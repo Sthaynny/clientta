@@ -1,26 +1,21 @@
-/// Mensagens de propósito e posicionamento do ConectaFERSA.
+/// Mensagens de propósito do ConectaFERSA — auxiliar do dia a dia na faculdade.
 abstract final class AppMission {
   static const String name = 'ConectaFERSA';
 
   static const String tagline =
-      'O que importa no campus, em um só lugar — sem login.';
+      'Grade, atividades e rotina — tudo no seu celular, offline.';
 
   static const String stripMessage =
-      'Avisos, eventos e documentos da turma. Abra e use.';
+      'Seus registros ficam só neste aparelho. Sem login, sem nuvem.';
 
-  static const String drawerSubtitle =
-      'Comunidade universitária • uso livre';
-
-  /// Resumo para README e documentação.
   static const String purposeSummary =
-      'Hub comunitário para estudantes que cansaram de perder aviso em grupo '
-      'de mensagem, prazo de evento e PDF de edital no fim do feed.';
+      'Organizador pessoal para estudantes: cadastre aulas na grade, '
+      'marque entregas e provas e veja o que importa hoje.';
 
   static const List<String> studentPainPoints = [
-    'Informação espalhada entre WhatsApp, Instagram e mural físico',
-    'Eventos e inscrições que passam despercebidos',
-    'Documentos difíceis de achar na hora da entrega ou da matrícula',
-    'Calouros sem um ponto único de referência do campus',
-    'Barreira de login ou conta institucional só para ler um aviso',
+    'Não saber qual sala ou horário da aula em um dia atípico',
+    'Esquecer trabalho, estudo ou prova porque não anotou em um lugar só',
+    'Depender de print e lista solta no WhatsApp',
+    'Querer algo simples, sem criar conta nem depender de internet',
   ];
 }
