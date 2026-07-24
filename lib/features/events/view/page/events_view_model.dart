@@ -1,3 +1,4 @@
+import 'package:ufersa_hub/core/config/community_access.dart';
 import 'package:ufersa_hub/core/utils/commands.dart';
 import 'package:ufersa_hub/core/utils/result.dart';
 import 'package:ufersa_hub/features/events/domain/repositories/events_repository.dart';
@@ -20,7 +21,7 @@ class EventsViewModel {
     );
 
     authenticated = CommandBase<bool>(() async {
-      final result = await authRepository.isAuthenticated;
+      final result = await CommunityAccess.resolveEditorAccess(authRepository);
       _userAuthenticated = result;
 
       return Result.ok(result);

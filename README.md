@@ -18,8 +18,10 @@
 </p>
 
 <p align="center">
-O ConectaFERSA é um aplicativo de notícias, eventos e documentos para a comunidade universitária, desenvolvido em Flutter. O perfil padrão prioriza uso acadêmico, sem monetização por anúncios ou compras in-app.
+O <strong>ConectaFERSA</strong> é um hub comunitário para estudantes: avisos, eventos e documentos do campus em um só app — <strong>sem login</strong> para o uso do dia a dia. Feito para quem perde informação em grupos de mensagem e precisa de um lugar confiável na correria da faculdade.
 </p>
+
+<p align="center"><em>O que importa no campus, em um só lugar — sem login.</em></p>
 
 <hr />
 
@@ -55,7 +57,7 @@ O ConectaFERSA é um aplicativo de notícias, eventos e documentos para a comuni
 - Flutter (MVVM, GetIt, SOLID)
 - Firebase Auth e Cloud Firestore (plano Spark gratuito para laboratório)
 - Design System
-- Perfil **universitário** sem anúncios nem compras in-app — veja [docs/GUIA_UNIVERSITARIO.md](docs/GUIA_UNIVERSITARIO.md) e [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md)
+- Perfil **comunitário** sem login no uso diário — veja [docs/PROPOSITO.md](docs/PROPOSITO.md), [docs/GUIA_UNIVERSITARIO.md](docs/GUIA_UNIVERSITARIO.md) e [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md)
 
 # :computer: Como rodar
 

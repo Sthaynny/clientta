@@ -79,14 +79,13 @@ void main() {
         expect(viewModel.authenticated.result?.asOk.value, true);
       });
 
-      test('should return ok when isAuthenticated is false', () async {
+      test('modo comunitário libera edição sem login no backend de auth', () async {
         when(() => authRepo.isAuthenticated).thenAnswer((_) async => false);
 
         await viewModel.authenticated.execute();
 
         expect(viewModel.authenticated.completed, true);
-        expect(viewModel.authenticated.result?.isOk, true);
-        expect(viewModel.authenticated.result?.asOk.value, false);
+        expect(viewModel.userAuthenticated, true);
       });
     });
   });

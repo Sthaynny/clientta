@@ -1,6 +1,8 @@
 # Guia universitário — ConectaFERSA sem recursos pagos
 
-Este guia descreve como o **ConectaFERSA** (`ufersa_hub`) foi orientado para uso como **facilitador acadêmico**: notícias, eventos e documentos da comunidade universitária, sem monetização nem dependências comerciais obrigatórias.
+Este guia descreve como o **ConectaFERSA** (`ufersa_hub`) funciona como **app comunitário** para o dia a dia na universidade: notícias, eventos e documentos **sem login obrigatório**, sem monetização e com dependências adequadas a laboratório e extensão.
+
+A motivação do produto (dores dos estudantes) está em [PROPOSITO.md](PROPOSITO.md).
 
 ## Visão da arquitetura
 
@@ -9,8 +11,9 @@ Flutter (MVVM + GetIt)
     ├── UI (features/*)
     ├── AppRouters (navegação)     → docs/ROTEAMENTO.md
     ├── AppConfig (perfil)         → lib/core/config/app_config.dart
+    ├── CommunityAccess (sem login)→ lib/core/config/community_access.dart
     └── Repositórios
-            ├── Auth (Firebase Auth)
+            ├── Auth (opcional — só se requireAuthentication)
             └── Dados (Cloud Firestore via FirebaseService)
 ```
 
@@ -22,26 +25,37 @@ Em `lib/core/config/app_config.dart`:
 
 | Configuração | Perfil `university` (padrão) | Perfil `production` |
 |--------------|------------------------------|---------------------|
+| Login obrigatório | **Não** (`requireAuthentication = false`) | Configurável |
 | Anúncios (Google Mobile Ads) | Desligado | Pode ser reativado manualmente* |
 | Compras in-app | Desligado | Pode ser reativado manualmente* |
 
-\* Os pacotes `google_mobile_ads` e `in_app_purchase` foram **removidos** do `pubspec.yaml` na versão universitária. Reativar monetização exige readicionar dependências e código legado (não recomendado em projetos de curso).
+\* Os pacotes `google_mobile_ads` e `in_app_purchase` foram **removidos** do `pubspec.yaml` na versão universitária.
 
-**Padrão atual:** `AppProfile.university`.
+**Padrão atual:** `AppProfile.university` + comunidade aberta.
+
+### Reativar login (gestores)
+
+Em `lib/core/config/app_config.dart`, defina:
+
+```dart
+static const bool requireAuthentication = true;
+```
+
+O menu lateral volta a exibir **Login** e **Sair**; apenas usuários autenticados veem ações de criar/editar/excluir.
 
 ## O que foi removido (recursos pagos / comerciais)
 
 | Recurso | Motivo | Substituição no perfil universitário |
 |---------|--------|--------------------------------------|
 | Google Mobile Ads | Monetização; conta AdMob; políticas de loja | `UniversityInfoStrip` (faixa informativa local) |
-| In-app purchase | Produto pago na Play/App Store | Funcionalidades liberadas para todos os usuários autenticados |
+| In-app purchase | Produto pago na Play/App Store | Conteúdo liberado para toda a comunidade |
 | IDs de anúncio em `AdHelper` | Vinculados a conta comercial | Código removido |
 
 ## Backend e custos
 
-### Firebase (Auth + Firestore)
+### Firebase (Firestore; Auth opcional)
 
-O projeto ainda usa **Firebase**, que possui plano **Spark gratuito** adequado a protótipos e turmas pequenas, com limites documentados pela Google.
+O projeto usa **Cloud Firestore** para dados compartilhados. **Firebase Authentication** só é necessário se `requireAuthentication = true`.
 
 **Configuração para alunos:**
 
@@ -51,7 +65,18 @@ O projeto ainda usa **Firebase**, que possui plano **Spark gratuito** adequado a
 4. Isso gera `lib/firebase_options.dart` e `android/app/google-services.json` (não versionados).
 5. Use `lib/firebase_options.example.dart` como referência do formato.
 
-**CI (Codemagic):** o arquivo `codemagic.yaml` injeta `google-services.json` e `firebase_options.dart` via variáveis de ambiente — adequado para builds institucionais, sem expor segredos no Git.
+**Regras Firestore (comunidade sem login):** para leitura e escrita abertas em ambiente de turma, ajuste as regras no console — em produção, prefira limitar escrita ou usar `requireAuthentication = true` para editores. Exemplo apenas para laboratório (não use em produção pública):
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+``` o arquivo `codemagic.yaml` injeta `google-services.json` e `firebase_options.dart` via variáveis de ambiente — adequado para builds institucionais, sem expor segredos no Git.
 
 ### Alternativas gratuitas ao Firebase (trabalhos avançados)
 
@@ -98,7 +123,7 @@ O workflow Codemagic atual publica na Play (`google_play`); comente o bloco `pub
 
 - [ ] Projeto Firebase Spark criado para a turma
 - [ ] Regras de segurança do Firestore revisadas (não deixar leitura/escrita abertas em produção)
-- [ ] `AppConfig.profile` = `university`
+- [ ] `AppConfig.profile` = `university` e `requireAuthentication` = `false` (comunidade aberta)
 - [ ] Rotas documentadas em `docs/ROTEAMENTO.md`
 - [ ] Sem pacotes de anúncios ou IAP no `pubspec.yaml`
 

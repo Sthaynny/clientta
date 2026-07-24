@@ -1,3 +1,4 @@
+import 'package:ufersa_hub/core/config/community_access.dart';
 import 'package:ufersa_hub/core/utils/commands.dart';
 import 'package:ufersa_hub/core/utils/result.dart';
 import 'package:ufersa_hub/features/events/domain/repositories/events_repository.dart';
@@ -14,8 +15,9 @@ class DetailsEventViewmodel {
     updateScreen = CommandAction<void, EventsModel>(_updateNews);
     deleteEvent = CommandAction<void, String>(_repository.deleteEvents);
     authenticated = CommandBase(() async {
-      final result = await authRepository.isAuthenticated;
-      isAuthenticated = result;
+      isAuthenticated = await CommunityAccess.resolveEditorAccess(
+        authRepository,
+      );
       return Result.ok();
     });
   }

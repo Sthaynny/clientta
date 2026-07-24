@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ufersa_hub/core/config/community_access.dart';
 import 'package:ufersa_hub/core/strings/strings.dart';
 import 'package:ufersa_hub/core/utils/commands.dart';
 import 'package:ufersa_hub/core/utils/extension/file.dart';
@@ -42,7 +43,7 @@ class DocumentsViewModel {
     });
 
     authenticated = CommandBase<bool>(() async {
-      final result = await authRepository.isAuthenticated;
+      final result = await CommunityAccess.resolveEditorAccess(authRepository);
       _userAuthenticated = result;
 
       return Result.ok(result);

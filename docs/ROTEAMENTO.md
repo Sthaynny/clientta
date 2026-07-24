@@ -56,7 +56,9 @@ A rota inicial está em `lib/features/app.dart`:
 initialRoute: AppRouters.home.path,
 ```
 
-Para exigir login antes do uso (por exemplo, em ambiente de laboratório), altere para `AppRouters.login.path` e implemente redirecionamento após autenticação bem-sucedida em `LoginScreen`.
+O app abre direto no feed de notícias — **sem tela de login** no modo comunitário (`requireAuthentication = false`).
+
+Para exigir login antes do uso (gestores), defina `requireAuthentication = true` em `AppConfig` e altere `initialRoute` para `AppRouters.login.path` se desejar.
 
 ## Evolução futura (opcional)
 

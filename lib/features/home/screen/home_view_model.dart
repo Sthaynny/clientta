@@ -1,3 +1,4 @@
+import 'package:ufersa_hub/core/config/community_access.dart';
 import 'package:ufersa_hub/core/utils/commands.dart';
 import 'package:ufersa_hub/core/utils/result.dart';
 import 'package:ufersa_hub/features/news/filter/domain/models/filter_news_model.dart';
@@ -37,7 +38,7 @@ class HomeViewModel {
   }
 
   Future<Result<bool>> _authenticated() async {
-    final result = await _authRepository.isAuthenticated;
+    final result = await CommunityAccess.resolveEditorAccess(_authRepository);
     _userAuthenticated = result;
 
     return Result.ok(result);
