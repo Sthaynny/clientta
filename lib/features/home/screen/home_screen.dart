@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/strings/daily_strings.dart';
+import 'package:ufersa_hub/core/theme/hub_colors.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
 import 'package:ufersa_hub/core/utils/extension/datetime.dart';
 import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
@@ -10,8 +11,13 @@ import 'package:ufersa_hub/features/home/screen/components/app_drawer.dart';
 import 'package:ufersa_hub/features/home/screen/home_view_model.dart';
 import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
 import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
-import 'package:ufersa_hub/features/shared/components/news_app_bar.dart';
-import 'package:ufersa_hub/features/shared/widgets/university_info_strip.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_activity_tile.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_class_card.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_day_header.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_empty_state.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_offline_banner.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_section_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.viewmodel});
@@ -32,23 +38,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final viewmodel = widget.viewmodel;
+    final now = DateTime.now();
 
     return Scaffold(
-      appBar: NewsAppBar(
+      appBar: HubAppBar(
         title: homeTodayString,
         leading: Builder(
           builder:
-              (context) => DSIconButton(
+              (context) => IconButton(
                 key: const Key('menu_button'),
                 onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: DSIcons.menu_dot_outline,
+                icon: const Icon(Icons.menu_rounded),
               ),
         ),
       ),
       drawer: const AppDrawer(),
       body: Column(
         children: [
-          const UniversityInfoStrip(),
+          const HubOfflineBanner(),
           Expanded(
             child: ListenableBuilder(
               listenable: viewmodel.load,
@@ -63,25 +70,56 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 return RefreshIndicator(
+                  color: HubColors.seed,
                   onRefresh: () async => viewmodel.load.execute(),
                   child: ListView(
                     padding: EdgeInsets.all(DSSpacing.md.value),
                     children: [
-                      DSHeadlineSmallText(classesTodayString),
-                      DSSpacing.sm.y,
+                      HubDayHeader(
+                        weekdayLabel: weekdayLabels[now.weekday - 1],
+                        dateLabel: formatHubDayHeader(now),
+                      ),
+                      DSSpacing.lg.y,
+                      HubSectionHeader(
+                        title: classesTodayString,
+                        count: viewmodel.todayClasses.isEmpty
+                            ? null
+                            : viewmodel.todayClasses.length,
+                        actionLabel: myScheduleString,
+                        onAction: () => context.go(AppRouters.classes),
+                      ),
                       if (viewmodel.todayClasses.isEmpty)
-                        DSBodyText(noClassesTodayString)
+                        HubEmptyState(
+                          icon: Icons.schedule_outlined,
+                          title: emptyClassesHomeTitle,
+                          message: emptyClassesHomeMessage,
+                          actionLabel: addClassString,
+                          onAction: () => context.go(AppRouters.classForm),
+                        )
                       else
                         ...viewmodel.todayClasses.map(_classTile),
                       DSSpacing.lg.y,
-                      DSHeadlineSmallText(activitiesTodayString),
-                      DSSpacing.sm.y,
+                      HubSectionHeader(
+                        title: activitiesTodayString,
+                        count: viewmodel.todayActivities.isEmpty
+                            ? null
+                            : viewmodel.todayActivities.length,
+                        actionLabel: myActivitiesString,
+                        onAction: () => context.go(AppRouters.activities),
+                      ),
                       if (viewmodel.todayActivities.isEmpty)
-                        DSBodyText(noActivitiesTodayString)
+                        HubEmptyState(
+                          icon: Icons.task_alt_outlined,
+                          title: emptyActivitiesHomeTitle,
+                          message: emptyActivitiesHomeMessage,
+                          actionLabel: addActivityString,
+                          onAction: () => context.go(AppRouters.activityForm),
+                        )
                       else
                         ...viewmodel.todayActivities.map(
                           (a) => _activityTile(context, viewmodel, a),
                         ),
+                      DSSpacing.xl.y,
                     ],
                   ),
                 );
@@ -94,16 +132,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _classTile(ClassEntry entry) {
-    final room = entry.room;
-    return Card(
-      margin: EdgeInsets.only(bottom: DSSpacing.xs.value),
-      child: ListTile(
-        title: DSHeadlineSmallText(entry.subject),
-        subtitle: DSBodyText(
-          '${entry.startTime} – ${entry.endTime}'
-          '${room != null ? ' • $room' : ''}',
-        ),
-      ),
+    return HubClassCard(
+      subject: entry.subject,
+      startTime: entry.startTime,
+      endTime: entry.endTime,
+      room: entry.room,
     );
   }
 
@@ -112,23 +145,16 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeViewModel viewmodel,
     ActivityEntry entry,
   ) {
-    return Card(
-      margin: EdgeInsets.only(bottom: DSSpacing.xs.value),
-      child: CheckboxListTile(
-        value: entry.done,
-        onChanged: (_) => viewmodel.toggleActivity.execute(entry),
-        title: DSBodyText(
-          entry.title,
-          maxLines: 2,
-        ),
-        subtitle: DSBodyText(
-          '${entry.kind.label} • ${entry.date.toDateAt}',
-        ),
-        onTap: () async {
-          await context.go(AppRouters.activityForm, arguments: entry);
-          viewmodel.load.execute();
-        },
-      ),
+    return HubActivityTile(
+      title: entry.title,
+      subtitle: '${entry.kind.label} • ${entry.date.toDateAt}',
+      kind: entry.kind,
+      done: entry.done,
+      onChanged: (_) => viewmodel.toggleActivity.execute(entry),
+      onTap: () async {
+        await context.go(AppRouters.activityForm, arguments: entry);
+        viewmodel.load.execute();
+      },
     );
   }
 }

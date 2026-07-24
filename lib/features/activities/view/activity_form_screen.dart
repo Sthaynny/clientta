@@ -6,7 +6,7 @@ import 'package:ufersa_hub/core/utils/extension/build_context.dart';
 import 'package:ufersa_hub/core/utils/extension/datetime.dart';
 import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
 import 'package:ufersa_hub/features/activities/view/activity_form_view_model.dart';
-import 'package:ufersa_hub/features/shared/components/news_app_bar.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
 
 class ActivityFormScreen extends StatefulWidget {
   const ActivityFormScreen({
@@ -71,8 +71,9 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NewsAppBar(
+      appBar: HubAppBar(
         canPop: true,
+        showBrandMark: false,
         title: widget.isEdit ? editActivityString : addActivityString,
       ),
       body: ListView(

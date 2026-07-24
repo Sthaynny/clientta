@@ -4,7 +4,7 @@ import 'package:ufersa_hub/core/strings/daily_strings.dart';
 import 'package:ufersa_hub/core/strings/strings.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
 import 'package:ufersa_hub/features/classes/view/class_form_view_model.dart';
-import 'package:ufersa_hub/features/shared/components/news_app_bar.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
 
 class ClassFormScreen extends StatefulWidget {
   const ClassFormScreen({super.key, required this.viewmodel, this.isEdit = false});
@@ -62,8 +62,9 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NewsAppBar(
+      appBar: HubAppBar(
         canPop: true,
+        showBrandMark: false,
         title: widget.isEdit ? editClassString : addClassString,
       ),
       body: ListView(

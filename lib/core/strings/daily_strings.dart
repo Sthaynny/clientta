@@ -22,6 +22,18 @@ String get markDoneString => 'Concluída';
 String get deleteString => 'Excluir';
 String get errorLoadDailyString => 'Não foi possível carregar seus registros.';
 String get errorSaveString => 'Não foi possível salvar. Tente novamente.';
+String get emptyClassesHomeTitle => 'Nenhuma aula hoje';
+String get emptyClassesHomeMessage =>
+    'Cadastre disciplinas em Minha grade para ver automaticamente o que você tem neste dia da semana.';
+String get emptyActivitiesHomeTitle => 'Nada pendente hoje';
+String get emptyActivitiesHomeMessage =>
+    'Registre trabalhos, provas e estudos em Minhas atividades — eles aparecem aqui na data certa.';
+String get emptyScheduleTitle => 'Grade vazia';
+String get emptyScheduleMessage =>
+    'Comece registrando suas aulas com dia, horário e sala. Tudo fica salvo só neste aparelho.';
+String get emptyActivitiesListTitle => 'Nenhuma atividade';
+String get emptyActivitiesListMessage =>
+    'Anote entregas e provas em um lugar só, em vez de prints no chat.';
 
 const weekdayLabels = [
   'Segunda-feira',
@@ -32,3 +44,21 @@ const weekdayLabels = [
   'Sábado',
   'Domingo',
 ];
+
+const monthLabels = [
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
+];
+
+String formatHubDayHeader(DateTime date) =>
+    '${date.day} de ${monthLabels[date.month - 1]}';

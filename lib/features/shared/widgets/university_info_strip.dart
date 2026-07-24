@@ -1,31 +1,8 @@
-import 'package:design_system/design_system.dart';
-import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/config/app_config.dart';
-import 'package:ufersa_hub/core/strings/app_mission.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_offline_banner.dart';
 
-class UniversityInfoStrip extends StatelessWidget {
-  const UniversityInfoStrip({super.key});
+export 'package:ufersa_hub/features/shared/hub/hub_offline_banner.dart'
+    show HubOfflineBanner;
 
-  @override
-  Widget build(BuildContext context) {
-    if (!AppConfig.isUniversityMode) {
-      return const SizedBox.shrink();
-    }
-
-    return Material(
-      color: DSColors.primary.withValues(alpha: 0.08),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            const Icon(Icons.offline_pin_outlined, size: 20),
-            const SizedBox(width: 8),
-            Expanded(
-              child: DSBodyText(AppMission.stripMessage, maxLines: 2),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+/// @deprecated Use [HubOfflineBanner].
+@Deprecated('Use HubOfflineBanner')
+typedef UniversityInfoStrip = HubOfflineBanner;

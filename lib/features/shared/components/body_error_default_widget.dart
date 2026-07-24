@@ -1,6 +1,6 @@
-import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/strings/strings.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_empty_state.dart';
 
 class BodyErrorDefaultWidget extends StatelessWidget {
   const BodyErrorDefaultWidget({
@@ -8,25 +8,18 @@ class BodyErrorDefaultWidget extends StatelessWidget {
     required this.title,
     this.onPressed,
   });
+
   final String title;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(DSSpacing.md.value),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            DSSpacing.xl.y,
-            DSHeadlineLargeText(title, maxLines: 4),
-            DSSpacing.xl.y,
-            DSPrimaryButton(label: tenteNovamenteString, onPressed: onPressed),
-          ],
-        ),
-      ),
+    return HubEmptyState(
+      icon: Icons.wifi_off_rounded,
+      title: title,
+      message: 'Verifique o armazenamento do aparelho e tente de novo.',
+      actionLabel: tenteNovamenteString,
+      onAction: onPressed,
     );
   }
 }

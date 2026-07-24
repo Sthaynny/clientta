@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/strings/daily_strings.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
 import 'package:ufersa_hub/features/classes/view/classes_view_model.dart';
 import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
 import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
-import 'package:ufersa_hub/features/shared/components/button_add_item_widget.dart';
-import 'package:ufersa_hub/features/shared/components/news_app_bar.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_class_card.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_empty_state.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_fab.dart';
 
 class ClassesScreen extends StatefulWidget {
   const ClassesScreen({super.key, required this.viewmodel});
@@ -31,10 +32,9 @@ class _ClassesScreenState extends State<ClassesScreen> {
     final viewmodel = widget.viewmodel;
 
     return Scaffold(
-      appBar: NewsAppBar(canPop: true, title: myScheduleString),
-      floatingActionButton: ButtonAddItemWidget(
+      appBar: HubAppBar(canPop: true, title: myScheduleString, showBrandMark: false),
+      floatingActionButton: HubFab(
         label: addClassString,
-        isVisible: true,
         onPressed: () async {
           await context.go(AppRouters.classForm);
           viewmodel.load.execute();
@@ -53,7 +53,13 @@ class _ClassesScreenState extends State<ClassesScreen> {
             );
           }
           if (viewmodel.entries.isEmpty) {
-            return Center(child: DSBodyText(noClassesTodayString));
+            return HubEmptyState(
+              icon: Icons.calendar_view_week_outlined,
+              title: emptyScheduleTitle,
+              message: emptyScheduleMessage,
+              actionLabel: addClassString,
+              onAction: () => context.go(AppRouters.classForm),
+            );
           }
 
           return ListView.builder(
@@ -61,8 +67,12 @@ class _ClassesScreenState extends State<ClassesScreen> {
             itemCount: viewmodel.entries.length,
             itemBuilder: (context, index) {
               final entry = viewmodel.entries[index];
-              return _ClassCard(
-                entry: entry,
+              return HubClassCard(
+                subject: entry.subject,
+                startTime: entry.startTime,
+                endTime: entry.endTime,
+                room: entry.room,
+                weekdayLabel: weekdayLabels[entry.weekday - 1],
                 onEdit: () async {
                   await context.go(AppRouters.classForm, arguments: entry);
                   viewmodel.load.execute();
@@ -72,43 +82,6 @@ class _ClassesScreenState extends State<ClassesScreen> {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class _ClassCard extends StatelessWidget {
-  const _ClassCard({
-    required this.entry,
-    required this.onEdit,
-    required this.onDelete,
-  });
-
-  final ClassEntry entry;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    final day = weekdayLabels[entry.weekday - 1];
-    return Card(
-      margin: EdgeInsets.only(bottom: DSSpacing.sm.value),
-      child: ListTile(
-        title: DSHeadlineSmallText(entry.subject),
-        subtitle: DSBodyText(
-          '$day • ${entry.startTime} – ${entry.endTime}'
-          '${entry.room != null ? '\n${entry.room}' : ''}',
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(onPressed: onEdit, icon: const Icon(Icons.edit_outlined)),
-            IconButton(
-              onPressed: onDelete,
-              icon: Icon(Icons.delete_outline, color: DSColors.error),
-            ),
-          ],
-        ),
       ),
     );
   }
