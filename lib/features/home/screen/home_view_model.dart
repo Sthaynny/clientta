@@ -1,66 +1,62 @@
 import 'package:ufersa_hub/core/utils/commands.dart';
 import 'package:ufersa_hub/core/utils/result.dart';
-import 'package:ufersa_hub/features/news/filter/domain/models/filter_news_model.dart';
-import 'package:ufersa_hub/features/shared/auth/data/repositories/auth_repository.dart';
-import 'package:ufersa_hub/features/shared/news/data/repositories/news_repository.dart';
-import 'package:ufersa_hub/features/shared/news/domain/models/news_model.dart';
+import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:ufersa_hub/features/activities/domain/repositories/activity_repository.dart';
+import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
+import 'package:ufersa_hub/features/classes/domain/repositories/class_repository.dart';
 
 class HomeViewModel {
-  final AuthRepository _authRepository;
-  final NewsRepository _newsRepository;
-
-  late final CommandBase logout;
-  late final CommandBase authenticated;
-  late final CommandAction<List<NewsModel>, (bool?, FilterNewsModel?)> news;
-
   HomeViewModel({
-    required AuthRepository authRepository,
-    required NewsRepository newsRepository,
-  }) : _authRepository = authRepository,
-       _newsRepository = newsRepository {
-    logout = CommandBase<void>(_logout);
-    authenticated = CommandBase<bool>(_authenticated);
-    news = CommandAction<List<NewsModel>, (bool?, FilterNewsModel?)>(_getNews);
+    required ClassRepository classRepository,
+    required ActivityRepository activityRepository,
+  }) : _classRepository = classRepository,
+       _activityRepository = activityRepository {
+    load = CommandBase(_load);
+    toggleActivity = CommandAction<void, ActivityEntry>(_toggleActivity);
   }
 
-  /// Variaveis de dados
-  final _newsList = <NewsModel>[];
-  bool _userAuthenticated = false;
-  FilterNewsModel? _filterNews;
-  FilterNewsModel? get filterNews => _filterNews;
-  bool get userAuthenticated => _userAuthenticated;
-  List<NewsModel> get newsList => _newsList;
-  Future<Result<void>> _logout() async {
-    final result = await _authRepository.logout();
-    authenticated.execute();
-    return result;
-  }
+  final ClassRepository _classRepository;
+  final ActivityRepository _activityRepository;
 
-  Future<Result<bool>> _authenticated() async {
-    final result = await _authRepository.isAuthenticated;
-    _userAuthenticated = result;
+  late final CommandBase<void> load;
+  late final CommandAction<void, ActivityEntry> toggleActivity;
 
-    return Result.ok(result);
-  }
+  List<ClassEntry> todayClasses = [];
+  List<ActivityEntry> todayActivities = [];
 
-  Future<Result<List<NewsModel>>> _getNews(
-    (bool?, FilterNewsModel?) params,
-  ) async {
-    final (restart, filter) = params;
-    _filterNews = filter;
-    final result = await _newsRepository.getNews(filter);
+  Future<Result<void>> _load() async {
+    try {
+      final now = DateTime.now();
+      final weekday = now.weekday;
+      final classes = await _classRepository.getAll();
+      todayClasses = classes.where((c) => c.weekday == weekday).toList();
 
-    switch (result) {
-      case Ok _:
-        if (restart ?? false || filter != null) {
-          newsList.clear();
-        }
+      final activities = await _activityRepository.getAll();
+      todayActivities =
+          activities
+              .where(
+                (a) =>
+                    a.date.year == now.year &&
+                    a.date.month == now.month &&
+                    a.date.day == now.day,
+              )
+              .toList()
+            ..sort((a, b) => a.done == b.done ? 0 : (a.done ? 1 : -1));
 
-        newsList.addAll(result.value as List<NewsModel>);
-        break;
-      case Error _:
-        return result;
+      return Result.ok();
+    } catch (e) {
+      return Result.errorDefault(e.toString());
     }
-    return result;
+  }
+
+  Future<Result<void>> _toggleActivity(ActivityEntry entry) async {
+    try {
+      final updated = entry.copyWith(done: !entry.done);
+      await _activityRepository.save(updated);
+      await load.execute();
+      return Result.ok();
+    } catch (e) {
+      return Result.errorDefault(e.toString());
+    }
   }
 }

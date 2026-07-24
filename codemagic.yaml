@@ -4,71 +4,22 @@ workflows:
     max_build_duration: 120
     environment:
       groups:
-        - firebase
         - signing-android
-        - google_credentials
-      vars:
-        PACKAGE_NAME: "io.codemagic.fluttersample"
-        GOOGLE_PLAY_TRACK: alpha
       flutter: stable
-    
+
     scripts:
-      - name: Generate keystore file
-        script: | 
-          echo $KEYSTORE_BASE64 | base64 --decode > $CM_BUILD_DIR/upload-keystore.jks
-
-      - name: Set up key.properties
-        script: | 
-          cat >> "$CM_BUILD_DIR/android/key.properties" <<EOF
-          storePassword=$CM_KEYSTORE_PASSWORD
-          keyPassword=$CM_KEY_PASSWORD
-          keyAlias=$CM_KEY_ALIAS
-          storeFile=$CM_BUILD_DIR/upload-keystore.jks
-          EOF    
-
-      - name: Debug key.properties
-        script: |
-          cat "$CM_BUILD_DIR/android/key.properties"
-
-      - name: Set up local.properties
-        script: | 
-          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/local.properties"
-          
-      - name: Add google-services.json (Firebase)
-        script: | 
-          echo $GOOGLE_SERVICES_JSON | base64 --decode > "$CM_BUILD_DIR/android/app/google-services.json"
-          
-      - name: add firebase_options.dart
-        script: | 
-          echo $FIREBASE_OPTIONS_DART | base64 --decode > "$CM_BUILD_DIR/lib/firebase_options.dart"
-
       - name: Get Flutter packages
-        script: | 
-          flutter pub get
+        script: flutter pub get
 
       - name: Flutter analyze
-        script: | 
-          flutter analyze
+        script: flutter analyze
 
-      # - name: Flutter unit tests
-      #   script: | 
-      #     flutter test
-        # ignore_failure: true
+      - name: Flutter unit tests
+        script: flutter test
 
       - name: Build AAB with Flutter
-        script: | 
-          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-          flutter build appbundle --release \
-            --build-name=1.0.$BUILD_NUMBER \
-            --build-number=$BUILD_NUMBER
+        script: |
+          flutter build appbundle --release
 
     artifacts:
       - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
-
-    publishing:
-      google_play:
-        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
-        track: $GOOGLE_PLAY_TRACK
-        submit_as_draft: true
