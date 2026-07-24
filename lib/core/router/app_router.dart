@@ -93,5 +93,20 @@ enum AppRouters {
   manegerDocuments;
 
   const AppRouters();
-  String get path => this == home ? '/' : '/$name';
+
+  /// Rotas nomeadas para uso acadêmico (sem dependência de serviços pagos).
+  /// Para alterar caminhos, edite este getter e atualize `docs/ROTEAMENTO.md`.
+  String get path => switch (this) {
+    home => '/',
+    login => '/acesso/login',
+    forgoutPassword => '/acesso/recuperar-senha',
+    detailsNews => '/noticias/detalhe',
+    detailsNewsImage => '/noticias/imagem',
+    manegerNews => '/noticias/gerenciar',
+    events => '/eventos',
+    detailsEvent => '/eventos/detalhe',
+    manegerEvents => '/eventos/gerenciar',
+    documents => '/documentos',
+    manegerDocuments => '/documentos/gerenciar',
+  };
 }

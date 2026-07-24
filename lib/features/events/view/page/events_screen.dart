@@ -1,6 +1,5 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/strings/strings.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
@@ -8,12 +7,11 @@ import 'package:ufersa_hub/core/utils/result.dart';
 import 'package:ufersa_hub/features/events/domain/models/events_model.dart';
 import 'package:ufersa_hub/features/events/view/page/components/card_event_widget.dart';
 import 'package:ufersa_hub/features/events/view/page/events_view_model.dart';
-import 'package:ufersa_hub/features/shared/ads/utils/ads_utils.dart';
-import 'package:ufersa_hub/features/shared/ads/widgets/banner_ads_widget.dart';
 import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
 import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
 import 'package:ufersa_hub/features/shared/components/button_add_item_widget.dart';
 import 'package:ufersa_hub/features/shared/components/news_app_bar.dart';
+import 'package:ufersa_hub/features/shared/widgets/university_info_strip.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key, required this.viewModel});
@@ -27,23 +25,12 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   late final EventsViewModel viewmodel;
 
-  final ValueNotifier<BannerAd?> bannerAdNotifier = ValueNotifier(null);
   @override
   void initState() {
     viewmodel = widget.viewModel;
     viewmodel.getEvents.execute();
     viewmodel.authenticated.execute();
-
-    loadBannerAd(
-      onAdLoaded: (value) => bannerAdNotifier.value = value as BannerAd?,
-    );
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    bannerAdNotifier.dispose();
-    super.dispose();
   }
 
   @override
@@ -52,7 +39,7 @@ class _EventsScreenState extends State<EventsScreen> {
       appBar: NewsAppBar(canPop: true, title: eventsString),
       body: Column(
         children: [
-          BannerAdsWidget(bannerAdNotifier: bannerAdNotifier),
+          const UniversityInfoStrip(),
           ListenableBuilder(
             listenable: widget.viewModel.getEvents,
             builder: (context, child) {

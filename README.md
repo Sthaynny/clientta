@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-O AppNews é um aplicativo simples e funcional de notícias, desenvolvido com o objetivo de aprimorar habilidades de programação. Ele serve como um projeto prático para explorar conceitos de desenvolvimento mobile, integração com APIs e gerenciamento de estado.
+O ConectaFERSA é um aplicativo de notícias, eventos e documentos para a comunidade universitária, desenvolvido em Flutter. O perfil padrão prioriza uso acadêmico, sem monetização por anúncios ou compras in-app.
 </p>
 
 <hr />
@@ -52,11 +52,10 @@ O AppNews é um aplicativo simples e funcional de notícias, desenvolvido com o 
 
 
 # :rocket: Tecnologias
-- Firebase
-- MVVM
-- SOLID
-- FirebaseAuth
+- Flutter (MVVM, GetIt, SOLID)
+- Firebase Auth e Cloud Firestore (plano Spark gratuito para laboratório)
 - Design System
+- Perfil **universitário** sem anúncios nem compras in-app — veja [docs/GUIA_UNIVERSITARIO.md](docs/GUIA_UNIVERSITARIO.md) e [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md)
 
 # :computer: Como rodar
 
@@ -66,6 +65,10 @@ $ git clone https://github.com/Sthaynny/ufersa_hub.git
 
 # Instale as dependências
 $ flutter pub get
+
+# Configure o Firebase (obrigatório para auth e dados)
+$ dart pub global activate flutterfire_cli
+$ flutterfire configure
 
 # Rode a aplicação
 $ flutter run

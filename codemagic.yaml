@@ -68,6 +68,8 @@ workflows:
       - flutter_drive.log
 
     publishing:
+      # Publicação na Play Store é opcional (conta paga). Para uso universitário,
+      # distribua o AAB/APK internamente e comente o bloco abaixo.
       google_play:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: $GOOGLE_PLAY_TRACK

@@ -1,6 +1,5 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/strings/strings.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
@@ -8,12 +7,11 @@ import 'package:ufersa_hub/core/utils/result.dart';
 import 'package:ufersa_hub/features/documents/domain/models/document_model.dart';
 import 'package:ufersa_hub/features/documents/view/page/components/card_document_widget.dart';
 import 'package:ufersa_hub/features/documents/view/page/documents_view_model.dart';
-import 'package:ufersa_hub/features/shared/ads/utils/ads_utils.dart';
-import 'package:ufersa_hub/features/shared/ads/widgets/banner_ads_widget.dart';
 import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
 import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
 import 'package:ufersa_hub/features/shared/components/button_add_item_widget.dart';
 import 'package:ufersa_hub/features/shared/components/news_app_bar.dart';
+import 'package:ufersa_hub/features/shared/widgets/university_info_strip.dart';
 
 class DocumentsScreen extends StatefulWidget {
   const DocumentsScreen({super.key, required this.viewmodel});
@@ -26,7 +24,6 @@ class DocumentsScreen extends StatefulWidget {
 
 class _DocumentsScreenState extends State<DocumentsScreen> {
   late final DocumentsViewModel viewmodel;
-  final ValueNotifier<BannerAd?> bannerAdNotifier = ValueNotifier(null);
 
   @override
   void initState() {
@@ -36,9 +33,6 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
 
     viewmodel.saveFile.addListener(_onResultSaveFile);
     viewmodel.deleteDocument.addListener(_onResultDelete);
-    loadBannerAd(
-      onAdLoaded: (value) => bannerAdNotifier.value = value as BannerAd?,
-    );
     super.initState();
   }
 
@@ -54,7 +48,8 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
 
   @override
   void dispose() {
-    bannerAdNotifier.dispose();
+    viewmodel.saveFile.removeListener(_onResultSaveFile);
+    viewmodel.deleteDocument.removeListener(_onResultDelete);
     super.dispose();
   }
 
@@ -64,7 +59,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       appBar: NewsAppBar(canPop: true, title: documentsString),
       body: Column(
         children: [
-          BannerAdsWidget(bannerAdNotifier: bannerAdNotifier),
+          const UniversityInfoStrip(),
           ListenableBuilder(
             listenable: widget.viewmodel.getData,
             builder: (context, child) {
