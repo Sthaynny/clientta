@@ -4,14 +4,11 @@ import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart
 import 'package:ufersa_hub/features/activities/view/activities_screen.dart';
 import 'package:ufersa_hub/features/activities/view/activity_form_screen.dart';
 import 'package:ufersa_hub/features/activities/view/activity_form_view_model.dart';
-import 'package:ufersa_hub/features/activities/view/activities_view_model.dart';
 import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
 import 'package:ufersa_hub/features/classes/view/class_form_screen.dart';
 import 'package:ufersa_hub/features/classes/view/class_form_view_model.dart';
 import 'package:ufersa_hub/features/classes/view/classes_screen.dart';
-import 'package:ufersa_hub/features/classes/view/classes_view_model.dart';
 import 'package:ufersa_hub/features/home/screen/home_screen.dart';
-import 'package:ufersa_hub/features/home/screen/home_view_model.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
   AppRouters.home.path: (context) => HomeScreen(viewmodel: dependency()),

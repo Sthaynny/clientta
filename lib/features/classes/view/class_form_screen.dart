@@ -71,7 +71,8 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
         padding: EdgeInsets.all(DSSpacing.md.value),
         children: [
           DropdownButtonFormField<int>(
-            value: viewmodel.weekday,
+            key: ValueKey(viewmodel.weekday),
+            initialValue: viewmodel.weekday,
             decoration: InputDecoration(labelText: weekdayString),
             items: List.generate(
               7,
@@ -119,7 +120,6 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
             controller: notesController,
             hint: notesOptionalString,
             onChanged: (v) => viewmodel.notes = v,
-            maxLines: 3,
           ),
           DSSpacing.lg.y,
           ListenableBuilder(

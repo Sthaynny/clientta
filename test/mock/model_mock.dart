@@ -1,30 +1,25 @@
-import 'package:ufersa_hub/features/shared/auth/domain/models/user_model.dart';
-import 'package:ufersa_hub/features/shared/domain/enums/category_post.dart';
-import 'package:ufersa_hub/features/shared/news/domain/models/news_model.dart';
+import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
 
-final tMapUserModel = <String, dynamic>{
-  'uid': '12345',
-  'email': 'test@example.com',
-  'displayName': 'Test User',
-  'photoURL': 'http://example.com/photo.jpg',
-  'emailVerified': true,
-  'phoneNumber': '1234567890',
-};
-final tInstanceUserModel = UserModel.fromMap(tMapUserModel);
-
-final tMapNewsModel = <String, dynamic>{
-  'uid': '1',
-  'title': 'Test Title',
-  'description': 'Test Description',
-  'publishedAt': '2023-10-01T00:00:00Z',
-  'imagesUrl': ['https://example.com/image.jpg'],
+final tMapClassEntry = <String, dynamic>{
+  'id': 'class-1',
+  'weekday': 2,
+  'subject': 'Cálculo I',
+  'startTime': '08:00',
+  'endTime': '10:00',
+  'room': 'Bloco A - 201',
+  'notes': null,
 };
 
-final tInstanceNewsModel = NewsModel(
-  uid: '',
-  title: 'title',
-  description: 'description',
-  images: [],
-  publishedAt: DateTime.now(),
-  categoryNews: CategoryPost.other,
-);
+final tInstanceClassEntry = ClassEntry.fromMap(tMapClassEntry);
+
+final tMapActivityEntry = <String, dynamic>{
+  'id': 'act-1',
+  'title': 'Lista de exercícios',
+  'date': '2026-03-10',
+  'kind': 'trabalho',
+  'done': false,
+  'notes': 'Entregar no AVA',
+};
+
+final tInstanceActivityEntry = ActivityEntry.fromMap(tMapActivityEntry);

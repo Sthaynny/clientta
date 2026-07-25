@@ -94,7 +94,8 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
           ),
           DSSpacing.md.y,
           DropdownButtonFormField<ActivityKind>(
-            value: viewmodel.kind,
+            key: ValueKey(viewmodel.kind),
+            initialValue: viewmodel.kind,
             decoration: InputDecoration(labelText: activityTypeString),
             items:
                 ActivityKind.values
@@ -120,7 +121,6 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
             controller: notesController,
             hint: notesOptionalString,
             onChanged: (v) => viewmodel.notes = v,
-            maxLines: 3,
           ),
           DSSpacing.lg.y,
           ListenableBuilder(

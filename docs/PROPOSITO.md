@@ -33,6 +33,8 @@ Os dados ficam em um **arquivo JSON no próprio celular** (`DeviceJsonStore`).
 
 Detalhes em [ROTEAMENTO.md](ROTEAMENTO.md).
 
+Roteiro de evolução: [PLANEJAMENTO.md](PLANEJAMENTO.md).
+
 ## Arquitetura
 
 ```

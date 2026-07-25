@@ -1,0 +1,75 @@
+---
+description: UI/UX e passos de construção de telas do ConectaFERSA
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# ConectaFERSA — construção de UI
+
+## Fundação visual
+
+1. Tema global: `HubTheme.light()` em `MyApp` (`lib/features/app.dart`).
+2. Cores do produto: `HubColors` (`lib/core/theme/hub_colors.dart`); tokens de espaçamento/tipografia do pacote `design_system` (`DSSpacing`, `DSTextFormField`, `DSSnackBar`).
+3. `main.dart`: `DSColors.inicialize(secundaryColor: ...)` antes de `runApp`.
+
+## Componentes Hub (preferir em vez de reinventar)
+
+Barrel: `lib/features/shared/hub/hub.dart`.
+
+| Componente | Uso |
+|------------|-----|
+| `HubAppBar` | Todas as telas; `canPop: true` em fluxos secundários; `showBrandMark: false` fora do início |
+| `HubSurface` | Cards com borda/sombra leve |
+| `HubClassCard` / `HubActivityTile` | Listagens de aula e atividade |
+| `HubSectionHeader` | Títulos de seção na home com ação “ver tudo” |
+| `HubDayHeader` | Cabeçalho de data na home |
+| `HubEmptyState` | Listas vazias com CTA |
+| `HubFab` | FAB com label nas listas de grade/atividades |
+| `HubOfflineBanner` | Faixa offline no topo da home |
+| `AppLoadingWidget` / `BodyErrorDefaultWidget` | Estados de carregamento e erro |
+
+## Receita de tela de lista (home, grade, atividades)
+
+```dart
+Scaffold(
+  appBar: HubAppBar(...),
+  drawer: /* só na home */ AppDrawer(),
+  floatingActionButton: HubFab(...), // listas secundárias
+  body: ListenableBuilder(
+    listenable: viewmodel.load,
+    builder: (context, _) {
+      if (load.running && entries.isEmpty) return AppLoadingWidget();
+      if (load.error) return BodyErrorDefaultWidget(onPressed: load.execute);
+      if (entries.isEmpty) return HubEmptyState(...);
+      return ListView(...); // padding: EdgeInsets.all(DSSpacing.md.value)
+    },
+  ),
+);
+```
+
+- Pull-to-refresh na home: `RefreshIndicator(color: HubColors.seed, ...)`.
+- Após voltar de formulário: `await context.go(...); viewmodel.load.execute();`
+
+## Receita de formulário
+
+1. `StatefulWidget` com `ViewModel` injetado + flag `isEdit`.
+2. `initState`: `hydrate()`, controllers com texto inicial, `save.addListener(_onSave)`.
+3. `Scaffold` + `HubAppBar(canPop: true, showBrandMark: false)`.
+4. `ListView` com `padding: EdgeInsets.all(DSSpacing.md.value)`.
+5. Campos: `DSTextFormField` para texto; `DSSpacing.md.y` entre blocos.
+6. Dropdown controlado: `initialValue` + `key: ValueKey(valorAtual)` + `setState` no `onChanged`.
+7. Botão salvar dispara `viewmodel.save.execute()`; erros via `context.showSnackBarError`.
+
+## Navegação e layout
+
+- Espaçamento: `DSSpacing.*.x` / `.y` do design_system, não números mágicos soltos.
+- Ícones: `Icons.*_outlined` / `_rounded` alinhados às telas existentes.
+- Drawer: `lib/features/home/screen/components/app_drawer.dart` + `HubNavTile`.
+- Feedback: extensões `showSnackBarInfo|Error|Success|Warning` em `build_context.dart`.
+
+## Checklist antes de abrir PR de UI
+
+- [ ] Strings em `daily_strings.dart` / `strings.dart`
+- [ ] Tema/cores via `HubTheme` / `HubColors`, não `Color(0x...)` espalhado
+- [ ] Estados vazio, loading e erro cobertos
+- [ ] Sem widgets deprecados; analyzer limpo na pasta `lib/`

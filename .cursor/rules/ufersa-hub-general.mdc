@@ -1,0 +1,58 @@
+---
+description: Arquitetura, estado, clean code e padrões do ConectaFERSA (ufersa_hub)
+alwaysApply: true
+---
+
+# ConectaFERSA — padrões gerais
+
+App **offline-first**: dados em `DeviceJsonStore` (JSON no dispositivo). Sem Firebase, auth ou backend.
+
+## Estrutura por feature
+
+```
+lib/features/<feature>/
+  domain/models/          # entidades imutáveis, fromMap/toMap/copyWith
+  domain/repositories/    # contratos abstratos
+  data/                   # implementações (*_repository_local.dart)
+  view/                   # telas + *ViewModel
+lib/core/                 # router, DI, theme, strings, utils compartilhados
+lib/features/shared/      # widgets/hub reutilizáveis entre features
+```
+
+Novas features seguem o mesmo desenho de `classes` e `activities`.
+
+## Estado (MVVM + Commands)
+
+- ViewModels **não** estendem `ChangeNotifier`; expõem `CommandBase` / `CommandAction` de `lib/core/utils/commands.dart`.
+- Ações assíncronas retornam `Result<T>` (`lib/core/utils/result.dart`).
+- Telas escutam comandos com `ListenableBuilder(listenable: viewmodel.load, ...)`.
+- Formulários: ViewModel recebido pelo construtor; `hydrate()` no `initState`; `save.addListener` para sucesso/erro e `context.back(true)` no sucesso.
+
+## Injeção de dependência
+
+- `GetIt` em `lib/core/dependecy/dependency.dart`: singletons para store/repos; **factory** para ViewModels de lista/home.
+- ViewModels de formulário são criados no `app_router.dart` com `arguments` da rota (`ClassEntry?` / `ActivityEntry?`).
+- Imports sempre `package:ufersa_hub/...`, nunca relativos entre features.
+
+## Rotas
+
+- Enum `AppRouters` + mapa `routes` em `app_router.dart`.
+- Navegação: `context.go(AppRouters.xxx, arguments: entry)` (`build_context.dart`).
+
+## Clean code
+
+- Textos de UI em `lib/core/strings/` (`strings.dart`, `daily_strings.dart`), não hardcoded em widgets.
+- Repositórios encapsulam I/O; ViewModels orquestram, não acessam arquivo direto.
+- Preferir `copyWith` e modelos imutáveis (`final` nos campos).
+- Não reintroduzir módulos removidos (`auth`, `news`, `premission_service`, `firebase_options`).
+
+## APIs e analyzer
+
+- **Não** usar membros `@deprecated` do Flutter/Dart; preferir alternativas indicadas pelo analyzer (ex.: `DropdownButtonFormField.initialValue` + `ValueKey` quando o valor muda via `setState`).
+- Dependências usadas no código devem estar em `pubspec.yaml` (`depend_on_referenced_packages`).
+- Antes de concluir: `flutter analyze` e `flutter test` sem erros.
+
+## Testes
+
+- Mocks/fixtures em `test/mock/` alinhados aos modelos atuais (`ActivityEntry`, `ClassEntry`).
+- Testes de domínio em `test/features/<feature>/`; não referenciar pacotes/features inexistentes.

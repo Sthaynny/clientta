@@ -33,6 +33,10 @@ O arquivo `conectafersa_daily.json` fica na pasta de documentos do app no dispos
 
 O workflow em `codemagic.yaml` não precisa mais de grupos Firebase. Basta Flutter analyze + build.
 
+## Planejamento
+
+Próximos passos e fases de entrega: [PLANEJAMENTO.md](PLANEJAMENTO.md).
+
 ## Design System
 
 Pacote Git `Sthaynny/design_system`. Para turmas offline, use fork interno no `pubspec.yaml`.
