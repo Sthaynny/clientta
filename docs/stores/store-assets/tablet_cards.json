@@ -1,0 +1,32 @@
+{
+  "teal": "#1A6B52",
+  "teal_dark": "#0F4535",
+  "gold": "#F5C518",
+  "tag_lines": ["ConectaFERSA", "Organizador universitário offline"],
+  "cards": [
+    {
+      "index": 1,
+      "slug": "gancho_dia",
+      "headline": "Seu dia na faculdade, claro.",
+      "print_name": "01_home_seu_dia.png"
+    },
+    {
+      "index": 2,
+      "slug": "grade",
+      "headline": "Sua grade num só lugar.",
+      "print_name": "05_minha_grade.png"
+    },
+    {
+      "index": 3,
+      "slug": "aula_multi_dia",
+      "headline": "Vários dias? Marca de uma vez.",
+      "print_name": "03_registrar_aula.png"
+    },
+    {
+      "index": 4,
+      "slug": "atividades",
+      "headline": "Entrega na data. Sem esquecer.",
+      "print_name": "02_atividades_pendente.png"
+    }
+  ]
+}
