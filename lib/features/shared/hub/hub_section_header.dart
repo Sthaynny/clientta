@@ -27,14 +27,9 @@ class HubSectionHeader extends StatelessWidget {
             child: Row(
               children: [
                 Flexible(
-                  child: Text(
+                  child: DSHeadlineSmallText(
                     title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: HubColors.ink,
-                      letterSpacing: -0.02,
-                    ),
+                    color: HubColors.ink,
                   ),
                 ),
                 if (count != null) ...[
@@ -76,13 +71,10 @@ class _CountBadge extends StatelessWidget {
           horizontal: DSSpacing.xs.value,
           vertical: DSSpacing.xxs.value,
         ),
-        child: Text(
+        child: DSCaptionText(
           '$count',
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: HubColors.seed,
-          ),
+          fontWeight: FontWeight.w600,
+          color: HubColors.seed,
         ),
       ),
     );

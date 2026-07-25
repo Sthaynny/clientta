@@ -6,7 +6,7 @@ import 'package:ufersa_hub/core/utils/extension/build_context.dart';
 import 'package:ufersa_hub/core/utils/extension/datetime.dart';
 import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
 import 'package:ufersa_hub/features/activities/view/activity_form_view_model.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
+import 'package:ufersa_hub/features/shared/hub/hub.dart';
 
 class ActivityFormScreen extends StatefulWidget {
   const ActivityFormScreen({
@@ -29,12 +29,12 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
 
   @override
   void initState() {
+    super.initState();
     viewmodel = widget.viewmodel;
     viewmodel.hydrate();
     titleController = TextEditingController(text: viewmodel.title);
     notesController = TextEditingController(text: viewmodel.notes);
     viewmodel.save.addListener(_onSave);
-    super.initState();
   }
 
   @override
@@ -85,11 +85,9 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
             onChanged: (v) => viewmodel.title = v,
           ),
           DSSpacing.md.y,
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(activityDateString),
-            subtitle: Text(viewmodel.date.toDateAt),
-            trailing: const Icon(Icons.calendar_today_outlined),
+          HubDateFormField(
+            label: activityDateString,
+            value: viewmodel.date.toDateAt,
             onTap: _pickDate,
           ),
           DSSpacing.md.y,
@@ -110,9 +108,8 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
                 (v) => setState(() => viewmodel.kind = v ?? ActivityKind.estudo),
           ),
           DSSpacing.md.y,
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(markDoneString),
+          HubSwitchFormField(
+            label: markDoneString,
             value: viewmodel.done,
             onChanged: (v) => setState(() => viewmodel.done = v),
           ),
@@ -126,7 +123,7 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
           ListenableBuilder(
             listenable: viewmodel.save,
             builder:
-                (_, __) => DSPrimaryButton(
+                (_, __) => HubPrimaryButton(
                   label: saveString,
                   isLoading: viewmodel.save.running,
                   onPressed: () => viewmodel.save.execute(),

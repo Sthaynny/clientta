@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/strings/daily_strings.dart';
+import 'package:ufersa_hub/core/strings/strings.dart';
 import 'package:ufersa_hub/core/theme/hub_colors.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
 import 'package:ufersa_hub/core/utils/extension/datetime.dart';
@@ -11,13 +12,7 @@ import 'package:ufersa_hub/features/home/screen/components/app_drawer.dart';
 import 'package:ufersa_hub/features/home/screen/home_view_model.dart';
 import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
 import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_activity_tile.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_class_card.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_day_header.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_empty_state.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_offline_banner.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_section_header.dart';
+import 'package:ufersa_hub/features/shared/hub/hub.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.viewmodel});
@@ -47,6 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
           builder:
               (context) => IconButton(
                 key: const Key('menu_button'),
+                tooltip: menuString,
+                style: IconButton.styleFrom(
+                  minimumSize: const Size(48, 48),
+                ),
                 onPressed: () => Scaffold.of(context).openDrawer(),
                 icon: const Icon(Icons.menu_rounded),
               ),

@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:ufersa_hub/core/strings/daily_strings.dart';
 import 'package:ufersa_hub/core/theme/hub_colors.dart';
 import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
 import 'package:ufersa_hub/features/shared/hub/hub_activity_kind_style.dart';
@@ -36,10 +37,15 @@ class HubActivityTile extends StatelessWidget {
         horizontal: DSSpacing.sm.value,
         vertical: DSSpacing.xs.value,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Checkbox(value: done, onChanged: onChanged),
+      child: Semantics(
+        label: '$title, $subtitle',
+        checked: done,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ExcludeSemantics(
+              child: Checkbox(value: done, onChanged: onChanged),
+            ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(top: DSSpacing.xs.value),
@@ -51,29 +57,22 @@ class HubActivityTile extends StatelessWidget {
                       _KindChip(label: style.label, color: style.color),
                       DSSpacing.sm.x,
                       Expanded(
-                        child: Text(
+                        child: DSBodyText(
                           title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: HubColors.ink,
-                            decoration:
-                                done ? TextDecoration.lineThrough : null,
-                            decorationColor: HubColors.inkMuted,
-                          ),
+                          fontWeight: FontWeight.w500,
+                          color: HubColors.ink,
+                          decoration:
+                              done ? TextDecoration.lineThrough : null,
                         ),
                       ),
                     ],
                   ),
                   DSSpacing.xxs.y,
-                  Text(
+                  DSCaptionText(
                     subtitle,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: HubColors.inkMuted,
-                    ),
+                    color: HubColors.inkMuted,
                   ),
                 ],
               ),
@@ -81,11 +80,13 @@ class HubActivityTile extends StatelessWidget {
           ),
           if (onDelete != null)
             IconButton(
+              tooltip: deleteString,
               onPressed: onDelete,
               icon: const Icon(Icons.delete_outline, size: 20),
               color: HubColors.error,
             ),
         ],
+        ),
       ),
     );
   }
@@ -109,13 +110,10 @@ class _KindChip extends StatelessWidget {
           horizontal: DSSpacing.xs.value,
           vertical: 2,
         ),
-        child: Text(
+        child: DSCaptionSmallText(
           label,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: color,
-          ),
+          fontWeight: FontWeight.w600,
+          color: color,
         ),
       ),
     );

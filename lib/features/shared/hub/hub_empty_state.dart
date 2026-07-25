@@ -37,32 +37,25 @@ class HubEmptyState extends StatelessWidget {
               ),
             ),
             DSSpacing.lg.y,
-            Text(
+            DSHeadlineSmallText(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: HubColors.ink,
-              ),
+              color: HubColors.ink,
             ),
             DSSpacing.sm.y,
-            Text(
+            DSCaptionText(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                height: 1.45,
-                color: HubColors.inkMuted,
-              ),
+              height: 1.45,
+              color: HubColors.inkMuted,
             ),
             if (actionLabel != null && onAction != null) ...[
               DSSpacing.lg.y,
               FilledButton(
                 onPressed: onAction,
                 style: FilledButton.styleFrom(
-                  backgroundColor: HubColors.seed,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: EdgeInsets.symmetric(
                     horizontal: DSSpacing.lg.value,
                     vertical: DSSpacing.md.value,

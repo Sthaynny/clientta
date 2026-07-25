@@ -33,12 +33,11 @@ class HubNavTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(DSSpacing.sm.value),
         child: ListTile(
           leading: Icon(icon, color: fg),
-          title: Text(
+          title: DSBodyText(
             label,
-            style: TextStyle(
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: fg,
-            ),
+            fontWeight:
+                isSelected ? FontWeight.w600 : FontWeight.w500,
+            color: fg,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(DSSpacing.sm.value),

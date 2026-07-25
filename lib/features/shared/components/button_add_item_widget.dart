@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_primary_button.dart';
 
 class ButtonAddItemWidget extends StatelessWidget {
   const ButtonAddItemWidget({
@@ -23,7 +24,7 @@ class ButtonAddItemWidget extends StatelessWidget {
         elevation: 3,
         child: IgnorePointer(
           ignoring: !isVisible,
-          child: DSPrimaryButton(
+          child: HubPrimaryButton(
             onPressed: onPressed,
             label: label,
             trailingIcon: Icon(

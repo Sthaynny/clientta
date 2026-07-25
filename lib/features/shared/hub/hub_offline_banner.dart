@@ -30,13 +30,10 @@ class HubOfflineBanner extends StatelessWidget {
             ),
             DSSpacing.sm.x,
             Expanded(
-              child: Text(
+              child: DSCaptionText(
                 AppMission.stripMessage,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.35,
-                  color: HubColors.ink,
-                ),
+                height: 1.35,
+                color: HubColors.ink,
               ),
             ),
           ],

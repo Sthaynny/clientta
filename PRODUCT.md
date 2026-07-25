@@ -2,7 +2,7 @@
 
 ## Platform
 
-`adaptive` (Flutter — Android / iOS)
+adaptive
 
 ## Register
 

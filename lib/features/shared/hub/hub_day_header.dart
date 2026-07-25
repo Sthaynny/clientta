@@ -23,13 +23,10 @@ class HubDayHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          DSCaptionText(
             weekdayLabel,
-            style: const TextStyle(
-              color: Color(0xFFB8D4CB),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+            color: HubColors.onPrimaryMuted,
+            fontWeight: FontWeight.w500,
           ),
           DSSpacing.xxs.y,
           Text(
@@ -43,13 +40,10 @@ class HubDayHeader extends StatelessWidget {
             ),
           ),
           DSSpacing.sm.y,
-          Text(
+          DSCaptionText(
             AppMission.purposeSummary,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.88),
-              fontSize: 14,
-              height: 1.4,
-            ),
+            color: Colors.white.withValues(alpha: 0.88),
+            height: 1.4,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),

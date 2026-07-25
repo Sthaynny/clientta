@@ -40,23 +40,16 @@ class HubClassCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                DSHeadlineSmallText(
                   subject,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: HubColors.ink,
-                    height: 1.25,
-                  ),
+                  color: HubColors.ink,
+                  height: 1.25,
                 ),
                 if (weekdayLabel != null) ...[
                   DSSpacing.xxs.y,
-                  Text(
+                  DSCaptionText(
                     weekdayLabel!,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: HubColors.inkMuted,
-                    ),
+                    color: HubColors.inkMuted,
                   ),
                 ],
                 if (room != null && room!.isNotEmpty) ...[
@@ -70,12 +63,9 @@ class HubClassCard extends StatelessWidget {
                       ),
                       DSSpacing.xxs.x,
                       Expanded(
-                        child: Text(
+                        child: DSCaptionText(
                           room!,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: HubColors.inkMuted,
-                          ),
+                          color: HubColors.inkMuted,
                         ),
                       ),
                     ],
@@ -89,14 +79,18 @@ class HubClassCard extends StatelessWidget {
               children: [
                 if (onEdit != null)
                   IconButton(
-                    visualDensity: VisualDensity.compact,
+                    style: IconButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                    ),
                     onPressed: onEdit,
                     icon: const Icon(Icons.edit_outlined, size: 20),
                     color: HubColors.inkMuted,
                   ),
                 if (onDelete != null)
                   IconButton(
-                    visualDensity: VisualDensity.compact,
+                    style: IconButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                    ),
                     onPressed: onDelete,
                     icon: const Icon(Icons.delete_outline, size: 20),
                     color: HubColors.error,
@@ -129,21 +123,15 @@ class _TimeBlock extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
+          DSCaptionText(
             start,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: HubColors.schedule,
-            ),
+            fontWeight: FontWeight.w700,
+            color: HubColors.schedule,
           ),
           const SizedBox(height: 2),
-          Text(
+          DSCaptionSmallText(
             end,
-            style: const TextStyle(
-              fontSize: 12,
-              color: HubColors.inkMuted,
-            ),
+            color: HubColors.inkMuted,
           ),
         ],
       ),
