@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen>
                   minimumSize: const Size(48, 48),
                 ),
                 onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: const Icon(Icons.menu_rounded),
+                icon: const Icon(Icons.menu_rounded, size: 26),
               ),
         ),
       ),

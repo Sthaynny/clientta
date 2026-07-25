@@ -26,6 +26,8 @@ abstract final class HubTheme {
         elevation: 0,
         centerTitle: false,
         scrolledUnderElevation: 0,
+        iconTheme: IconThemeData(color: Colors.white, size: 26),
+        actionsIconTheme: IconThemeData(color: Colors.white, size: 26),
       ),
       drawerTheme: const DrawerThemeData(
         backgroundColor: HubColors.surface,

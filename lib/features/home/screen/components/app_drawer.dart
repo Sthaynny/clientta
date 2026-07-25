@@ -32,7 +32,7 @@ class AppDrawer extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      AppIcon.hub(scale: 44),
+                      AppIcon.hub(size: 44),
                       DSSpacing.sm.x,
                       Expanded(
                         child: Text(

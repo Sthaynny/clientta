@@ -36,13 +36,14 @@ class HubAppBar extends StatelessWidget implements PreferredSizeWidget {
           (canPop
               ? IconButton(
                 icon: const Icon(Icons.arrow_back_rounded),
+                iconSize: 26,
                 onPressed: onBackButtonPressed ?? () => Navigator.maybePop(context),
               )
               : null),
       title: Row(
         children: [
           if (showBrandMark && !canPop) ...[
-            AppIcon.hub(scale: 48),
+            AppIcon.hub(size: 40),
             DSSpacing.sm.x,
           ],
           Expanded(
