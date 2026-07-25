@@ -1,6 +1,7 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-/// Boolean control with the same outlined shell as dropdowns and date fields.
+/// Boolean control inside the same outlined shell as other Hub form fields.
 class HubSwitchFormField extends StatelessWidget {
   const HubSwitchFormField({
     super.key,
@@ -16,12 +17,23 @@ class HubSwitchFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InputDecorator(
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(
+        labelText: label,
+        contentPadding: EdgeInsets.fromLTRB(
+          DSSpacing.md.value,
+          DSSpacing.xs.value,
+          DSSpacing.xs.value,
+          DSSpacing.xs.value,
+        ),
+      ),
       child: Align(
         alignment: Alignment.centerRight,
-        child: Switch.adaptive(
-          value: value,
-          onChanged: onChanged,
+        child: SizedBox(
+          height: 32,
+          child: Switch.adaptive(
+            value: value,
+            onChanged: onChanged,
+          ),
         ),
       ),
     );

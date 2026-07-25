@@ -47,6 +47,11 @@ abstract final class HubTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: HubColors.surface,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: DSSpacing.md.value,
+          vertical: DSSpacing.md.value,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(DSSpacing.sm.value),
           borderSide: const BorderSide(color: HubColors.border),

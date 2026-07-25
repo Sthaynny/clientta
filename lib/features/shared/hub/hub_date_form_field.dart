@@ -35,9 +35,13 @@ class HubDateFormField extends StatelessWidget {
                   color: HubColors.inkMuted,
                 ),
               ),
-              child: DSBodyText(
+              child: Text(
                 value,
-                color: HubColors.ink,
+                style: const TextStyle(
+                  fontSize: 16,
+                  height: 1.25,
+                  color: HubColors.ink,
+                ),
               ),
             ),
           ),

@@ -79,9 +79,9 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
       body: ListView(
         padding: EdgeInsets.all(DSSpacing.md.value),
         children: [
-          DSTextFormField(
+          HubTextFormField(
             controller: titleController,
-            hint: activityTitleString,
+            label: activityTitleString,
             onChanged: (v) => viewmodel.title = v,
           ),
           DSSpacing.md.y,
@@ -114,9 +114,10 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
             onChanged: (v) => setState(() => viewmodel.done = v),
           ),
           DSSpacing.md.y,
-          DSTextFormField(
+          HubTextFormField(
             controller: notesController,
-            hint: notesOptionalString,
+            label: notesOptionalString,
+            maxLines: 3,
             onChanged: (v) => viewmodel.notes = v,
           ),
           DSSpacing.lg.y,

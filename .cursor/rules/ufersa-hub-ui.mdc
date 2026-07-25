@@ -56,7 +56,7 @@ Scaffold(
 2. `initState`: `hydrate()`, controllers com texto inicial, `save.addListener(_onSave)`.
 3. `Scaffold` + `HubAppBar(canPop: true, showBrandMark: false)`.
 4. `ListView` com `padding: EdgeInsets.all(DSSpacing.md.value)`.
-5. Campos: `DSTextFormField` para texto; `DSSpacing.md.y` entre blocos.
+5. Campos: `HubTextFormField` para texto; `DSSpacing.md.y` entre blocos.
 6. Dropdown controlado: `initialValue` + `key: ValueKey(valorAtual)` + `setState` no `onChanged`.
 7. Botão salvar dispara `viewmodel.save.execute()`; erros via `context.showSnackBarError`.
 

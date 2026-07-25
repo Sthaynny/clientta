@@ -44,17 +44,17 @@ Design System (`DSHeadline*`, `DSBodyText`) com hierarquia fixa em rem. Títulos
 
 Objetivo: **vocabulário visual único** entre campos DS e controles Material nativos.
 
-- **Texto:** `DSTextFormField` do `design_system` para entradas de texto (grade, atividades).
+- **Texto:** `HubTextFormField` (`TextFormField` + `InputDecoration` do `HubTheme`) — não usar `DSTextFormField` em formulários Hub (evita borda dupla do pacote DS).
 - **Data:** `HubDateFormField` (rótulo + valor formatado, abre `showDatePicker` no `onTap`).
 - **Boolean:** `HubSwitchFormField` (mesmo contorno de dropdown/data).
 - **Salvar / CTA de formulário:** `HubPrimaryButton` (verde `seed`, loading via `isLoading`).
 - **Dropdowns / seleção:** `DropdownButtonFormField` (ou equivalente Material) com `InputDecoration` que herda o tema do app — ou seja, `Theme.of(context).inputDecorationTheme` definido em `HubTheme.light()` (preenchido `surface`, borda `border`, foco `seed` 1.5px).
-- Não misturar estilos ad hoc (bordas/cores soltas); se o campo não for `DSTextFormField`, ainda deve parecer o mesmo sistema de outline + foco verde.
+- Não misturar estilos ad hoc (bordas/cores soltas); todos os campos usam o mesmo outline + foco verde via `inputDecorationTheme`.
 - Espaçamento entre blocos: `DSSpacing.md` do DS.
 
 ## Components (namespace `Hub*`)
 
-Barrel: `hub.dart` em `lib/features/shared/hub/`. Não usar `Card` Material cru — preferir `HubSurface`, `HubClassCard`, `HubActivityTile`, `HubEmptyState`, `HubAppBar`, `HubOfflineBanner`, `HubNavTile`, `HubFab`, `HubPrimaryButton`, `HubDateFormField`, `HubSwitchFormField`.
+Barrel: `hub.dart` em `lib/features/shared/hub/`. Não usar `Card` Material cru — preferir `HubSurface`, `HubClassCard`, `HubActivityTile`, `HubEmptyState`, `HubAppBar`, `HubOfflineBanner`, `HubNavTile`, `HubFab`, `HubPrimaryButton`, `HubTextFormField`, `HubDateFormField`, `HubSwitchFormField`.
 
 ## Motion
 

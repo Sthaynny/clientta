@@ -88,41 +88,42 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
             onChanged: (v) => setState(() => viewmodel.weekday = v ?? 1),
           ),
           DSSpacing.md.y,
-          DSTextFormField(
+          HubTextFormField(
             controller: subjectController,
-            hint: subjectString,
+            label: subjectString,
             onChanged: (v) => viewmodel.subject = v,
           ),
           DSSpacing.md.y,
           Row(
             children: [
               Expanded(
-                child: DSTextFormField(
+                child: HubTextFormField(
                   controller: startController,
-                  hint: startTimeString,
+                  label: startTimeString,
                   onChanged: (v) => viewmodel.startTime = v,
                 ),
               ),
               DSSpacing.sm.x,
               Expanded(
-                child: DSTextFormField(
+                child: HubTextFormField(
                   controller: endController,
-                  hint: endTimeString,
+                  label: endTimeString,
                   onChanged: (v) => viewmodel.endTime = v,
                 ),
               ),
             ],
           ),
           DSSpacing.md.y,
-          DSTextFormField(
+          HubTextFormField(
             controller: roomController,
-            hint: roomString,
+            label: roomString,
             onChanged: (v) => viewmodel.room = v,
           ),
           DSSpacing.md.y,
-          DSTextFormField(
+          HubTextFormField(
             controller: notesController,
-            hint: notesOptionalString,
+            label: notesOptionalString,
+            maxLines: 3,
             onChanged: (v) => viewmodel.notes = v,
           ),
           DSSpacing.lg.y,
