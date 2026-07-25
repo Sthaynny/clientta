@@ -5,6 +5,7 @@ class ClassEntry {
     required this.subject,
     required this.startTime,
     required this.endTime,
+    this.seriesId,
     this.room,
     this.notes,
   });
@@ -14,6 +15,7 @@ class ClassEntry {
   final String subject;
   final String startTime;
   final String endTime;
+  final String? seriesId;
   final String? room;
   final String? notes;
 
@@ -24,6 +26,7 @@ class ClassEntry {
       subject: map['subject'] as String,
       startTime: map['startTime'] as String,
       endTime: map['endTime'] as String,
+      seriesId: map['seriesId'] as String?,
       room: map['room'] as String?,
       notes: map['notes'] as String?,
     );
@@ -35,6 +38,7 @@ class ClassEntry {
     'subject': subject,
     'startTime': startTime,
     'endTime': endTime,
+    if (seriesId != null) 'seriesId': seriesId,
     'room': room,
     'notes': notes,
   };
@@ -45,6 +49,8 @@ class ClassEntry {
     String? subject,
     String? startTime,
     String? endTime,
+    String? seriesId,
+    bool clearSeriesId = false,
     String? room,
     String? notes,
   }) {
@@ -54,6 +60,7 @@ class ClassEntry {
       subject: subject ?? this.subject,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      seriesId: clearSeriesId ? null : (seriesId ?? this.seriesId),
       room: room ?? this.room,
       notes: notes ?? this.notes,
     );

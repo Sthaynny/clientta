@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:ufersa_hub/core/strings/daily_strings.dart';
 import 'package:ufersa_hub/core/theme/hub_colors.dart';
 import 'package:ufersa_hub/features/shared/hub/hub_surface.dart';
 
@@ -78,22 +79,32 @@ class HubClassCard extends StatelessWidget {
             Column(
               children: [
                 if (onEdit != null)
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      minimumSize: const Size(48, 48),
+                  Semantics(
+                    button: true,
+                    label: editActionString,
+                    child: IconButton(
+                      tooltip: editActionString,
+                      style: IconButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
+                      onPressed: onEdit,
+                      icon: const Icon(Icons.edit_outlined, size: 20),
+                      color: HubColors.inkMuted,
                     ),
-                    onPressed: onEdit,
-                    icon: const Icon(Icons.edit_outlined, size: 20),
-                    color: HubColors.inkMuted,
                   ),
                 if (onDelete != null)
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      minimumSize: const Size(48, 48),
+                  Semantics(
+                    button: true,
+                    label: deleteString,
+                    child: IconButton(
+                      tooltip: deleteString,
+                      style: IconButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
+                      onPressed: onDelete,
+                      icon: const Icon(Icons.delete_outline, size: 20),
+                      color: HubColors.error,
                     ),
-                    onPressed: onDelete,
-                    icon: const Icon(Icons.delete_outline, size: 20),
-                    color: HubColors.error,
                   ),
               ],
             ),
