@@ -14,7 +14,7 @@
 
 O ConectaFERSA começou lá na faculdade: eu só queria um jeito simples de não perder a grade, as entregas e a rotina da semana sem depender de mil apps diferentes.
 
-Montei um projeto mobile para isso — seu dia na universidade em um lugar só: o que tem de aula hoje, o que está pendente nas atividades, sala e horário quando a semana vira de cabeça para baixo.
+Montei um projeto mobile para isso, seu dia na universidade em um lugar só: o que tem de aula hoje, o que está pendente nas atividades, sala e horário quando a semana vira de cabeça para baixo.
 
 A vida aconteceu, o código ficou na gaveta por um tempo. Recentemente retomei, fui lapidando de novo e hoje dá para dizer com calma: está publicado na Google Play.
 
@@ -22,7 +22,7 @@ A vida aconteceu, o código ficou na gaveta por um tempo. Recentemente retomei, 
 
 Se você estuda (ou conhece alguém que vive de grade + prazo + “cadê a sala?”), dá uma olhada:
 
-📲 Google Play: [LINK_PLAY_STORE]  
+📲 Google Play: [LINK_PLAY_STORE]
 💻 Código aberto: https://github.com/Sthaynny/app_news
 
 Qualquer feedback sincero ajuda — comentário aqui ou issue no GitHub.
@@ -75,7 +75,7 @@ O ConectaFERSA nasceu na faculdade: organizar grade, entregas e rotina sem espal
 
 Foco em seu dia na faculdade — aulas de hoje, atividades pendentes, horário e sala. Sem login, offline, dados no próprio celular.
 
-📲 Instale: [LINK_PLAY_STORE]  
+📲 Instale: [LINK_PLAY_STORE]
 💻 GitHub: https://github.com/Sthaynny/app_news
 
 Feedback é bem-vindo.
@@ -86,6 +86,6 @@ Feedback é bem-vindo.
 
 ## 5. CTA
 
-**Principal:** “Instale na Google Play” + link `[LINK_PLAY_STORE]`  
-**Secundário:** “Código no GitHub” + https://github.com/Sthaynny/app_news  
+**Principal:** “Instale na Google Play” + link `[LINK_PLAY_STORE]`
+**Secundário:** “Código no GitHub” + https://github.com/Sthaynny/app_news
 **Engajamento:** convite a comentário ou issue (sem pedir download em massa nem números inventados).
