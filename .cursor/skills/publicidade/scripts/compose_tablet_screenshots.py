@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Compose Google Play tablet promo screenshots (7" and 10") from real UI prints.
 
-Layout: headline panel ~30% left + landscape tablet mockup ~70% right.
+Layout: headline panel ~30% left + portrait phone mockup ~70% right on 16:9 canvas.
+Phone-first apps stay legible (landscape tablet frame + cover crop made UI unreadable).
 Used by the publicidade skill when UI fidelity matters more than GenerateImage.
 
 Requires: pip install Pillow
@@ -98,41 +99,45 @@ def _rounded_rect(
     draw.rounded_rectangle(box, radius=radius, fill=fill)
 
 
-def _prepare_screen_for_tablet(
+def _prepare_screen_for_phone(
     screen: Image.Image,
     inner_w: int,
     inner_h: int,
+    *,
+    screen_bg: tuple[int, int, int],
 ) -> Image.Image:
-    """Portrait phone capture scaled to cover a landscape tablet screen (no phone bezel)."""
-    trim_top = int(screen.height * 0.055)
+    """Portrait capture scaled to fit inside the phone screen (full UI visible)."""
+    trim_top = int(screen.height * 0.04)
     trimmed = screen.crop((0, trim_top, screen.width, screen.height))
     sw, sh = trimmed.size
-    scale = max(inner_w / sw, inner_h / sh)
-    new_w = int(sw * scale)
-    new_h = int(sh * scale)
+    scale = min(inner_w / sw, inner_h / sh)
+    new_w = max(1, int(sw * scale))
+    new_h = max(1, int(sh * scale))
     resized = trimmed.resize((new_w, new_h), Image.Resampling.LANCZOS)
-    left = (new_w - inner_w) // 2
-    top = (new_h - inner_h) // 2
-    return resized.crop((left, top, left + inner_w, top + inner_h))
+    fitted = Image.new("RGB", (inner_w, inner_h), screen_bg)
+    offset_x = (inner_w - new_w) // 2
+    offset_y = (inner_h - new_h) // 2
+    fitted.paste(resized, (offset_x, offset_y))
+    return fitted
 
 
-def _tablet_device_box(
+def _phone_device_box(
     width: int,
     height: int,
     panel_w: int,
 ) -> tuple[int, int, int, int]:
-    """Landscape tablet frame on the right ~70% of the canvas."""
-    margin_x = int(width * 0.035)
-    margin_y = int(height * 0.06)
+    """Portrait phone frame on the right ~70% of the landscape promo canvas."""
+    margin_x = int(width * 0.028)
+    margin_y = int(height * 0.045)
     avail_w = width - panel_w - margin_x * 2
     avail_h = height - margin_y * 2
-    # Target ~16:10 landscape device.
-    target_ratio = 16 / 10
-    box_w = avail_w
-    box_h = int(box_w / target_ratio)
-    if box_h > avail_h:
-        box_h = avail_h
-        box_w = int(box_h * target_ratio)
+    # ~9:19.5 modern phone aspect (width / height).
+    target_ratio = 9 / 19.5
+    box_h = avail_h
+    box_w = int(box_h * target_ratio)
+    if box_w > avail_w:
+        box_w = avail_w
+        box_h = int(box_w / target_ratio)
     left = panel_w + margin_x + (avail_w - box_w) // 2
     top = margin_y + (avail_h - box_h) // 2
     return (left, top, left + box_w, top + box_h)
@@ -185,30 +190,29 @@ def compose_card(
         raise FileNotFoundError(f"Print not found: {print_path}")
     screen = Image.open(print_path).convert("RGB")
 
-    tablet_left, tablet_top, tablet_right, tablet_bottom = _tablet_device_box(width, height, panel_w)
-    bezel_px = max(12, int((tablet_right - tablet_left) * 0.014))
-    radius_outer = max(22, int((tablet_right - tablet_left) * 0.025))
-    radius_inner = max(14, radius_outer - 6)
-    inner_left = tablet_left + bezel_px
-    inner_top = tablet_top + bezel_px
-    inner_right = tablet_right - bezel_px
-    inner_bottom = tablet_bottom - bezel_px
+    phone_left, phone_top, phone_right, phone_bottom = _phone_device_box(width, height, panel_w)
+    bezel_px = max(10, int((phone_right - phone_left) * 0.022))
+    radius_outer = max(28, int((phone_right - phone_left) * 0.08))
+    radius_inner = max(18, radius_outer - 5)
+    inner_left = phone_left + bezel_px
+    inner_top = phone_top + bezel_px
+    inner_right = phone_right - bezel_px
+    inner_bottom = phone_bottom - bezel_px
     inner_w = inner_right - inner_left
     inner_h = inner_bottom - inner_top
 
-    _rounded_rect(draw, (tablet_left, tablet_top, tablet_right, tablet_bottom), radius_outer, bezel)
+    _rounded_rect(draw, (phone_left, phone_top, phone_right, phone_bottom), radius_outer, bezel)
     _rounded_rect(draw, (inner_left, inner_top, inner_right, inner_bottom), radius_inner, screen_bg)
 
-    # Front camera (landscape tablet, long edge top).
-    cam_r = max(4, bezel_px // 2)
-    cam_x = (tablet_left + tablet_right) // 2
-    cam_y = tablet_top + bezel_px // 2 + cam_r
+    cam_r = max(5, int(bezel_px * 0.45))
+    cam_x = (inner_left + inner_right) // 2
+    cam_y = inner_top + max(8, int(bezel_px * 0.6))
     draw.ellipse(
         (cam_x - cam_r, cam_y - cam_r, cam_x + cam_r, cam_y + cam_r),
         fill=(55, 55, 58),
     )
 
-    fitted = _prepare_screen_for_tablet(screen, inner_w, inner_h)
+    fitted = _prepare_screen_for_phone(screen, inner_w, inner_h, screen_bg=screen_bg)
     canvas.paste(fitted, (inner_left, inner_top))
     return canvas
 

@@ -3,7 +3,8 @@
 ## `compose_tablet_screenshots.py`
 
 Compositor determinístico (Pillow) para capturas **tablet 7"** e **10"** da Google Play:
-headline ~30% à esquerda + mockup landscape ~70% à direita.
+headline ~30% à esquerda + mockup de **telefone em portrait** ~70% à direita (canvas 16:9).
+Use quando o app é phone-first — mockup landscape com crop deixava a UI ilegível.
 
 **Quando usar:** pacote loja com prints reais e fidelidade de UI (preferir isto a GenerateImage para tablet).
 
