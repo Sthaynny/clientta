@@ -84,11 +84,9 @@ packages:
   design_system:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: f35d003d6a1e807874b9d67fca728fd14f820945
-      url: "https://github.com/Sthaynny/design_system.git"
-    source: git
+      path: "../design_system/ds"
+      relative: true
+    source: path
     version: "0.0.1"
   dispose_scope:
     dependency: transitive

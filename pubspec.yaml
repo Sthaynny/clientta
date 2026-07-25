@@ -30,8 +30,7 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.8
   design_system:
-    git:
-      url: https://github.com/Sthaynny/design_system.git
+    path: ../design_system/ds
   flutter:
     sdk: flutter
   get_it: ^8.0.3
