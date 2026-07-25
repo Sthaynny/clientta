@@ -44,7 +44,12 @@ class HubActivityTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ExcludeSemantics(
-              child: Checkbox(value: done, onChanged: onChanged),
+              child: Checkbox(
+                value: done,
+                onChanged: onChanged,
+                activeColor: HubColors.seed,
+                checkColor: Colors.white,
+              ),
             ),
           Expanded(
             child: Padding(

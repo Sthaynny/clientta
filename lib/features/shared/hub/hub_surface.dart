@@ -22,16 +22,34 @@ class HubSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(DSSpacing.md.value);
     final content = Padding(
       padding: padding ?? EdgeInsets.all(DSSpacing.md.value),
       child: child,
     );
 
-    final decorated = DecoratedBox(
+    Widget surface = Material(
+      color: tint ?? HubColors.surface,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: radius,
+        side: showBorder
+            ? const BorderSide(color: HubColors.border)
+            : BorderSide.none,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: onTap != null
+          ? InkWell(
+              onTap: onTap,
+              borderRadius: radius,
+              child: content,
+            )
+          : content,
+    );
+
+    surface = DecoratedBox(
       decoration: BoxDecoration(
-        color: tint ?? HubColors.surface,
-        borderRadius: BorderRadius.circular(DSSpacing.md.value),
-        border: showBorder ? Border.all(color: HubColors.border) : null,
+        borderRadius: radius,
         boxShadow: const [
           BoxShadow(
             color: Color(0x0A1A1F24),
@@ -40,21 +58,12 @@ class HubSurface extends StatelessWidget {
           ),
         ],
       ),
-      child: content,
+      child: surface,
     );
 
-  return Padding(
+    return Padding(
       padding: margin ?? EdgeInsets.zero,
-      child: Material(
-        color: Colors.transparent,
-        child: onTap != null
-            ? InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(DSSpacing.md.value),
-              child: decorated,
-            )
-            : decorated,
-      ),
+      child: surface,
     );
   }
 }

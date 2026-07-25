@@ -115,18 +115,165 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
     );
   }
 
-  Future<void> _pickStartTime() async {
+  Future<void> _pickSharedStartTime() async {
     final picked = await _pickTime(_timeFromHhMm(viewmodel.startTime));
     if (picked != null) {
-      setState(() => viewmodel.startTime = _hhMmFromTime(picked));
+      setState(
+        () => viewmodel.updateSharedStartTime(_hhMmFromTime(picked)),
+      );
     }
   }
 
-  Future<void> _pickEndTime() async {
+  Future<void> _pickSharedEndTime() async {
     final picked = await _pickTime(_timeFromHhMm(viewmodel.endTime));
     if (picked != null) {
-      setState(() => viewmodel.endTime = _hhMmFromTime(picked));
+      setState(() => viewmodel.updateSharedEndTime(_hhMmFromTime(picked)));
     }
+  }
+
+  Future<void> _pickDayStartTime(int weekday) async {
+    final slot = viewmodel.scheduleForWeekday(weekday);
+    final picked = await _pickTime(
+      _timeFromHhMm(slot?.startTime ?? viewmodel.startTime),
+    );
+    if (picked != null) {
+      setState(
+        () => viewmodel.updateDayStartTime(weekday, _hhMmFromTime(picked)),
+      );
+    }
+  }
+
+  Future<void> _pickDayEndTime(int weekday) async {
+    final slot = viewmodel.scheduleForWeekday(weekday);
+    final picked = await _pickTime(
+      _timeFromHhMm(slot?.endTime ?? viewmodel.endTime),
+    );
+    if (picked != null) {
+      setState(
+        () => viewmodel.updateDayEndTime(weekday, _hhMmFromTime(picked)),
+      );
+    }
+  }
+
+  Widget _buildSharedTimeFields() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: HubTimeFormField(
+                label: startTimeString,
+                value: viewmodel.startTime,
+                onTap: _pickSharedStartTime,
+              ),
+            ),
+            DSSpacing.sm.x,
+            Expanded(
+              child: HubTimeFormField(
+                label: endTimeString,
+                value: viewmodel.endTime,
+                onTap: _pickSharedEndTime,
+              ),
+            ),
+          ],
+        ),
+        HubNightShiftPresets(
+          onApply: (start, end) {
+            setState(() => viewmodel.applyTimeRange(start, end));
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPerDayTimeFields() {
+    final days = viewmodel.selectedWeekdays.toList()..sort();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DSCaptionText(
+          classPerDayTimesHintString,
+          color: HubColors.inkMuted,
+        ),
+        DSSpacing.sm.y,
+        for (final weekday in days) ...[
+          if (weekday != days.first) DSSpacing.md.y,
+          HubSurface(
+            padding: EdgeInsets.all(DSSpacing.sm.value),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                DSBodyText(
+                  weekdayLabels[weekday - 1],
+                  fontWeight: FontWeight.w600,
+                  color: HubColors.ink,
+                ),
+                DSSpacing.sm.y,
+                Row(
+                  children: [
+                    Expanded(
+                      child: HubTimeFormField(
+                        label: startTimeString,
+                        value:
+                            viewmodel.scheduleForWeekday(weekday)?.startTime ??
+                            viewmodel.startTime,
+                        onTap: () => _pickDayStartTime(weekday),
+                      ),
+                    ),
+                    DSSpacing.sm.x,
+                    Expanded(
+                      child: HubTimeFormField(
+                        label: endTimeString,
+                        value:
+                            viewmodel.scheduleForWeekday(weekday)?.endTime ??
+                            viewmodel.endTime,
+                        onTap: () => _pickDayEndTime(weekday),
+                      ),
+                    ),
+                  ],
+                ),
+                HubNightShiftPresets(
+                  onApply: (start, end) {
+                    setState(
+                      () => viewmodel.applyTimeRange(
+                        start,
+                        end,
+                        weekday: weekday,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildScheduleSection(bool showSameTimeSwitch) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HubSectionHeader(title: classScheduleSectionString),
+        if (showSameTimeSwitch) ...[
+          HubSwitchFormField(
+            label: classSameTimeSwitchString,
+            subtitle: classSameTimeSwitchSubtitleString,
+            value: viewmodel.sameTimeForAllDays,
+            onChanged: (value) {
+              setState(() => viewmodel.setSameTimeForAllDays(value));
+            },
+          ),
+          DSSpacing.md.y,
+        ],
+        if (!showSameTimeSwitch || viewmodel.sameTimeForAllDays)
+          _buildSharedTimeFields()
+        else
+          _buildPerDayTimeFields(),
+      ],
+    );
   }
 
   @override
@@ -141,6 +288,8 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
         body: const AppLoadingWidget(),
       );
     }
+
+    final showSameTimeSwitch = viewmodel.selectedWeekdays.length > 1;
 
     return Scaffold(
       appBar: HubAppBar(
@@ -163,33 +312,15 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
             classWeekdaysHintString,
             color: HubColors.inkMuted,
           ),
-          DSSpacing.md.y,
+          DSSpacing.lg.y,
           HubTextFormField(
             controller: subjectController,
             label: subjectString,
             onChanged: (v) => viewmodel.subject = v,
           ),
-          DSSpacing.md.y,
-          Row(
-            children: [
-              Expanded(
-                child: HubTimeFormField(
-                  label: startTimeString,
-                  value: viewmodel.startTime,
-                  onTap: _pickStartTime,
-                ),
-              ),
-              DSSpacing.sm.x,
-              Expanded(
-                child: HubTimeFormField(
-                  label: endTimeString,
-                  value: viewmodel.endTime,
-                  onTap: _pickEndTime,
-                ),
-              ),
-            ],
-          ),
-          DSSpacing.md.y,
+          DSSpacing.lg.y,
+          _buildScheduleSection(showSameTimeSwitch),
+          DSSpacing.lg.y,
           HubTextFormField(
             controller: roomController,
             label: roomString,
@@ -202,7 +333,7 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
             maxLines: 3,
             onChanged: (v) => viewmodel.notes = v,
           ),
-          DSSpacing.lg.y,
+          DSSpacing.xl.y,
           ListenableBuilder(
             listenable: viewmodel.save,
             builder:
@@ -212,6 +343,7 @@ class _ClassFormScreenState extends State<ClassFormScreen> {
                   onPressed: () => viewmodel.save.execute(),
                 ),
           ),
+          DSSpacing.md.y,
         ],
       ),
     );

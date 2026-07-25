@@ -2,16 +2,14 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/strings/daily_strings.dart';
+import 'package:ufersa_hub/core/theme/hub_colors.dart';
 import 'package:ufersa_hub/core/utils/extension/build_context.dart';
+import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
 import 'package:ufersa_hub/features/classes/domain/models/class_schedule_group.dart';
 import 'package:ufersa_hub/features/classes/view/classes_view_model.dart';
 import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
 import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_app_bar.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_class_card.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_empty_state.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_fab.dart';
-
+import 'package:ufersa_hub/features/shared/hub/hub.dart';
 enum _ClassDeleteScope { singleDay, entireSeries }
 
 class ClassesScreen extends StatefulWidget {
@@ -23,15 +21,26 @@ class ClassesScreen extends StatefulWidget {
   State<ClassesScreen> createState() => _ClassesScreenState();
 }
 
-class _ClassesScreenState extends State<ClassesScreen> {
+class _ClassesScreenState extends State<ClassesScreen>
+    with RouteAware, HubRouteRefreshMixin {
+  ClassesViewModel get viewmodel => widget.viewmodel;
+
   @override
   void initState() {
     super.initState();
-    widget.viewmodel.load.execute();
+    viewmodel.load.execute();
+  }
+
+  @override
+  void onHubRouteVisible() => viewmodel.load.execute();
+
+  Future<void> _openClassForm({ClassEntry? entry}) async {
+    await context.go(AppRouters.classForm, arguments: entry);
+    if (!mounted) return;
+    viewmodel.load.execute();
   }
 
   Future<void> _confirmDelete(ClassScheduleGroup group) async {
-    final viewmodel = widget.viewmodel;
     final representative = group.representative;
 
     if (group.entries.length == 1) {
@@ -137,16 +146,19 @@ class _ClassesScreenState extends State<ClassesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final viewmodel = widget.viewmodel;
-
     return Scaffold(
-      appBar: HubAppBar(canPop: true, title: myScheduleString, showBrandMark: false),
+      appBar: HubAppBar(
+        canPop: true,
+        title: myScheduleString,
+        showBrandMark: false,
+        onBackButtonPressed:
+            () => Navigator.of(context).pushReplacementNamed(
+              AppRouters.home.path,
+            ),
+      ),
       floatingActionButton: HubFab(
         label: addClassString,
-        onPressed: () async {
-          await context.go(AppRouters.classForm);
-          viewmodel.load.execute();
-        },
+        onPressed: () => _openClassForm(),
       ),
       body: ListenableBuilder(
         listenable: viewmodel.load,
@@ -160,35 +172,61 @@ class _ClassesScreenState extends State<ClassesScreen> {
               onPressed: () => viewmodel.load.execute(),
             );
           }
+
+          Future<void> onRefresh() async => viewmodel.load.execute();
+
           if (viewmodel.entries.isEmpty) {
-            return HubEmptyState(
-              icon: Icons.calendar_view_week_outlined,
-              title: emptyScheduleTitle,
-              message: emptyScheduleMessage,
-              actionLabel: addClassString,
-              onAction: () => context.go(AppRouters.classForm),
+            return RefreshIndicator(
+              color: HubColors.seed,
+              onRefresh: onRefresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.65,
+                  child: HubEmptyState(
+                    icon: Icons.calendar_view_week_outlined,
+                    title: emptyScheduleTitle,
+                    message: emptyScheduleMessage,
+                    actionLabel: addClassString,
+                    onAction: () => _openClassForm(),
+                  ),
+                ),
+              ),
             );
           }
 
-          return ListView.builder(
-            padding: EdgeInsets.all(DSSpacing.md.value),
-            itemCount: viewmodel.groups.length,
-            itemBuilder: (context, index) {
-              final group = viewmodel.groups[index];
-              final entry = group.representative;
-              return HubClassCard(
-                subject: entry.subject,
-                startTime: entry.startTime,
-                endTime: entry.endTime,
-                room: entry.room,
-                weekdayLabel: group.combinedWeekdayLabel,
-                onEdit: () async {
-                  await context.go(AppRouters.classForm, arguments: entry);
-                  viewmodel.load.execute();
-                },
-                onDelete: () => _confirmDelete(group),
-              );
-            },
+          return RefreshIndicator(
+            color: HubColors.seed,
+            onRefresh: onRefresh,
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.all(DSSpacing.md.value),
+              itemCount: viewmodel.groups.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: DSSpacing.sm.value),
+                    child: HubSectionHeader(
+                      title: myScheduleString,
+                      count: viewmodel.groups.length,
+                    ),
+                  );
+                }
+                final group = viewmodel.groups[index - 1];
+                final entry = group.displayTimeEntry;
+                return HubClassCard(
+                  subject: entry.subject,
+                  startTime: entry.startTime,
+                  endTime: entry.endTime,
+                  timeVaries: group.hasVaryingTimes,
+                  room: entry.room,
+                  weekdayLabel: group.combinedWeekdayLabel,
+                  onTap: () => _openClassForm(entry: entry),
+                  onEdit: () => _openClassForm(entry: entry),
+                  onDelete: () => _confirmDelete(group),
+                );
+              },
+            ),
           );
         },
       ),

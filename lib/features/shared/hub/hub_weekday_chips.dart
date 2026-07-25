@@ -32,7 +32,7 @@ class HubWeekdayChips extends StatelessWidget {
           final selected = selectedWeekdays.contains(weekday);
           return FilterChip(
             label: Text(
-              weekdayLabels[index],
+              weekdayShortLabels[index],
               style: theme.textTheme.bodySmall?.copyWith(
                 color: selected ? HubColors.seed : HubColors.ink,
               ),

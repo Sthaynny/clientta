@@ -39,4 +39,30 @@ void main() {
     expect(groups.last.combinedWeekdayLabel, 'Sex');
     expect(groups.last.entryIds, ['legacy']);
   });
+
+  test('ClassScheduleGroup detecta horários diferentes na série', () {
+    const series = 's2';
+    final group = ClassScheduleGroup(
+      entries: [
+        ClassEntry(
+          id: 'a',
+          seriesId: series,
+          weekday: 1,
+          subject: 'EF',
+          startTime: '07:00',
+          endTime: '08:00',
+        ),
+        ClassEntry(
+          id: 'b',
+          seriesId: series,
+          weekday: 2,
+          subject: 'EF',
+          startTime: '19:00',
+          endTime: '21:00',
+        ),
+      ],
+    );
+
+    expect(group.hasVaryingTimes, isTrue);
+  });
 }

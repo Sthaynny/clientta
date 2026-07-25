@@ -12,6 +12,7 @@ class HubClassCard extends StatelessWidget {
     required this.endTime,
     this.room,
     this.weekdayLabel,
+    this.timeVaries = false,
     this.onTap,
     this.onEdit,
     this.onDelete,
@@ -22,6 +23,7 @@ class HubClassCard extends StatelessWidget {
   final String endTime;
   final String? room;
   final String? weekdayLabel;
+  final bool timeVaries;
   final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
@@ -35,7 +37,11 @@ class HubClassCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _TimeBlock(start: startTime, end: endTime),
+          _TimeBlock(
+            start: startTime,
+            end: endTime,
+            varies: timeVaries,
+          ),
           DSSpacing.md.x,
           Expanded(
             child: Column(
@@ -115,10 +121,15 @@ class HubClassCard extends StatelessWidget {
 }
 
 class _TimeBlock extends StatelessWidget {
-  const _TimeBlock({required this.start, required this.end});
+  const _TimeBlock({
+    required this.start,
+    required this.end,
+    this.varies = false,
+  });
 
   final String start;
   final String end;
+  final bool varies;
 
   @override
   Widget build(BuildContext context) {
@@ -132,20 +143,29 @@ class _TimeBlock extends StatelessWidget {
         color: HubColors.scheduleMuted,
         borderRadius: BorderRadius.circular(DSSpacing.xs.value),
       ),
-      child: Column(
-        children: [
-          DSCaptionText(
-            start,
-            fontWeight: FontWeight.w700,
-            color: HubColors.schedule,
-          ),
-          const SizedBox(height: 2),
-          DSCaptionSmallText(
-            end,
-            color: HubColors.inkMuted,
-          ),
-        ],
-      ),
+      child: varies
+          ? Center(
+              child: DSCaptionSmallText(
+                classScheduleTimeVariesString,
+                color: HubColors.schedule,
+                fontWeight: FontWeight.w700,
+                textAlign: TextAlign.center,
+              ),
+            )
+          : Column(
+              children: [
+                DSCaptionText(
+                  start,
+                  fontWeight: FontWeight.w700,
+                  color: HubColors.schedule,
+                ),
+                const SizedBox(height: 2),
+                DSCaptionSmallText(
+                  end,
+                  color: HubColors.inkMuted,
+                ),
+              ],
+            ),
     );
   }
 }

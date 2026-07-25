@@ -23,16 +23,33 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with RouteAware, HubRouteRefreshMixin {
+  HomeViewModel get viewmodel => widget.viewmodel;
+
   @override
   void initState() {
     super.initState();
-    widget.viewmodel.load.execute();
+    viewmodel.load.execute();
+  }
+
+  @override
+  void onHubRouteVisible() => viewmodel.load.execute();
+
+  Future<void> _openClassForm({ClassEntry? entry}) async {
+    await context.go(AppRouters.classForm, arguments: entry);
+    if (!mounted) return;
+    viewmodel.load.execute();
+  }
+
+  Future<void> _openActivityForm({ActivityEntry? entry}) async {
+    await context.go(AppRouters.activityForm, arguments: entry);
+    if (!mounted) return;
+    viewmodel.load.execute();
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewmodel = widget.viewmodel;
     final now = DateTime.now();
 
     return Scaffold(
@@ -52,80 +69,97 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       drawer: const AppDrawer(),
-      body: Column(
-        children: [
-          const HubOfflineBanner(),
-          Expanded(
-            child: ListenableBuilder(
-              listenable: viewmodel.load,
-              builder: (context, _) {
-                if (viewmodel.load.running && viewmodel.todayClasses.isEmpty) {
-                  return const AppLoadingWidget();
-                }
-                if (viewmodel.load.error) {
-                  return BodyErrorDefaultWidget(
-                    title: errorLoadDailyString,
-                    onPressed: () => viewmodel.load.execute(),
-                  );
-                }
-                return RefreshIndicator(
-                  color: HubColors.seed,
-                  onRefresh: () async => viewmodel.load.execute(),
-                  child: ListView(
-                    padding: EdgeInsets.all(DSSpacing.md.value),
-                    children: [
-                      HubDayHeader(
-                        weekdayLabel: weekdayLabels[now.weekday - 1],
-                        dateLabel: formatHubDayHeader(now),
+      body: ListenableBuilder(
+        listenable: viewmodel.load,
+        builder: (context, _) {
+          if (viewmodel.load.running && viewmodel.todayClasses.isEmpty) {
+            return const AppLoadingWidget();
+          }
+          if (viewmodel.load.error) {
+            return BodyErrorDefaultWidget(
+              title: errorLoadDailyString,
+              onPressed: () => viewmodel.load.execute(),
+            );
+          }
+          return RefreshIndicator(
+            color: HubColors.seed,
+            onRefresh: () async => viewmodel.load.execute(),
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.all(DSSpacing.md.value),
+              children: [
+                HubDayHeader(
+                  weekdayLabel: weekdayLabels[now.weekday - 1],
+                  dateLabel: formatHubDayHeader(now),
+                  classesTodayCount: viewmodel.todayClasses.length,
+                  activitiesTodayCount: viewmodel.todayActivities.length,
+                ),
+                DSSpacing.md.y,
+                HubHomeQuickActions(
+                  addClassLabel: addClassString,
+                  addActivityLabel: addActivityString,
+                  onAddClass: () => _openClassForm(),
+                  onAddActivity: () => _openActivityForm(),
+                ),
+                DSSpacing.lg.y,
+                HubHomeSection(
+                  title: classesTodayString,
+                  count: viewmodel.todayClasses.isEmpty
+                      ? null
+                      : viewmodel.todayClasses.length,
+                  actionLabel: myScheduleString,
+                  onAction: () =>
+                      Navigator.of(context).pushReplacementNamed(
+                        AppRouters.classes.path,
                       ),
-                      DSSpacing.lg.y,
-                      HubSectionHeader(
-                        title: classesTodayString,
-                        count: viewmodel.todayClasses.isEmpty
-                            ? null
-                            : viewmodel.todayClasses.length,
-                        actionLabel: myScheduleString,
-                        onAction: () => context.go(AppRouters.classes),
-                      ),
-                      if (viewmodel.todayClasses.isEmpty)
-                        HubEmptyState(
+                  child: viewmodel.todayClasses.isEmpty
+                      ? HubEmptyState(
+                          embedded: true,
                           icon: Icons.schedule_outlined,
                           title: emptyClassesHomeTitle,
                           message: emptyClassesHomeMessage,
                           actionLabel: addClassString,
-                          onAction: () => context.go(AppRouters.classForm),
+                          onAction: () => _openClassForm(),
                         )
-                      else
-                        ...viewmodel.todayClasses.map(_classTile),
-                      DSSpacing.lg.y,
-                      HubSectionHeader(
-                        title: activitiesTodayString,
-                        count: viewmodel.todayActivities.isEmpty
-                            ? null
-                            : viewmodel.todayActivities.length,
-                        actionLabel: myActivitiesString,
-                        onAction: () => context.go(AppRouters.activities),
+                      : Column(
+                          children:
+                              viewmodel.todayClasses
+                                  .map(_classTile)
+                                  .toList(),
+                        ),
+                ),
+                DSSpacing.lg.y,
+                HubHomeSection(
+                  title: activitiesTodayString,
+                  count: viewmodel.todayActivities.isEmpty
+                      ? null
+                      : viewmodel.todayActivities.length,
+                  actionLabel: myActivitiesString,
+                  onAction: () =>
+                      Navigator.of(context).pushReplacementNamed(
+                        AppRouters.activities.path,
                       ),
-                      if (viewmodel.todayActivities.isEmpty)
-                        HubEmptyState(
+                  child: viewmodel.todayActivities.isEmpty
+                      ? HubEmptyState(
+                          embedded: true,
                           icon: Icons.task_alt_outlined,
                           title: emptyActivitiesHomeTitle,
                           message: emptyActivitiesHomeMessage,
                           actionLabel: addActivityString,
-                          onAction: () => context.go(AppRouters.activityForm),
+                          onAction: () => _openActivityForm(),
                         )
-                      else
-                        ...viewmodel.todayActivities.map(
-                          (a) => _activityTile(context, viewmodel, a),
+                      : Column(
+                          children:
+                              viewmodel.todayActivities
+                                  .map((a) => _activityTile(a))
+                                  .toList(),
                         ),
-                      DSSpacing.xl.y,
-                    ],
-                  ),
-                );
-              },
+                ),
+                DSSpacing.xl.y,
+              ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -136,24 +170,18 @@ class _HomeScreenState extends State<HomeScreen> {
       startTime: entry.startTime,
       endTime: entry.endTime,
       room: entry.room,
+      onTap: () => _openClassForm(entry: entry),
     );
   }
 
-  Widget _activityTile(
-    BuildContext context,
-    HomeViewModel viewmodel,
-    ActivityEntry entry,
-  ) {
+  Widget _activityTile(ActivityEntry entry) {
     return HubActivityTile(
       title: entry.title,
       subtitle: '${entry.kind.label} • ${entry.date.toDateAt}',
       kind: entry.kind,
       done: entry.done,
       onChanged: (_) => viewmodel.toggleActivity.execute(entry),
-      onTap: () async {
-        await context.go(AppRouters.activityForm, arguments: entry);
-        viewmodel.load.execute();
-      },
+      onTap: () => _openActivityForm(entry: entry),
     );
   }
 }

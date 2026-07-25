@@ -5,9 +5,6 @@ abstract final class AppMission {
   static const String tagline =
       'Grade, atividades e rotina — tudo no seu celular, offline.';
 
-  static const String stripMessage =
-      'Seus registros ficam só neste aparelho. Sem login, sem nuvem.';
-
   static const String purposeSummary =
       'Organizador pessoal para estudantes: cadastre aulas na grade, '
       'marque entregas e provas e veja o que importa hoje.';

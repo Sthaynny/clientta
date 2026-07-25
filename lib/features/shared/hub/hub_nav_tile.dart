@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/router/app_router.dart';
 import 'package:ufersa_hub/core/theme/hub_colors.dart';
-import 'package:ufersa_hub/core/utils/extension/build_context.dart';
 
 class HubNavTile extends StatelessWidget {
   const HubNavTile({
@@ -44,7 +43,8 @@ class HubNavTile extends StatelessWidget {
           ),
           onTap: () {
             Navigator.pop(context);
-            context.go(route);
+            if (isSelected) return;
+            Navigator.of(context).pushReplacementNamed(route.path);
           },
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:ufersa_hub/core/theme/hub_colors.dart';
+import 'package:ufersa_hub/features/shared/hub/hub_primary_button.dart';
 
 class HubEmptyState extends StatelessWidget {
   const HubEmptyState({
@@ -10,6 +11,7 @@ class HubEmptyState extends StatelessWidget {
     required this.message,
     this.actionLabel,
     this.onAction,
+    this.embedded = false,
   });
 
   final IconData icon;
@@ -18,14 +20,19 @@ class HubEmptyState extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onAction;
 
+  /// Quando true, ocupa só o espaço da seção (ex.: cards na home), não a tela inteira.
+  final bool embedded;
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(DSSpacing.xl.value),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+    final padding = embedded ? DSSpacing.lg.value : DSSpacing.xl.value;
+    final content = Padding(
+      padding: EdgeInsets.all(padding),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment:
+            embedded ? MainAxisAlignment.start : MainAxisAlignment.center,
+        children: [
             DecoratedBox(
               decoration: BoxDecoration(
                 color: HubColors.successTint,
@@ -51,22 +58,16 @@ class HubEmptyState extends StatelessWidget {
             ),
             if (actionLabel != null && onAction != null) ...[
               DSSpacing.lg.y,
-              FilledButton(
+              HubPrimaryButton(
+                label: actionLabel,
                 onPressed: onAction,
-                style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: DSSpacing.lg.value,
-                    vertical: DSSpacing.md.value,
-                  ),
-                ),
-                child: Text(actionLabel!),
               ),
             ],
           ],
         ),
-      ),
     );
+
+    if (embedded) return content;
+    return Center(child: content);
   }
 }

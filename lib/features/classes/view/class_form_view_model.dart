@@ -1,6 +1,7 @@
 import 'package:ufersa_hub/core/utils/commands.dart';
 import 'package:ufersa_hub/core/utils/result.dart';
 import 'package:ufersa_hub/features/classes/domain/class_form_validation.dart';
+import 'package:ufersa_hub/features/classes/domain/models/class_day_schedule.dart';
 import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
 import 'package:ufersa_hub/features/classes/domain/repositories/class_repository.dart';
 
@@ -12,6 +13,7 @@ class ClassFormViewModel {
        _initial = initial {
     save = CommandBase(_save);
     selectedWeekdays = {DateTime.now().weekday};
+    _syncPerDayTimesFromShared();
   }
 
   final ClassRepository _repository;
@@ -20,22 +22,34 @@ class ClassFormViewModel {
   late final CommandBase<void> save;
 
   late Set<int> selectedWeekdays;
+  bool sameTimeForAllDays = true;
   String subject = '';
   String startTime = '08:00';
   String endTime = '10:00';
+  Map<int, ClassDaySchedule> perDayTimes = {};
   String room = '';
   String notes = '';
 
   List<ClassEntry> _loadedEntries = [];
   String? _seriesId;
 
+  ClassDaySchedule _defaultSlot() =>
+      ClassDaySchedule(startTime: startTime, endTime: endTime);
+
+  void _syncPerDayTimesFromShared() {
+    final slot = _defaultSlot();
+    final next = <int, ClassDaySchedule>{};
+    for (final weekday in selectedWeekdays) {
+      next[weekday] = perDayTimes[weekday] ?? slot;
+    }
+    perDayTimes = next;
+  }
+
   Future<void> hydrate() async {
     final entry = _initial;
     if (entry == null) return;
 
     subject = entry.subject;
-    startTime = entry.startTime;
-    endTime = entry.endTime;
     room = entry.room ?? '';
     notes = entry.notes ?? '';
 
@@ -52,18 +66,113 @@ class ClassFormViewModel {
     }
 
     selectedWeekdays = _loadedEntries.map((e) => e.weekday).toSet();
+
+    if (_loadedEntries.length == 1) {
+      final only = _loadedEntries.first;
+      startTime = only.startTime;
+      endTime = only.endTime;
+      sameTimeForAllDays = true;
+      perDayTimes = {
+        only.weekday: ClassDaySchedule(
+          startTime: only.startTime,
+          endTime: only.endTime,
+        ),
+      };
+      return;
+    }
+
+    final first = _loadedEntries.first;
+    sameTimeForAllDays = _loadedEntries.every(
+      (e) => e.startTime == first.startTime && e.endTime == first.endTime,
+    );
+
+    perDayTimes = {
+      for (final e in _loadedEntries)
+        e.weekday: ClassDaySchedule(
+          startTime: e.startTime,
+          endTime: e.endTime,
+        ),
+    };
+
+    if (sameTimeForAllDays) {
+      startTime = first.startTime;
+      endTime = first.endTime;
+    } else {
+      startTime = '08:00';
+      endTime = '10:00';
+    }
   }
 
   void toggleWeekdays(Set<int> weekdays) {
     selectedWeekdays = weekdays;
+    _syncPerDayTimesFromShared();
+  }
+
+  void setSameTimeForAllDays(bool value) {
+    sameTimeForAllDays = value;
+    if (value) {
+      final firstWeekday = selectedWeekdays.isEmpty
+          ? null
+          : (selectedWeekdays.toList()..sort()).first;
+      if (firstWeekday != null) {
+        final slot = perDayTimes[firstWeekday];
+        if (slot != null) {
+          startTime = slot.startTime;
+          endTime = slot.endTime;
+        }
+      }
+      _syncPerDayTimesFromShared();
+    } else {
+      _syncPerDayTimesFromShared();
+    }
+  }
+
+  void updateSharedStartTime(String value) {
+    startTime = value;
+    if (sameTimeForAllDays) _syncPerDayTimesFromShared();
+  }
+
+  void updateSharedEndTime(String value) {
+    endTime = value;
+    if (sameTimeForAllDays) _syncPerDayTimesFromShared();
+  }
+
+  void updateDayStartTime(int weekday, String value) {
+    final current = perDayTimes[weekday] ?? _defaultSlot();
+    perDayTimes = {
+      ...perDayTimes,
+      weekday: current.copyWith(startTime: value),
+    };
+  }
+
+  void updateDayEndTime(int weekday, String value) {
+    final current = perDayTimes[weekday] ?? _defaultSlot();
+    perDayTimes = {
+      ...perDayTimes,
+      weekday: current.copyWith(endTime: value),
+    };
+  }
+
+  ClassDaySchedule? scheduleForWeekday(int weekday) => perDayTimes[weekday];
+
+  void applyTimeRange(String start, String end, {int? weekday}) {
+    if (weekday != null) {
+      updateDayStartTime(weekday, start);
+      updateDayEndTime(weekday, end);
+      return;
+    }
+    updateSharedStartTime(start);
+    updateSharedEndTime(end);
   }
 
   Future<Result<void>> _save() async {
     final validation = validateClassForm(
       selectedWeekdays: selectedWeekdays,
       subject: subject,
+      sameTimeForAllDays: sameTimeForAllDays,
       startTime: startTime,
       endTime: endTime,
+      perDayTimes: perDayTimes,
     );
     if (validation.isError) return validation;
 
@@ -73,8 +182,6 @@ class ClassFormViewModel {
       final trimmedNotes = notes.trim();
       final roomValue = trimmedRoom.isEmpty ? null : trimmedRoom;
       final notesValue = trimmedNotes.isEmpty ? null : trimmedNotes;
-      final trimmedStart = startTime.trim();
-      final trimmedEnd = endTime.trim();
 
       final useSeries = selectedWeekdays.length > 1;
       final seriesId =
@@ -93,13 +200,24 @@ class ClassFormViewModel {
             break;
           }
         }
+
+        final ClassDaySchedule slot;
+        if (sameTimeForAllDays) {
+          slot = ClassDaySchedule(
+            startTime: startTime.trim(),
+            endTime: endTime.trim(),
+          );
+        } else {
+          slot = perDayTimes[weekday]!;
+        }
+
         toSave.add(
           ClassEntry(
             id: existing?.id ?? '$baseId-$weekday',
             weekday: weekday,
             subject: trimmedSubject,
-            startTime: trimmedStart,
-            endTime: trimmedEnd,
+            startTime: slot.startTime,
+            endTime: slot.endTime,
             seriesId: seriesId,
             room: roomValue,
             notes: notesValue,

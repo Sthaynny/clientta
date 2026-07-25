@@ -15,6 +15,18 @@ class ClassScheduleGroup {
       .map((e) => weekdayShortLabels[e.weekday - 1])
       .join(', ');
 
+  bool get hasVaryingTimes {
+    if (entries.length <= 1) return false;
+    final first = entries.first;
+    return entries.any(
+      (e) =>
+          e.startTime != first.startTime || e.endTime != first.endTime,
+    );
+  }
+
+  /// Representative slot when all days share the same time.
+  ClassEntry get displayTimeEntry => representative;
+
   static String groupKeyFor(ClassEntry entry) => entry.seriesId ?? entry.id;
 
   static List<ClassScheduleGroup> fromEntries(List<ClassEntry> all) {
