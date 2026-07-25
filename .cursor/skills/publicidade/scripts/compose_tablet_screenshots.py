@@ -98,6 +98,46 @@ def _rounded_rect(
     draw.rounded_rectangle(box, radius=radius, fill=fill)
 
 
+def _prepare_screen_for_tablet(
+    screen: Image.Image,
+    inner_w: int,
+    inner_h: int,
+) -> Image.Image:
+    """Portrait phone capture scaled to cover a landscape tablet screen (no phone bezel)."""
+    trim_top = int(screen.height * 0.055)
+    trimmed = screen.crop((0, trim_top, screen.width, screen.height))
+    sw, sh = trimmed.size
+    scale = max(inner_w / sw, inner_h / sh)
+    new_w = int(sw * scale)
+    new_h = int(sh * scale)
+    resized = trimmed.resize((new_w, new_h), Image.Resampling.LANCZOS)
+    left = (new_w - inner_w) // 2
+    top = (new_h - inner_h) // 2
+    return resized.crop((left, top, left + inner_w, top + inner_h))
+
+
+def _tablet_device_box(
+    width: int,
+    height: int,
+    panel_w: int,
+) -> tuple[int, int, int, int]:
+    """Landscape tablet frame on the right ~70% of the canvas."""
+    margin_x = int(width * 0.035)
+    margin_y = int(height * 0.06)
+    avail_w = width - panel_w - margin_x * 2
+    avail_h = height - margin_y * 2
+    # Target ~16:10 landscape device.
+    target_ratio = 16 / 10
+    box_w = avail_w
+    box_h = int(box_w / target_ratio)
+    if box_h > avail_h:
+        box_h = avail_h
+        box_w = int(box_h * target_ratio)
+    left = panel_w + margin_x + (avail_w - box_w) // 2
+    top = margin_y + (avail_h - box_h) // 2
+    return (left, top, left + box_w, top + box_h)
+
+
 def compose_card(
     card: TabletCard,
     canvas_size: tuple[int, int],
@@ -145,12 +185,10 @@ def compose_card(
         raise FileNotFoundError(f"Print not found: {print_path}")
     screen = Image.open(print_path).convert("RGB")
 
-    margin_x = int(width * 0.04)
-    tablet_left = panel_w + margin_x
-    tablet_top = int(height * 0.08)
-    tablet_right = width - margin_x
-    tablet_bottom = int(height * 0.92)
-    bezel_px = 14 if height <= 1080 else 18
+    tablet_left, tablet_top, tablet_right, tablet_bottom = _tablet_device_box(width, height, panel_w)
+    bezel_px = max(12, int((tablet_right - tablet_left) * 0.014))
+    radius_outer = max(22, int((tablet_right - tablet_left) * 0.025))
+    radius_inner = max(14, radius_outer - 6)
     inner_left = tablet_left + bezel_px
     inner_top = tablet_top + bezel_px
     inner_right = tablet_right - bezel_px
@@ -158,17 +196,20 @@ def compose_card(
     inner_w = inner_right - inner_left
     inner_h = inner_bottom - inner_top
 
-    _rounded_rect(draw, (tablet_left, tablet_top, tablet_right, tablet_bottom), 28, bezel)
-    _rounded_rect(draw, (inner_left, inner_top, inner_right, inner_bottom), 18, screen_bg)
+    _rounded_rect(draw, (tablet_left, tablet_top, tablet_right, tablet_bottom), radius_outer, bezel)
+    _rounded_rect(draw, (inner_left, inner_top, inner_right, inner_bottom), radius_inner, screen_bg)
 
-    sw, sh = screen.size
-    scale = min(inner_w / sw, inner_h / sh)
-    new_w = int(sw * scale)
-    new_h = int(sh * scale)
-    resized = screen.resize((new_w, new_h), Image.Resampling.LANCZOS)
-    paste_x = inner_left + (inner_w - new_w) // 2
-    paste_y = inner_top + (inner_h - new_h) // 2
-    canvas.paste(resized, (paste_x, paste_y))
+    # Front camera (landscape tablet, long edge top).
+    cam_r = max(4, bezel_px // 2)
+    cam_x = (tablet_left + tablet_right) // 2
+    cam_y = tablet_top + bezel_px // 2 + cam_r
+    draw.ellipse(
+        (cam_x - cam_r, cam_y - cam_r, cam_x + cam_r, cam_y + cam_r),
+        fill=(55, 55, 58),
+    )
+
+    fitted = _prepare_screen_for_tablet(screen, inner_w, inner_h)
+    canvas.paste(fitted, (inner_left, inner_top))
     return canvas
 
 
