@@ -15,6 +15,9 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
+// Play: Android 6.0+ (API 23). Flutter reescreve `minSdk = 23` literal no build — usar constante.
+private val playStoreMinSdk = 23
+
 android {
     namespace = "br.com.sthaynny.ufersa_hub"
     compileSdk = flutter.compileSdkVersion
@@ -34,7 +37,7 @@ android {
         applicationId = "br.com.sthaynny.ufersa_hub"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = playStoreMinSdk
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
