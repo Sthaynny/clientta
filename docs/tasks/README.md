@@ -45,7 +45,7 @@ Cada entrada usa o mesmo formato:
 | Qualidade | [qualidade.md](a_fazer/qualidade.md) | — |
 | Design | [design.md](a_fazer/design.md) | [design.md](finalizadas/design.md) |
 | Loja / go-to-market | [loja.md](a_fazer/loja.md) | — |
-| Monetização | [monetizacao.md](a_fazer/monetizacao.md) | [monetizacao.md](finalizadas/monetizacao.md) |
+| Monetização (dois apps Free/Pro, um repo) | [monetizacao.md](a_fazer/monetizacao.md) | [monetizacao.md](finalizadas/monetizacao.md) |
 
 ## Documentação relacionada
 

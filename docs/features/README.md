@@ -1,7 +1,7 @@
 # Funcionalidades — Sextante
 
 Catálogo de funcionalidades do app com visão de **plano Free** vs **Pro**.  
-O modelo de assinatura é **roadmap de produto** — hoje o app não exibe paywall nem cobrança in-app ([PLANEJAMENTO.md](../PLANEJAMENTO.md)).
+**Arquitetura de monetização alvo:** dois apps nas lojas (**Sextante** gratuito e **Sextante Pro** pago), **um repositório** com variantes de build (estilo cura.li) — ver [tasks/a_fazer/monetizacao.md](../tasks/a_fazer/monetizacao.md). Hoje só existe um binário publicável e **não** há paywall nem cobrança in-app ([PLANEJAMENTO.md](../PLANEJAMENTO.md)).
 
 ## Índice
 

@@ -13,7 +13,7 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [guia_sextante.md](guia_sextante.md)
 | **Arquitetura** | Flutter, MVVM, GetIt, repositórios locais |
 | **UI** | Tema `HubTheme` + componentes `Hub*` nas telas principais |
 | **Nuvem / login** | Removidos (sem Firebase, sem auth) |
-| **Monetização** | Ads e IAP **desligados**; roadmap **Free / Pro** documentado em [features/README.md](features/README.md), sem paywall no código |
+| **Monetização** | Ads e IAP **desligados**; alvo **dois apps** (Free + Pro) no mesmo repo — [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md); catálogo Free/Pro em [features/README.md](features/README.md) |
 | **Publicação** | `main` no GitHub — repositório `https://github.com/Sthaynny/university-` |
 
 ---
@@ -93,7 +93,8 @@ Não priorizar até validação com usuários ou orientação do TCC.
 
 | Item | Observação |
 |------|------------|
-| **Anúncios / assinatura Pro** | Removidos em 2026-03; reintroduzir só com Billing 8+ e UX alinhada a [features/README.md](features/README.md) |
+| **Dois apps Free/Pro** | Prioridade de monetização — variantes de build e listings duplos; ver [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md) |
+| **Anúncios / IAP em app único** | Removidos em 2026-03; alternativa futura (T-404), não modelo principal |
 | **Sincronização na nuvem** | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) — contraria princípio atual |
 | **Múltiplos campi / cursos** | [multiplos_semestres.md](features/multiplos_semestres.md) |
 | **Integração calendário ICS** | Import de grade exportada pela instituição |

@@ -22,7 +22,7 @@ Os dados ficam em um **arquivo JSON no próprio celular** (`DeviceJsonStore`).
 | **Minhas atividades** | Trabalhos, estudos, provas e presenças, com data e “concluída” |
 | **Perfil** | Nome da universidade no menu (opcional, local) |
 
-Catálogo completo e plano **Free / Pro** (roadmap, sem paywall hoje): [features/README.md](features/README.md).
+Catálogo **Free / Pro** e modelo alvo **dois apps na loja** (um repositório): [features/README.md](features/README.md), [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md).
 
 ## Rotas
 

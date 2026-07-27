@@ -6,7 +6,7 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 **Visão operacional por feature:** [tasks/README.md](tasks/README.md) — pastas [tasks/a_fazer/](tasks/a_fazer/) e [tasks/finalizadas/](tasks/finalizadas/) com os mesmos IDs (T-001…).
 
 **Produto:** nome de exibição **Sextante** (`AppMission.name` em `lib/core/strings/app_mission.dart`).  
-**Monetização:** paywall e billing **não** estão no app; itens Pro são roadmap de produto.
+**Monetização:** alvo **dois apps** (Free + Pro), um repo — [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md); billing/paywall **não** estão no código hoje.
 
 ## Como ler a tabela
 
@@ -108,16 +108,20 @@ flowchart LR
 
 ---
 
-## 5. Monetização (design e decisão — sem billing no código hoje)
+## 5. Monetização (dois apps na loja — sem billing no código hoje)
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-401 | monetização | Documentar **limites Free** vs **benefícios Pro** (volume, features) | Base para paywall futuro | Médio — conversão Pro | Concluído | [features/README.md](features/README.md) |
-| T-402 | monetização | Definir **preço e periodicidade** (mensal/anual) e experimento | Viabilidade econômica | Alto — receita | Não iniciado | [PRODUCT.md](../PRODUCT.md) |
-| T-403 | design | Esboçar **paywall** e pontos de upgrade (backup, lembretes, stats) | UX clara sem frustrar o Free | Alto — conversão Pro | Não iniciado | [export_backup.md](features/export_backup.md) |
-| T-404 | monetização | Plano técnico **Google Play Billing 8+** (quando reintroduzir) | Cobrança conforme políticas | Alto — receita | Bloqueado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §7 |
-| T-405 | monetização | Avaliar **anúncios** vs assinatura (hoje desligados) | Monetização sem degradar offline | Baixo — decisão futura | Bloqueado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §7 |
-| T-406 | produto | Implementar **enforcement** de limites Free no app | Diferenciar tiers de fato | Alto — conversão Pro | Não iniciado | [features/README.md](features/README.md) |
+| T-401 | monetização | Documentar **limites Free** vs **benefícios Pro** (volume, features) | Base para tiers Free/Pro | Médio — conversão Pro | Concluído | [features/README.md](features/README.md) |
+| T-402 | monetização | Definir **preço** do app **Sextante Pro** na loja (compra única) | Viabilidade econômica | Alto — receita | Não iniciado | [PRODUCT.md](../PRODUCT.md) |
+| T-403 | design | Esboçar **descoberta Pro** no Free (link para listing; não paywall) | UX clara sem frustrar o Free | Alto — conversão Pro | Não iniciado | [export_backup.md](features/export_backup.md) |
+| T-404 | monetização | Plano **IAP/Billing 8+** como **alternativa futura** (app único) | Opção de pivot | Baixo — curto prazo | Bloqueado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §7 |
+| T-405 | monetização | Avaliar **anúncios** no Free (hoje desligados) | Monetização complementar | Baixo — decisão futura | Bloqueado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §7 |
+| T-406 | produto | **Enforcement** Free vs Pro por variante de build | Diferenciar tiers entre binários | Alto — valor Pro | Não iniciado | [features/README.md](features/README.md) |
+| T-407 | engenharia | Definir **flavors** Android/iOS e IDs (`…hub` / `…hub_pro`) | Dois artefatos, um repo | Alto — publicação | Não iniciado | [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md) |
+| T-408 | engenharia | **CI Codemagic** — matriz free + pro (AAB/APK/IPA) | Releases sincronizados | Alto — operação | Não iniciado | [stores/ENTREGA-PLAY.md](stores/ENTREGA-PLAY.md) |
+| T-409 | loja | **Listings duplos** Play/App Store em `docs/stores/` | Descoberta e conformidade | Alto — conversão | Não iniciado | [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md) |
+| T-410 | engenharia | **Gates compile-time** (`APP_VARIANT`, `AppVariant`) | Um código, dois comportamentos | Alto — manutenção | Não iniciado | [features/README.md](features/README.md) |
 
 ---
 
@@ -127,10 +131,10 @@ flowchart LR
 |--------|------------------|
 | Concluído | 14 (T-001–T-013, T-401) |
 | Em andamento | 9 (T-201, T-205, T-207, T-210, T-301, T-302, T-304, T-306, T-307) — *ajustar conforme sprint* |
-| Não iniciado | 25 |
+| Não iniciado | 29 |
 | Bloqueado | 3 (T-113, T-404, T-405) |
 
-**Total de tarefas listadas:** 51
+**Total de tarefas listadas:** 55
 
 ---
 

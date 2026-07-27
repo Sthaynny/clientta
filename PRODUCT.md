@@ -29,9 +29,9 @@ Estudantes universitários que querem organizar sala, horário e entregas sem fr
 
 ## Tiers (roadmap)
 
-- **Free:** núcleo offline (dia, grade, atividades, perfil) com limites de volume documentados.
-- **Pro:** backup, lembretes, estatísticas, temas, anexos, widgets, múltiplos semestres; sync na nuvem apenas como futuro explícito.
-- Paywall / billing **não** implementados no app — ver `docs/features/README.md`.
+- **Free:** app gratuito na loja — núcleo offline (dia, grade, atividades, perfil) com limites de volume documentados.
+- **Pro:** app **pago** em listing separado (**Sextante Pro**) — backup, lembretes, estatísticas, temas, anexos, widgets, múltiplos semestres; sync na nuvem apenas como futuro explícito.
+- **Um código, dois apps** (flavors / `APP_VARIANT`); modelo principal **não** é paywall in-app — ver `docs/tasks/a_fazer/monetizacao.md` e `docs/features/README.md`.
 
 ## Source of truth
 
