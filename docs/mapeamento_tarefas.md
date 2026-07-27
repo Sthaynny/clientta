@@ -3,6 +3,8 @@
 Índice de trabalho possível para o **Sextante** (`university_hub`), com **o que fazer**, **objetivo** e **impacto** por item.  
 Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](features/README.md) (catálogo Free/Pro).
 
+**Visão operacional por feature:** [tasks/README.md](tasks/README.md) — pastas [tasks/a_fazer/](tasks/a_fazer/) e [tasks/finalizadas/](tasks/finalizadas/) com os mesmos IDs (T-001…).
+
 **Produto:** nome de exibição **Sextante** (`AppMission.name` em `lib/core/strings/app_mission.dart`).  
 **Monetização:** paywall e billing **não** estão no app; itens Pro são roadmap de produto.
 
@@ -29,9 +31,9 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 | T-003 | produto | **Grade horária** semanal (dia, horário, sala) | Resolver “onde e quando” é a aula | Alto — retenção | Concluído | [grade_horaria.md](features/grade_horaria.md) |
 | T-004 | produto | **Atividades** com tipo, data e marcação de concluída | Centralizar entregas e provas | Alto — retenção | Concluído | [atividades.md](features/atividades.md) |
 | T-005 | produto | **Perfil** com nome da universidade (local) | Personalizar sem conta | Médio — identidade e confiança | Concluído | [perfil_universidade.md](features/perfil_universidade.md) |
-| T-006 | engenharia | Persistência **offline** em `DeviceJsonStore` (JSON no dispositivo) | Funcionar sem internet após instalar | Alto — proposta do produto | Concluído | [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md) |
-| T-007 | engenharia | Arquitetura **MVVM + GetIt** e repositórios locais por feature | Manter evolução previsível | Médio — manutenção | Concluído | [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md) |
-| T-008 | design | Identidade **Hub** (`HubTheme`, componentes `Hub*`, verde Sextante) | UI consistente nas telas principais | Médio — confiança e marca | Concluído | [../DESIGN.md](../DESIGN.md) |
+| T-006 | engenharia | Persistência **offline** em `DeviceJsonStore` (JSON no dispositivo) | Funcionar sem internet após instalar | Alto — proposta do produto | Concluído | [guia_sextante.md](guia_sextante.md) |
+| T-007 | engenharia | Arquitetura **MVVM + GetIt** e repositórios locais por feature | Manter evolução previsível | Médio — manutenção | Concluído | [guia_sextante.md](guia_sextante.md) |
+| T-008 | design | Identidade **Sextante** (`HubTheme`, componentes `Hub*`, verde marca) | UI consistente nas telas principais | Médio — confiança e marca | Concluído | [../DESIGN.md](../DESIGN.md) |
 | T-009 | produto | **Rebrand** para Sextante (nome, copy, migração de arquivo legado) | Alinhar produto à metáfora e à loja | Médio — go-to-market | Concluído | [PROPOSITO.md](PROPOSITO.md) |
 | T-010 | produto | Série de aulas em **vários dias** com exclusão por dia ou série | Atender turmas que repetem na semana | Médio — retenção | Concluído | [design-brief-class-multi-day.md](design-brief-class-multi-day.md) |
 | T-011 | produto | Ordenar atividades de hoje (não concluídas primeiro) | Priorizar o que ainda falta fazer | Médio — retenção | Concluído | [home_hoje.md](features/home_hoje.md) |
@@ -46,7 +48,7 @@ Prioridade sugerida alinhada a [PLANEJAMENTO.md](PLANEJAMENTO.md) Fases 1–2.
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-101 | produto | **Formulários Hub** completos (observação multilinha, validação de horário) | Menos atrito ao cadastrar | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
+| T-101 | produto | **Formulários** com componentes `Hub*` (observação multilinha, validação de horário) | Menos atrito ao cadastrar | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
 | T-102 | produto | Ordenar **aulas de hoje** por `startTime` | Leitura natural da agenda do dia | Médio — retenção | Não iniciado | [home_hoje.md](features/home_hoje.md) |
 | T-103 | design | Revisar **empty states** com copy validada (TCC/extensão) | Primeira impressão quando não há dados | Médio — conversão de uso | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
 | T-104 | produto | **Onboarding** leve (1–2 telas: dados no celular + primeira aula) | Ativar usuário na primeira sessão | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
@@ -79,14 +81,14 @@ flowchart LR
 |----|------|-------------|----------|---------|--------|-------------|
 | T-201 | qualidade | Manter **`flutter analyze`** sem erros no `main` | Evitar regressões em release | Alto — manutenção | Em andamento | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 | T-202 | qualidade | Expandir **testes de domínio** (ViewModels home, grade, atividades com `mocktail`) | Refatorar com segurança | Médio — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
-| T-203 | qualidade | **Restaurar / alinhar** `integration_test/` ao fluxo Hub atual | CI e regressão de navegação | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
+| T-203 | qualidade | **Restaurar / alinhar** `integration_test/` ao fluxo principal do Sextante | CI e regressão de navegação | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
 | T-204 | qualidade | Testes **Patrol** ou em dispositivo (drawer, FAB) | Cobrir gestos difíceis em widget test | Médio — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
 | T-205 | engenharia | **Build release** Android (`appbundle`) com `versionCode` incremental | Publicar na Play Store | Alto — distribuição | Em andamento | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 | T-206 | engenharia | Auditar **AndroidManifest** (permissões de mídia não usadas) | Conformidade e revisão da loja | Médio — confiança | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
-| T-207 | engenharia | **Codemagic**: analyze + bundle sem secrets Firebase | Pipeline confiável | Alto — manutenção | Em andamento | [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md) |
+| T-207 | engenharia | **Codemagic**: analyze + bundle sem secrets Firebase | Pipeline confiável | Alto — manutenção | Em andamento | [guia_sextante.md](guia_sextante.md) |
 | T-208 | engenharia | Migrar `DropdownButtonFormField` deprecado para **`initialValue`** | Compatibilidade com SDK Flutter | Baixo — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §8 |
 | T-209 | engenharia | Declarar ou remover uso de **`url_launcher`** | `depend_on_referenced_packages` limpo | Baixo — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §8 |
-| T-210 | engenharia | Acompanhar compatibilidade do **`design_system`** (Git) com o SDK | Evitar quebra de build | Médio — manutenção | Em andamento | [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md) |
+| T-210 | engenharia | Acompanhar compatibilidade do **`design_system`** (Git) com o SDK | Evitar quebra de build | Médio — manutenção | Em andamento | [guia_sextante.md](guia_sextante.md) |
 | T-211 | engenharia | Atualizar **remote** e links do repositório canonical | Onboarding de contribuidores e CI | Baixo — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 | T-212 | qualidade | **Internacionalização** (opcional; hoje PT em `strings.dart`) | Ampliar mercado | Baixo — conversão | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
 

@@ -12,4 +12,5 @@ O <strong>Sextante</strong> ajuda estudantes no <strong>dia a dia</strong>: cada
 | [docs/features/README.md](docs/features/README.md) | Catálogo Free / Pro |
 | [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.md) | Fases de entrega |
 | [docs/mapeamento_tarefas.md](docs/mapeamento_tarefas.md) | Mapeamento de tarefas (objetivo e impacto) |
-| [docs/GUIA_UNIVERSITARIO.md](docs/GUIA_UNIVERSITARIO.md) | Como rodar e arquitetura |
+| [docs/tasks/README.md](docs/tasks/README.md) | Tarefas por feature (a fazer / finalizadas) |
+| [docs/guia_sextante.md](docs/guia_sextante.md) | Como rodar e arquitetura |

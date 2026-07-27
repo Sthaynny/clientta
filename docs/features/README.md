@@ -31,7 +31,7 @@ O modelo de assinatura é **roadmap de produto** — hoje o app não exibe paywa
 | Backup JSON export/import | — | Sim |
 | Notificações locais | — | Sim |
 | Estatísticas de conclusão | — | Sim |
-| Temas além do padrão Hub | Tema claro padrão | Paletas / escuro estendido |
+| Temas além do padrão Sextante (`HubTheme` claro) | Tema claro padrão | Paletas / escuro estendido |
 | Anexos por aula/atividade | — | Sim |
 | Widget Android (próxima aula) | — | Sim |
 | Arquivar vários semestres | Um período ativo | Vários períodos |
@@ -39,7 +39,8 @@ O modelo de assinatura é **roadmap de produto** — hoje o app não exibe paywa
 
 ## Documentação relacionada
 
-- [GUIA_UNIVERSITARIO.md](../GUIA_UNIVERSITARIO.md) — como rodar e arquitetura
+- [guia_sextante.md](../guia_sextante.md) — como rodar e arquitetura
 - [PROPOSITO.md](../PROPOSITO.md) — visão do produto
 - [PLANEJAMENTO.md](../PLANEJAMENTO.md) — fases de entrega
 - [mapeamento_tarefas.md](../mapeamento_tarefas.md) — tarefas com objetivo, impacto e status
+- [tasks/README.md](../tasks/README.md) — tarefas **a fazer** e **finalizadas**, agrupadas por feature
