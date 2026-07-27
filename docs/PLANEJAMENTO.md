@@ -66,7 +66,7 @@ Itens já citados em [PROPOSITO.md](PROPOSITO.md), mantendo **sem nuvem**.
 
 | # | Entrega | Dependência sugerida | Escopo mínimo |
 |---|---------|----------------------|---------------|
-| 2.1 | **Exportar / importar JSON** | `share_plus` ou intent nativo | Backup/restore de `conectafersa_daily.json` |
+| 2.1 | **Exportar / importar JSON** | `share_plus` ou intent nativo | Backup/restore de `university_hub_daily.json` |
 | 2.2 | **Lembretes locais** | `flutter_local_notifications` | Lembrete X minutos antes da aula ou na data da atividade |
 | 2.3 | **Widget “próxima aula”** | Android App Widget (+ iOS se viável) | Próxima disciplina do dia com sala |
 | 2.4 | **Busca / filtro** | — | Filtrar atividades por tipo ou período |

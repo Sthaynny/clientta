@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:university_hub/core/storage/app_profile_repository.dart';
 import 'package:university_hub/core/storage/device_json_store.dart';
 import 'package:university_hub/features/activities/data/activity_repository_local.dart';
 import 'package:university_hub/features/activities/domain/repositories/activity_repository.dart';
@@ -12,6 +13,10 @@ final dependency = GetIt.instance;
 
 void setup() {
   dependency.registerLazySingleton<DeviceJsonStore>(DeviceJsonStore.new);
+
+  dependency.registerLazySingleton<AppProfileRepository>(
+    () => AppProfileRepository(dependency()),
+  );
 
   dependency.registerLazySingleton<ClassRepository>(
     () => ClassRepositoryLocal(dependency()),

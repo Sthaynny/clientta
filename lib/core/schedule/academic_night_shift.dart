@@ -1,5 +1,5 @@
 /// Turno noturno em grade de 50 min + intervalo de 10 min entre o 2º e 3º período,
-/// padrão comum em SIGAA (ex.: códigos `N1`…`N4`, blocos `N1234`).
+/// padrão comum em universidades públicas brasileiras (ex.: códigos `N1`…`N4`).
 ///
 /// Referência para cadastro manual no app; horários podem variar por campus.
 class AcademicNightPeriod {
@@ -33,7 +33,7 @@ class AcademicNightBlock {
   final int periodTo;
 }
 
-/// Períodos noturnos SIGAA (atestado de matrícula, turno N).
+/// Períodos noturnos de referência (turno N, quatro blocos de 50 min).
 const academicNightPeriods = <AcademicNightPeriod>[
   AcademicNightPeriod(
     index: 1,

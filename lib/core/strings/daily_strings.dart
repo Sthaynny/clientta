@@ -119,3 +119,9 @@ const monthLabels = [
 
 String formatHubDayHeader(DateTime date) =>
     '${date.day} de ${monthLabels[date.month - 1]}';
+
+String get universityNameMenuString => 'Nome da universidade';
+String get universityNameDialogTitleString => 'Sua universidade';
+String get universityNameDialogHintString =>
+    'Ex.: Universidade Federal do seu estado';
+String get universityNameDialogSaveString => 'Salvar';

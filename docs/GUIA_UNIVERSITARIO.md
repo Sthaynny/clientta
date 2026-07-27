@@ -27,7 +27,7 @@ Cada feature segue **model → repository → view model → screen**.
 
 ## Backup dos dados
 
-O arquivo `conectafersa_daily.json` fica na pasta de documentos do app no dispositivo. Para backup manual, exporte esse arquivo (funcionalidade de export pode ser adicionada depois).
+O arquivo `university_hub_daily.json` fica na pasta de documentos do app no dispositivo. Instalações antigas migram automaticamente de `conectafersa_daily.json`. Para backup manual, exporte esse arquivo (funcionalidade de export pode ser adicionada depois).
 
 ## CI (Codemagic)
 

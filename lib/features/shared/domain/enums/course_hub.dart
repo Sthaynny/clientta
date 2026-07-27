@@ -1,27 +1,28 @@
+/// Áreas de curso genéricas (legado de hubs institucionais; reservado para filtros futuros).
 enum CourseHub {
-  softwareEngineering,
-  computerEngineering,
-  environmentalEngineering,
-  civilEngineering,
-  tecnologyInformation,
-  cienceTechnology;
+  computerScience,
+  engineering,
+  health,
+  humanities,
+  business,
+  other;
 
   const CourseHub();
 
   String get labelCourseHub {
     switch (this) {
-      case CourseHub.softwareEngineering:
-        return 'Engenharia de Software';
-      case CourseHub.computerEngineering:
-        return 'Engenharia de Computação';
-      case CourseHub.environmentalEngineering:
-        return 'Engenharia Ambiental';
-      case CourseHub.civilEngineering:
-        return 'Engenharia Civil';
-      case CourseHub.tecnologyInformation:
-        return 'Tecnologia da Informação';
-      case CourseHub.cienceTechnology:
-        return 'Ciência e Tecnologia';
+      case CourseHub.computerScience:
+        return 'Ciências da Computação / TI';
+      case CourseHub.engineering:
+        return 'Engenharias';
+      case CourseHub.health:
+        return 'Saúde';
+      case CourseHub.humanities:
+        return 'Humanas e sociais';
+      case CourseHub.business:
+        return 'Administração e negócios';
+      case CourseHub.other:
+        return 'Outro curso';
     }
   }
 }
