@@ -1,7 +1,7 @@
 # Planejamento — próximos passos (Sextante)
 
 Documento de roteiro para evolução do app após a refatoração para **organizador offline** e a identidade visual **Sextante** (verde `#1A6B52` em `hub_colors.dart`).  
-Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
+Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---
 
@@ -115,7 +115,7 @@ Não priorizar até validação com usuários ou orientação do TCC.
 
 ## 9. Como usar este documento
 
-- **Sprint / semana:** escolher 2–3 itens da Fase 0 ou 1.
+- **Sprint / semana:** escolher 2–3 itens da Fase 0 ou 1; ver também [mapeamento_tarefas.md](mapeamento_tarefas.md) (objetivo e impacto por tarefa).
 - **Antes de feature nova:** atualizar [PROPOSITO.md](PROPOSITO.md), entrada em [features/](features/README.md) e, se mudar UI, [DESIGN.md](../DESIGN.md).
 - **Após entrega:** marcar item como feito (data + versão do app) neste arquivo ou em issues do GitHub.
 

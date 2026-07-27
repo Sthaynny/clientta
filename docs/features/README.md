@@ -42,3 +42,4 @@ O modelo de assinatura é **roadmap de produto** — hoje o app não exibe paywa
 - [GUIA_UNIVERSITARIO.md](../GUIA_UNIVERSITARIO.md) — como rodar e arquitetura
 - [PROPOSITO.md](../PROPOSITO.md) — visão do produto
 - [PLANEJAMENTO.md](../PLANEJAMENTO.md) — fases de entrega
+- [mapeamento_tarefas.md](../mapeamento_tarefas.md) — tarefas com objetivo, impacto e status
