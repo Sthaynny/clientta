@@ -6,7 +6,7 @@ Estudante no corredor ou na biblioteca, consulta o celular entre aulas — luz a
 
 ## Color strategy
 
-**Restrained** com acento institucional: verde semiárido (confiança, UFS/FERSA) + neutros frios (foco). Calor só em detalhes de horário (`schedule`).
+**Restrained** com acento verde (confiança, foco acadêmico) + neutros frios. Calor só em detalhes de horário (`schedule`).
 
 | Token | Role | Hex |
 |-------|------|-----|

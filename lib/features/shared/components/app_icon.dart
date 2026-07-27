@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppIcon extends StatelessWidget {
   AppIcon({super.key, this.size = 60}) {
-    _path = "assets/images/ufersa-logo.png";
+    _path = 'assets/images/app-icon.png';
   }
 
   AppIcon.hub({super.key, this.size = 60}) {

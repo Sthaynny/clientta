@@ -1,4 +1,4 @@
-String get homeTodayString => 'Seu dia na faculdade';
+String get homeTodayString => 'Seu dia na universidade';
 String homeDayStatClasses(int count) =>
     count == 1 ? '1 aula hoje' : '$count aulas hoje';
 String homeDayStatActivities(int count) =>
@@ -27,7 +27,7 @@ String get classPerDayTimesHintString =>
     'Defina início e fim para cada dia selecionado.';
 String get classScheduleTimeVariesString => 'Horários variam';
 String get classNightShiftPresetsTitleString =>
-    'Turno noturno (referência SIGAA)';
+    'Atalhos de turno noturno';
 String get errorClassPerDayTimeMissingString =>
     'Preencha o horário de cada dia selecionado.';
 String get startTimeString => 'Início';

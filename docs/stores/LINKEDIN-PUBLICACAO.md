@@ -1,18 +1,18 @@
-# Publicação LinkedIn — ConectaFERSA na Google Play
+# Publicação LinkedIn — Hub Universitário na Google Play
 
 **Links (substituir antes de publicar)**
 
 | Destino | URL |
 |--------|-----|
-| Google Play | `[LINK_PLAY_STORE]` — buscar “ConectaFERSA” na Play Store ou colar o link do Console |
+| Google Play | `[LINK_PLAY_STORE]` — buscar “Hub Universitário” na Play Store ou colar o link do Console |
 | GitHub (repositório atual) | https://github.com/Sthaynny/app_news |
-| GitHub (nome legado / planejado) | https://github.com/Sthaynny/conecta_ufersa — conferir se é o mesmo projeto ou redirect |
+| GitHub (nome legado / planejado) | https://github.com/Sthaynny/university- — conferir se é o mesmo projeto ou redirect |
 
 ---
 
 ## 1. Texto do post (principal)
 
-O ConectaFERSA começou lá na faculdade: eu só queria um jeito simples de não perder a grade, as entregas e a rotina da semana sem depender de mil apps diferentes.
+O Hub Universitário começou lá na faculdade: eu só queria um jeito simples de não perder a grade, as entregas e a rotina da semana sem depender de mil apps diferentes.
 
 Montei um projeto mobile para isso, seu dia na universidade em um lugar só: o que tem de aula hoje, o que está pendente nas atividades, sala e horário quando a semana vira de cabeça para baixo.
 
@@ -37,7 +37,7 @@ Qualquer feedback sincero ajuda — comentário aqui ou issue no GitHub.
 
 Alternativas (trocar 1–2 se quiser menos “dev” e mais “estudante”):
 
-- `#ufersa` (se quiser âncora regional)
+- `#estudante` (se quiser âncora regional)
 - `#devbr`
 - `#aplicativos`
 
@@ -71,7 +71,7 @@ Use se o post principal parecer longo no preview ou se preferir feed mais direto
 
 ---
 
-O ConectaFERSA nasceu na faculdade: organizar grade, entregas e rotina sem espalhar tudo no WhatsApp. Ficou parado um tempo; retomei o projeto e agora está na Google Play.
+O Hub Universitário nasceu na faculdade: organizar grade, entregas e rotina sem espalhar tudo no WhatsApp. Ficou parado um tempo; retomei o projeto e agora está na Google Play.
 
 Foco em seu dia na faculdade — aulas de hoje, atividades pendentes, horário e sala. Sem login, offline, dados no próprio celular.
 

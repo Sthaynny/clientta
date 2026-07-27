@@ -1,4 +1,4 @@
-# Prints — Google Play (ConectaFERSA)
+# Prints — Google Play (Hub Universitário)
 
 Capturas de tela para a ficha da Play Store. Ordem sugerida na galeria: `01` → `06`.
 

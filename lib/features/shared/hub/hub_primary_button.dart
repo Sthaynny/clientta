@@ -2,7 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:university_hub/core/theme/hub_colors.dart';
 
-/// Primary call-to-action using ConectaFERSA brand green.
+/// Primary call-to-action using Hub brand green.
 class HubPrimaryButton extends StatelessWidget {
   const HubPrimaryButton({
     super.key,

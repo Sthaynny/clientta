@@ -4,7 +4,7 @@ import 'package:university_hub/core/schedule/academic_night_shift.dart';
 import 'package:university_hub/core/strings/daily_strings.dart';
 import 'package:university_hub/core/theme/hub_colors.dart';
 
-/// Quick-fill chips for SIGAA-style night shift blocks and single periods.
+/// Quick-fill chips for common night-shift blocks and single periods.
 class HubNightShiftPresets extends StatelessWidget {
   const HubNightShiftPresets({
     super.key,

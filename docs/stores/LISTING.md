@@ -1,4 +1,4 @@
-# Google Play — ConectaFERSA
+# Google Play — Hub Universitário
 
 Dados para publicação e revisão interna. Atualizado para a release **1.3.0 (9)**.
 
@@ -6,14 +6,14 @@ Dados para publicação e revisão interna. Atualizado para a release **1.3.0 (9
 
 | Campo | Valor |
 |-------|--------|
-| **Nome do app** | ConectaFERSA |
-| **Package name (applicationId)** | `br.com.sthaynny.ufersa_hub` |
+| **Nome do app** | Hub Universitário |
+| **Package name (applicationId)** | `br.com.sthaynny.university_hub` |
 | **Versão** | `1.3.0+9` (`versionName` 1.3.0, `versionCode` 9) |
 
 ## Descrição curta (≤ 80 caracteres)
 
 ```
-Grade, atividades e seu dia na faculdade — offline, sem login.
+Grade, atividades e seu dia na universidade — offline, sem login.
 ```
 
 _(79 caracteres)_
@@ -21,7 +21,7 @@ _(79 caracteres)_
 ## Descrição completa (PT-BR)
 
 ```
-ConectaFERSA é um organizador para a rotina na universidade. Tudo fica no seu celular: não é preciso criar conta nem depender de internet para consultar sua grade ou suas tarefas.
+Hub Universitário é um organizador para a rotina na universidade. Tudo fica no seu celular: não é preciso criar conta nem depender de internet para consultar sua grade ou suas tarefas.
 
 O que você pode fazer:
 • Ver o painel do dia — aulas e atividades de hoje em um só lugar
@@ -31,14 +31,14 @@ O que você pode fazer:
 
 Seus dados são armazenados localmente no aparelho (arquivo JSON no dispositivo). O app não envia suas informações para servidores do desenvolvedor.
 
-ConectaFERSA é um projeto independente voltado a estudantes que querem simplicidade. Não substitui sistemas oficiais da instituição nem oferece diagnóstico, tratamento ou aconselhamento de saúde.
+Hub Universitário é um projeto independente voltado a estudantes que querem simplicidade. Não substitui sistemas oficiais da instituição nem oferece diagnóstico, tratamento ou aconselhamento de saúde.
 ```
 
 ## Notas da versão (release 1.3.0)
 
 ```
 • Retomada do app como organizador universitário offline (grade, atividades e painel do dia)
-• Identidade ConectaFERSA e experiência focada em “o que importa hoje”
+• Identidade Hub Universitário e experiência focada em “o que importa hoje”
 • Preparação para publicação na Google Play (versão 1.3.0)
 ```
 

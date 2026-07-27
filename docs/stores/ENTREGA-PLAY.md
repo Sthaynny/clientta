@@ -1,4 +1,4 @@
-## Campanha / publicação: ConectaFERSA — Google Play
+## Campanha / publicação: Hub Universitário — Google Play
 
 **Objetivo:** Instalação e publicação na ficha  
 **Estágio do funil / framework:** Atenção → decisão; carrossel PAS + CTA (card 05)  
@@ -13,7 +13,7 @@
 
 Ver texto completo em `docs/stores/CAMPANHA-PLAY.md`.
 
-- **Nome:** ConectaFERSA  
+- **Nome:** Hub Universitário  
 - **Breve (79/80):** Grade, atividades e o dia na facul — tudo no celular, sem internet.
 
 ### Headline(s) / CTA
@@ -33,7 +33,7 @@ Ver texto completo em `docs/stores/CAMPANHA-PLAY.md`.
 - Phone: 5× **1080×1920** (9:16), layouts A / D / E / C / H  
 - Ícone **512×512**; feature **1024×500**  
 - Tablet: compositor Pillow, headline 30% + mockup 70%, temas 01–04 pareados com phone  
-- Prints lidos: painel do dia, grade, registrar aula (SIGAA), atividades pendentes, drawer offline  
+- Prints lidos: painel do dia, grade, registrar aula (sistema acadêmico), atividades pendentes, drawer offline  
 
 ### Arquivos gerados
 

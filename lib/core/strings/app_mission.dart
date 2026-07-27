@@ -3,7 +3,7 @@ abstract final class AppMission {
   static const String name = 'Hub Universitário';
 
   static const String tagline =
-      'Grade, atividades e rotina — tudo no seu celular, offline.';
+      'Grade, atividades e rotina na sua universidade — tudo no celular, offline.';
 
   static const String purposeSummary =
       'Organizador pessoal para estudantes: cadastre aulas na grade, '

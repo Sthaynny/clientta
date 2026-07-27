@@ -1,4 +1,4 @@
-# Planejamento — próximos passos (ConectaFERSA)
+# Planejamento — próximos passos (Hub Universitário)
 
 Documento de roteiro para evolução do app após a refatoração para **organizador universitário offline** e a identidade visual **Hub**.  
 Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
@@ -14,7 +14,7 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERS
 | **UI** | Tema `HubTheme` + componentes `Hub*` nas telas principais |
 | **Nuvem / login** | Removidos (sem Firebase, sem auth) |
 | **Monetização** | Ads e compras in-app **desligados** por enquanto |
-| **Publicação** | `main` no GitHub; remoto pode apontar para `conecta_ufersa` — conferir `git remote -v` |
+| **Publicação** | `main` no GitHub; remoto pode apontar para `university-` — conferir `git remote -v` |
 
 ---
 
@@ -38,7 +38,7 @@ Objetivo: build confiável e base limpa para releases na Play Store / TestFlight
 | 0.2 | `flutter analyze` + testes existentes verdes | `test/features/activities`, `test/features/classes` |
 | 0.3 | Build release Android | `flutter build appbundle`; `versionCode` incremental |
 | 0.4 | Revisar `AndroidManifest` | Permissões de mídia ainda listadas — manter só o que o app usa hoje |
-| 0.5 | Atualizar `remote` do Git | Migrar para `github.com/Sthaynny/conecta_ufersa` se for o canonical |
+| 0.5 | Atualizar `remote` do Git | Migrar para `github.com/Sthaynny/university-` se for o canonical |
 | 0.6 | Codemagic | Garantir pipeline sem secrets Firebase; analyze + bundle |
 
 **Critério de conclusão:** AAB publicável sem erros de análise; documentação de release alinhada à versão no `pubspec.yaml`.
