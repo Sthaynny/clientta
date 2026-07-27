@@ -28,7 +28,7 @@
 - **O que fazer:** **Codemagic**: analyze + bundle sem secrets Firebase.
 - **Objetivo:** Pipeline confiável.
 - **Impacto:** **Alto** — manutenção.
-- **Feature:** [GUIA_UNIVERSITARIO.md](../../GUIA_UNIVERSITARIO.md)
+- **Feature:** [guia_sextante.md](../../guia_sextante.md)
 
 ---
 
@@ -58,7 +58,7 @@
 - **O que fazer:** Acompanhar compatibilidade do **`design_system`** (Git) com o SDK.
 - **Objetivo:** Evitar quebra de build.
 - **Impacto:** **Médio** — manutenção.
-- **Feature:** [GUIA_UNIVERSITARIO.md](../../GUIA_UNIVERSITARIO.md)
+- **Feature:** [guia_sextante.md](../../guia_sextante.md)
 
 ---
 

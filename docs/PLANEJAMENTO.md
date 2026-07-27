@@ -1,7 +1,7 @@
 # Planejamento — próximos passos (Sextante)
 
 Documento de roteiro para evolução do app após a refatoração para **organizador offline** e a identidade visual **Sextante** (verde `#1A6B52` em `hub_colors.dart`).  
-Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
+Referências: [PROPOSITO.md](PROPOSITO.md), [guia_sextante.md](guia_sextante.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---
 
@@ -14,7 +14,7 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERS
 | **UI** | Tema `HubTheme` + componentes `Hub*` nas telas principais |
 | **Nuvem / login** | Removidos (sem Firebase, sem auth) |
 | **Monetização** | Ads e IAP **desligados**; roadmap **Free / Pro** documentado em [features/README.md](features/README.md), sem paywall no código |
-| **Publicação** | `main` no GitHub; remoto pode apontar para `university-` — conferir `git remote -v` |
+| **Publicação** | `main` no GitHub — repositório `https://github.com/Sthaynny/university-` |
 
 ---
 
@@ -24,7 +24,7 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERS
 2. **Baixa fricção** — poucos passos para cadastrar aula ou atividade.
 3. **Clareza do “hoje”** — início do app como painel do dia.
 4. **Sem infraestrutura** — evitar backend salvo necessidade forte e documentada.
-5. **Consistência Hub** — novas telas usam `lib/features/shared/hub/`, não widgets soltos.
+5. **Consistência de UI** — novas telas usam componentes `Hub*` em `lib/features/shared/hub/`, não widgets soltos.
 
 ---
 
@@ -38,7 +38,7 @@ Objetivo: build confiável e base limpa para releases na Play Store / TestFlight
 | 0.2 | `flutter analyze` + testes existentes verdes | `test/features/activities`, `test/features/classes` |
 | 0.3 | Build release Android | `flutter build appbundle`; `versionCode` incremental |
 | 0.4 | Revisar `AndroidManifest` | Permissões de mídia ainda listadas — manter só o que o app usa hoje |
-| 0.5 | Atualizar `remote` do Git | Migrar para `github.com/Sthaynny/university-` se for o canonical |
+| 0.5 | Conferir `remote` do Git | Canonical: `https://github.com/Sthaynny/university-` |
 | 0.6 | Codemagic | Garantir pipeline sem secrets Firebase; analyze + bundle |
 
 **Critério de conclusão:** AAB publicável sem erros de análise; documentação de release alinhada à versão no `pubspec.yaml`.
@@ -51,7 +51,7 @@ Objetivo: reduzir atrito e aumentar retenção sem novas dependências pesadas.
 
 | # | Entrega | Prioridade | Detalhe |
 |---|---------|------------|---------|
-| 1.1 | **Formulários Hub** | Alta | Campos de observação multilinha (API do `design_system` ou `TextFormField` temático); validação de horário |
+| 1.1 | **Formulários** (componentes `Hub*`) | Alta | Campos de observação multilinha (API do `design_system` ou `TextFormField` temático); validação de horário |
 | 1.2 | **Ordenação inteligente** | Alta | Aulas de hoje por `startTime`; atividades por data + não concluídas primeiro |
 | 1.3 | **Confirmação ao excluir** | Média | Dialog antes de apagar aula/atividade |
 | 1.4 | **Empty states** | Média | Revisar copy com estudantes reais (TCC/extensão) |
@@ -79,7 +79,7 @@ Itens já citados em [PROPOSITO.md](PROPOSITO.md), mantendo **sem nuvem**.
 
 | # | Entrega |
 |---|---------|
-| 3.1 | Testes de integração (`integration_test/home_test.dart`) alinhados ao fluxo Hub |
+| 3.1 | Testes de integração (`integration_test/home_test.dart`) alinhados ao fluxo principal do Sextante |
 | 3.2 | Patrol / testes em dispositivo para drawer e FAB |
 | 3.3 | Política de privacidade (Play Console) refletindo **apenas armazenamento local** |
 | 3.4 | Screenshots e descrição da loja alinhadas ao propósito (sem menção a login/nuvem) |
@@ -126,7 +126,7 @@ Não priorizar até validação com usuários ou orientação do TCC.
 | Data | Decisão |
 |------|---------|
 | 2026-03 | App focado em grade/atividades locais; Firebase e login removidos |
-| 2026-03 | Identidade visual Hub (`HubTheme`, componentes `Hub*`) |
+| 2026-03 | Identidade visual Sextante (`HubTheme`, componentes `Hub*`) |
 | 2026-03 | Ads e IAP removidos temporariamente; foco em release limpo na Play Store |
 
 ---

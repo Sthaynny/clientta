@@ -5,8 +5,7 @@
 | Destino | URL |
 |--------|-----|
 | Google Play | `[LINK_PLAY_STORE]` — buscar “Sextante” na Play Store ou colar o link do Console |
-| GitHub (repositório atual) | https://github.com/Sthaynny/app_news |
-| GitHub (nome legado / planejado) | https://github.com/Sthaynny/university- — conferir se é o mesmo projeto ou redirect |
+| GitHub (repositório) | https://github.com/Sthaynny/university- |
 
 ---
 
@@ -23,7 +22,7 @@ A vida aconteceu, o código ficou na gaveta por um tempo. Recentemente retomei, 
 Se você estuda (ou conhece alguém que vive de grade + prazo + “cadê a sala?”), dá uma olhada:
 
 📲 Google Play: [LINK_PLAY_STORE]
-💻 Código aberto: https://github.com/Sthaynny/app_news
+💻 Código aberto: https://github.com/Sthaynny/university-
 
 Qualquer feedback sincero ajuda — comentário aqui ou issue no GitHub.
 
@@ -76,7 +75,7 @@ O Sextante nasceu na faculdade: organizar grade, entregas e rotina sem espalhar 
 Foco em seu dia na faculdade — aulas de hoje, atividades pendentes, horário e sala. Sem login, offline, dados no próprio celular.
 
 📲 Instale: [LINK_PLAY_STORE]
-💻 GitHub: https://github.com/Sthaynny/app_news
+💻 GitHub: https://github.com/Sthaynny/university-
 
 Feedback é bem-vindo.
 
@@ -87,5 +86,5 @@ Feedback é bem-vindo.
 ## 5. CTA
 
 **Principal:** “Instale na Google Play” + link `[LINK_PLAY_STORE]`
-**Secundário:** “Código no GitHub” + https://github.com/Sthaynny/app_news
+**Secundário:** “Código no GitHub” + https://github.com/Sthaynny/university-
 **Engajamento:** convite a comentário ou issue (sem pedir download em massa nem números inventados).

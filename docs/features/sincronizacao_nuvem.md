@@ -2,7 +2,7 @@
 
 ## Resumo
 
-Sincronização **opcional** entre dispositivos via conta e backend — **fora do escopo atual** do Hub, que é offline-first sem login.
+Sincronização **opcional** entre dispositivos via conta e backend — **fora do escopo atual** do **Sextante**, que é offline-first sem login.
 
 ## Plano
 

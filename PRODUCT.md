@@ -10,7 +10,7 @@ product
 
 ## One-liner
 
-Auxiliar do dia a dia na universidade: grade, atividades e visão do que importa hoje — offline, sem login. Tagline: *Navegue sua vida na faculdade*.
+Auxiliar do dia a dia na faculdade: grade, atividades e visão do que importa hoje — offline, sem login. Tagline: *Navegue sua vida na faculdade — offline, no celular.*
 
 ## Audience
 

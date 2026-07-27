@@ -1,6 +1,6 @@
 # Guia do projeto — Sextante
 
-**Sextante** é o nome do produto: um organizador offline para estudantes de qualquer universidade (pacote técnico `university_hub`). A metáfora do sextante remete a orientar-se na graduação — grade, entregas e o que importa hoje — sem depender de sistemas da instituição.
+**Sextante** é o nome do produto: um organizador offline para estudantes de qualquer universidade. Pacote Dart **`university_hub`**; `applicationId` Android **`br.com.sthaynny.university_hub`**. A metáfora do sextante remete a orientar-se na graduação — grade, entregas e o que importa hoje — sem depender de sistemas da instituição.
 
 ## Princípios
 

@@ -4,10 +4,10 @@ Itens de núcleo que atravessam várias telas / features.
 
 ---
 
-## T-101 — Formulários Hub completos
+## T-101 — Formulários (componentes `Hub*`)
 
 - **Status:** Não iniciado
-- **O que fazer:** **Formulários Hub** completos (observação multilinha, validação de horário).
+- **O que fazer:** **Formulários** com componentes `Hub*` (observação multilinha, validação de horário).
 - **Objetivo:** Menos atrito ao cadastrar.
 - **Impacto:** **Alto** — retenção.
 - **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §4

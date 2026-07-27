@@ -57,7 +57,7 @@ Ver texto completo em `docs/stores/CAMPANHA-PLAY.md`.
 | `docs/stores/store-assets/screenshots/tablet_10/03_aula_multi_dia.png` | Tablet 10" |
 | `docs/stores/store-assets/screenshots/tablet_10/04_atividades.png` | Tablet 10" |
 
-**Cópias intermediárias (geração):** `C:\Users\sthay\.cursor\projects\c-Users-sthay-OneDrive-Documents-GitHub-app-news\assets\` — podem ser descartadas após validação visual.
+**Cópias intermediárias (geração):** pasta local de assets do workspace (ex.: `.cursor/projects/.../assets/`) — podem ser descartadas após validação visual.
 
 ### Checklist loja
 

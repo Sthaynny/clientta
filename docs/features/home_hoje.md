@@ -2,7 +2,7 @@
 
 ## Resumo
 
-Tela inicial com aulas e atividades do dia atual, atalhos para cadastro e navegação pelo menu Hub. É o painel “o que importa hoje”.
+Tela inicial com aulas e atividades do dia atual, atalhos para cadastro e navegação pelo menu lateral (drawer). É o painel “o que importa hoje”.
 
 ## Plano
 

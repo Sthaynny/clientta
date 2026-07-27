@@ -9,7 +9,7 @@ Tarefas de fundação técnica já entregues (sem feature de produto única).
 - **O que fazer:** Persistência **offline** em `DeviceJsonStore` (JSON no dispositivo).
 - **Objetivo:** Funcionar sem internet após instalar.
 - **Impacto:** **Alto** — proposta do produto.
-- **Feature:** [GUIA_UNIVERSITARIO.md](../../GUIA_UNIVERSITARIO.md) (arquitetura)
+- **Feature:** [guia_sextante.md](../../guia_sextante.md) (arquitetura)
 
 ---
 
@@ -18,7 +18,7 @@ Tarefas de fundação técnica já entregues (sem feature de produto única).
 - **O que fazer:** Arquitetura **MVVM + GetIt** e repositórios locais por feature.
 - **Objetivo:** Manter evolução previsível.
 - **Impacto:** **Médio** — manutenção.
-- **Feature:** [GUIA_UNIVERSITARIO.md](../../GUIA_UNIVERSITARIO.md) (arquitetura)
+- **Feature:** [guia_sextante.md](../../guia_sextante.md) (arquitetura)
 
 ---
 

@@ -15,7 +15,7 @@ Widget do sistema (Android em v1) mostrando **próxima aula** do dia, sala e hor
 ### Pro
 
 - App Widget configurável (tamanho médio/grande).
-- Toque abre o Hub na home ou na grade.
+- Toque abre o **Sextante** na home ou na grade.
 
 ## Status no app
 

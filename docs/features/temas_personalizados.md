@@ -2,7 +2,7 @@
 
 ## Resumo
 
-Personalização visual além do tema Hub padrão (verde institucional), incluindo modo escuro completo e paletas alternativas.
+Personalização visual além do tema padrão do Sextante (`HubTheme` claro, verde marca), incluindo modo escuro completo e paletas alternativas.
 
 ## Plano
 

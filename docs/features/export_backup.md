@@ -11,7 +11,7 @@ Exportar o arquivo JSON local para backup manual e restaurar em outro aparelho o
 ### Free
 
 - Dados permanecem apenas no dispositivo; backup manual via explorador de arquivos do sistema (sem fluxo guiado no app).
-- Menção no [GUIA_UNIVERSITARIO.md](../GUIA_UNIVERSITARIO.md) sobre localização do arquivo.
+- Menção no [guia_sextante.md](../guia_sextante.md) sobre localização do arquivo.
 
 ### Pro
 

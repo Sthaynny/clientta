@@ -25,7 +25,7 @@
 ## T-203 — integration_test
 
 - **Status:** Não iniciado
-- **O que fazer:** **Restaurar / alinhar** `integration_test/` ao fluxo Hub atual.
+- **O que fazer:** **Restaurar / alinhar** `integration_test/` ao fluxo principal do Sextante.
 - **Objetivo:** CI e regressão de navegação.
 - **Impacto:** **Alto** — manutenção.
 - **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §6
