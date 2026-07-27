@@ -18,3 +18,5 @@ Capturas de tela para a ficha da Play Store. Ordem sugerida na galeria: `01` →
 | `4.png` | Duplicata idêntica a `3.png` (mesmo hash MD5); mantido apenas `03_registrar_aula.png`. |
 
 Convenção: prefixo numérico `NN_` + `snake_case` em português, alinhado à ordem de apresentação na loja.
+
+Telas correspondem às features em [../../features/README.md](../../features/README.md) (painel do dia, grade, atividades).

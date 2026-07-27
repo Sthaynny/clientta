@@ -256,3 +256,5 @@ Transação lógica: ler lista completa → aplicar deletes → upserts → `wri
 ---
 
 **Handoff:** implementar modelo + repositório em lote, `ClassFormViewModel` com estado `Set<int> weekdays` e diff, `ClassesViewModel` com agrupamento, widget `HubWeekdayChips` (ou local ao form se ainda não reutilizado).
+
+**Produto:** cadastro e grade documentados em [features/disciplinas.md](features/disciplinas.md) e [features/grade_horaria.md](features/grade_horaria.md) (plano Free/Pro).

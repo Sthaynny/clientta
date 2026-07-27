@@ -18,3 +18,5 @@ context.go(AppRouters.classForm, arguments: classEntry);
 ```
 
 Para alterar um caminho, edite o getter `path` no enum `AppRouters`.
+
+Perfil (nome da universidade) é editado pelo drawer na home, sem rota dedicada — ver [features/perfil_universidade.md](features/perfil_universidade.md).

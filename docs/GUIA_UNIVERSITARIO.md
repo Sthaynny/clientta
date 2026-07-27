@@ -25,9 +25,11 @@ Não é necessário `flutterfire configure` nem variáveis de ambiente de nuvem.
 
 Cada feature segue **model → repository → view model → screen**.
 
+Detalhamento de funcionalidades, status e roadmap **Free / Pro** (assinatura ainda não implementada no app): [features/README.md](features/README.md).
+
 ## Backup dos dados
 
-O arquivo `university_hub_daily.json` fica na pasta de documentos do app no dispositivo. Instalações antigas migram automaticamente de `conectafersa_daily.json`. Para backup manual, exporte esse arquivo (funcionalidade de export pode ser adicionada depois).
+O arquivo `university_hub_daily.json` fica na pasta de documentos do app no dispositivo. Instalações antigas migram automaticamente de `conectafersa_daily.json`. Para backup manual, exporte esse arquivo; fluxo guiado no app está previsto no plano **Pro** ([features/export_backup.md](features/export_backup.md)).
 
 ## CI (Codemagic)
 

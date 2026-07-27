@@ -27,6 +27,12 @@ Estudantes universitários que querem organizar sala, horário e entregas sem fr
 - Dados locais (`DeviceJsonStore`); sem Firebase/auth.
 - Deve funcionar offline após instalação.
 
+## Tiers (roadmap)
+
+- **Free:** núcleo offline (dia, grade, atividades, perfil) com limites de volume documentados.
+- **Pro:** backup, lembretes, estatísticas, temas, anexos, widgets, múltiplos semestres; sync na nuvem apenas como futuro explícito.
+- Paywall / billing **não** implementados no app — ver `docs/features/README.md`.
+
 ## Source of truth
 
-`docs/PROPOSITO.md`
+`docs/PROPOSITO.md` e `docs/features/README.md`

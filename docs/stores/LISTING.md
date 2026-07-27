@@ -32,6 +32,8 @@ O que você pode fazer:
 Seus dados são armazenados localmente no aparelho (arquivo JSON no dispositivo). O app não envia suas informações para servidores do desenvolvedor.
 
 Hub Universitário é um projeto independente voltado a estudantes que querem simplicidade. Não substitui sistemas oficiais da instituição nem oferece diagnóstico, tratamento ou aconselhamento de saúde.
+
+Hoje o app é gratuito na íntegra; planos Free e Pro são roadmap interno (ver docs/features/README.md na documentação do repositório).
 ```
 
 ## Notas da versão (release 1.3.0)

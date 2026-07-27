@@ -1,7 +1,7 @@
 # Planejamento — próximos passos (Hub Universitário)
 
 Documento de roteiro para evolução do app após a refatoração para **organizador universitário offline** e a identidade visual **Hub**.  
-Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
+Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---
 
@@ -13,7 +13,7 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERS
 | **Arquitetura** | Flutter, MVVM, GetIt, repositórios locais |
 | **UI** | Tema `HubTheme` + componentes `Hub*` nas telas principais |
 | **Nuvem / login** | Removidos (sem Firebase, sem auth) |
-| **Monetização** | Ads e compras in-app **desligados** por enquanto |
+| **Monetização** | Ads e IAP **desligados**; roadmap **Free / Pro** documentado em [features/README.md](features/README.md), sem paywall no código |
 | **Publicação** | `main` no GitHub; remoto pode apontar para `university-` — conferir `git remote -v` |
 
 ---
@@ -66,9 +66,9 @@ Itens já citados em [PROPOSITO.md](PROPOSITO.md), mantendo **sem nuvem**.
 
 | # | Entrega | Dependência sugerida | Escopo mínimo |
 |---|---------|----------------------|---------------|
-| 2.1 | **Exportar / importar JSON** | `share_plus` ou intent nativo | Backup/restore de `university_hub_daily.json` |
-| 2.2 | **Lembretes locais** | `flutter_local_notifications` | Lembrete X minutos antes da aula ou na data da atividade |
-| 2.3 | **Widget “próxima aula”** | Android App Widget (+ iOS se viável) | Próxima disciplina do dia com sala |
+| 2.1 | **Exportar / importar JSON** | `share_plus` ou intent nativo | [export_backup.md](features/export_backup.md) — tier Pro |
+| 2.2 | **Lembretes locais** | `flutter_local_notifications` | [lembretes_notificacoes.md](features/lembretes_notificacoes.md) — tier Pro |
+| 2.3 | **Widget “próxima aula”** | Android App Widget (+ iOS se viável) | [widgets_tela_inicial.md](features/widgets_tela_inicial.md) — tier Pro |
 | 2.4 | **Busca / filtro** | — | Filtrar atividades por tipo ou período |
 
 **Ordem sugerida:** 2.1 → 2.2 → 2.4 → 2.3 (widget é o mais custoso).
@@ -93,11 +93,11 @@ Não priorizar até validação com usuários ou orientação do TCC.
 
 | Item | Observação |
 |------|------------|
-| **Anúncios / assinatura** | Removidos em 2026-03; reintroduzir só com Billing 8+ e UX que não conflite com offline-first |
-| **Sincronização na nuvem** | Contraria princípio atual; exigiria novo PROPOSITO |
-| **Múltiplos campi / cursos** | Config em `AppConfig` |
+| **Anúncios / assinatura Pro** | Removidos em 2026-03; reintroduzir só com Billing 8+ e UX alinhada a [features/README.md](features/README.md) |
+| **Sincronização na nuvem** | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) — contraria princípio atual |
+| **Múltiplos campi / cursos** | [multiplos_semestres.md](features/multiplos_semestres.md) |
 | **Integração calendário ICS** | Import de grade exportada pela instituição |
-| **Tema escuro** | Estender `HubTheme.dark()` |
+| **Tema escuro** | [temas_personalizados.md](features/temas_personalizados.md) |
 
 ---
 
@@ -116,7 +116,7 @@ Não priorizar até validação com usuários ou orientação do TCC.
 ## 9. Como usar este documento
 
 - **Sprint / semana:** escolher 2–3 itens da Fase 0 ou 1.
-- **Antes de feature nova:** atualizar [PROPOSITO.md](PROPOSITO.md) e, se mudar UI, [DESIGN.md](../DESIGN.md).
+- **Antes de feature nova:** atualizar [PROPOSITO.md](PROPOSITO.md), entrada em [features/](features/README.md) e, se mudar UI, [DESIGN.md](../DESIGN.md).
 - **Após entrega:** marcar item como feito (data + versão do app) neste arquivo ou em issues do GitHub.
 
 ---

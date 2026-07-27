@@ -20,6 +20,9 @@ Os dados ficam em um **arquivo JSON no próprio celular** (`DeviceJsonStore`).
 | **Início** | Aulas de hoje + atividades de hoje |
 | **Minha grade** | Cadastro de disciplinas por dia da semana, horário e sala |
 | **Minhas atividades** | Trabalhos, estudos, provas e presenças, com data e “concluída” |
+| **Perfil** | Nome da universidade no menu (opcional, local) |
+
+Catálogo completo e plano **Free / Pro** (roadmap, sem paywall hoje): [features/README.md](features/README.md).
 
 ## Rotas
 
@@ -48,6 +51,10 @@ Não há Firebase, autenticação nem Firestore.
 
 ## Evoluções possíveis (sem nuvem)
 
-- Lembrete com notificação local (`flutter_local_notifications`)
-- Exportar/importar JSON para backup
-- Widget de “próxima aula”
+Itens abaixo estão detalhados em `docs/features/`; a maioria está no tier **Pro** do roadmap de produto:
+
+- [Lembretes locais](features/lembretes_notificacoes.md) (`flutter_local_notifications`)
+- [Exportar/importar JSON](features/export_backup.md)
+- [Widget “próxima aula”](features/widgets_tela_inicial.md)
+
+Sincronização na nuvem: apenas [futuro explícito](features/sincronizacao_nuvem.md), fora do escopo offline atual.
