@@ -1,8 +1,8 @@
-# Propósito do Hub Universitário
+# Propósito do Sextante
 
 ## Em uma frase
 
-**Hub Universitário** é um **auxiliar do dia a dia** para quem estuda em qualquer universidade: grade de aulas, registro de atividades e visão do que importa **hoje** — **sem login, sem servidor e sem banco de dados na nuvem**.
+**Sextante** é um **auxiliar do dia a dia** para quem estuda em qualquer universidade: grade de aulas, registro de atividades e visão do que importa **hoje** — **sem login, sem servidor e sem banco de dados na nuvem**.
 
 Os dados ficam em um **arquivo JSON no próprio celular** (`DeviceJsonStore`).
 

@@ -1,5 +1,5 @@
 name: university_hub
-description: "Hub Universitário — organizador offline para estudantes: painel do dia, grade de aulas e atividades no celular."
+description: "Sextante — organize grade, atividades e o painel do dia na faculdade, offline no celular."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -49,7 +49,7 @@ dev_dependencies:
   patrol_finders: ^2.7.0
 
 patrol:
-  app_name: Hub Universitário
+  app_name: Sextante
   android:
     package_name: br.com.sthaynny.university_hub
   ios:

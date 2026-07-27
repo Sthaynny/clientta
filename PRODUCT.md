@@ -1,4 +1,4 @@
-# Hub Universitário — PRODUCT
+# Sextante — PRODUCT
 
 ## Platform
 
@@ -10,7 +10,7 @@ product
 
 ## One-liner
 
-Auxiliar do dia a dia na universidade: grade, atividades e visão do que importa hoje — offline, sem login.
+Auxiliar do dia a dia na universidade: grade, atividades e visão do que importa hoje — offline, sem login. Tagline: *Navegue sua vida na faculdade*.
 
 ## Audience
 

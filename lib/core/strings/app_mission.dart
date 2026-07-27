@@ -1,9 +1,8 @@
-/// Mensagens de propósito do Hub Universitário — auxiliar do dia a dia na faculdade.
+/// Mensagens de propósito do Sextante — auxiliar do dia a dia na faculdade.
 abstract final class AppMission {
-  static const String name = 'Hub Universitário';
+  static const String name = 'Sextante';
 
-  static const String tagline =
-      'Grade, atividades e rotina na sua universidade — tudo no celular, offline.';
+  static const String tagline = 'Navegue sua vida na faculdade — offline, no celular.';
 
   static const String purposeSummary =
       'Organizador pessoal para estudantes: cadastre aulas na grade, '

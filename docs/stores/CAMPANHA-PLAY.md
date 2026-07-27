@@ -1,4 +1,4 @@
-# Campanha / publicação: Hub Universitário — Google Play
+# Campanha / publicação: Sextante — Google Play
 
 **Objetivo:** Instalação e publicação na ficha Play  
 **Estágio do funil / framework:** Atenção → consideração → decisão; carrossel com PAS no card 03 e CTA no 05  
@@ -6,20 +6,20 @@
 **Canal / peça:** Pacote completo Google Play  
 **Fonte visual:** prints reais  
 **Path dos prints:** `docs/stores/prints/`  
-**Identidade usada:** verde Hub `#1A6B52` / `#0F4535`, dourado/amarelo no logo Hub Universitário (`lib/core/theme/hub_colors.dart`)  
+**Identidade usada:** verde marca `#1A6B52` / `#0F4535`, dourado/amarelo no logo Sextante (`lib/core/theme/hub_colors.dart`)  
 **Play Store:** [LINK_PLAY_STORE]
 
 ---
 
 ## Copy da ficha
 
-- **Nome:** Hub Universitário
+- **Nome:** Sextante
 - **Breve (79/80):** Grade, atividades e o dia na facul — tudo no celular, sem internet.
 - **Descrição completa:**
 
 Organizar a faculdade não precisa virar planilha nem grupo de WhatsApp perdido.
 
-O **Hub Universitário** é um organizador pessoal para quem estuda na universidade: você monta a **grade de aulas**, registra **entregas e provas** e abre o **painel do dia** para ver o que importa agora — aula da manhã, trabalho da semana, sala e horário.
+O **Sextante** é um organizador pessoal para quem estuda na universidade: você monta a **grade de aulas**, registra **entregas e provas** e abre o **painel do dia** para ver o que importa agora — aula da manhã, trabalho da semana, sala e horário.
 
 **Para quem é:** estudantes que querem clareza na rotina, sem depender de sinal o tempo todo.
 
@@ -70,7 +70,7 @@ O **Hub Universitário** é um organizador pessoal para quem estuda na universid
 ## Brief visual
 
 - **Phone:** 5× 9:16 (alvo 1080×1920 pós-redimensionar), arquétipos A, D, E, C, H  
-- **Ícone:** 512×512, tocha/logo estilo Hub Universitário, verde + amarelo, sem texto longo  
+- **Ícone:** 512×512, tocha/logo estilo Sextante, verde + amarelo, sem texto longo  
 - **Feature:** 1024×500, marca + benefício curto  
 - **Heurísticas:** hierarquia headline → UI; sem badges flutuantes; contraste AA no texto  
 - **Riqueza UI:** datas PT-BR, sistema acadêmico, salas LTI, tipos Entrega/Trabalho  

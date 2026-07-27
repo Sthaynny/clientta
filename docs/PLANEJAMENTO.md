@@ -1,6 +1,6 @@
-# Planejamento — próximos passos (Hub Universitário)
+# Planejamento — próximos passos (Sextante)
 
-Documento de roteiro para evolução do app após a refatoração para **organizador universitário offline** e a identidade visual **Hub**.  
+Documento de roteiro para evolução do app após a refatoração para **organizador offline** e a identidade visual **Sextante** (verde `#1A6B52` em `hub_colors.dart`).  
 Referências: [PROPOSITO.md](PROPOSITO.md), [GUIA_UNIVERSITARIO.md](GUIA_UNIVERSITARIO.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---

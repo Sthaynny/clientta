@@ -1,9 +1,9 @@
 ---
-description: Arquitetura, estado, clean code e padrões do Hub Universitário (university_hub)
+description: Arquitetura, estado, clean code e padrões do Sextante (pacote university_hub)
 alwaysApply: true
 ---
 
-# Hub Universitário — padrões gerais
+# Sextante — padrões gerais
 
 App **offline-first**: dados em `DeviceJsonStore` (JSON no dispositivo). Sem Firebase, auth ou backend.
 

@@ -1,4 +1,4 @@
-# Prints — Google Play (Hub Universitário)
+# Prints — Google Play (Sextante)
 
 Capturas de tela para a ficha da Play Store. Ordem sugerida na galeria: `01` → `06`.
 

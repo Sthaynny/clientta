@@ -1,4 +1,4 @@
-# Funcionalidades — Hub Universitário
+# Funcionalidades — Sextante
 
 Catálogo de funcionalidades do app com visão de **plano Free** vs **Pro**.  
 O modelo de assinatura é **roadmap de produto** — hoje o app não exibe paywall nem cobrança in-app ([PLANEJAMENTO.md](../PLANEJAMENTO.md)).

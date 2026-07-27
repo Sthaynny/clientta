@@ -1,4 +1,4 @@
-## Campanha / publicação: Hub Universitário — Google Play
+## Campanha / publicação: Sextante — Google Play
 
 **Objetivo:** Instalação e publicação na ficha  
 **Estágio do funil / framework:** Atenção → decisão; carrossel PAS + CTA (card 05)  
@@ -13,7 +13,7 @@
 
 Ver texto completo em `docs/stores/CAMPANHA-PLAY.md`.
 
-- **Nome:** Hub Universitário  
+- **Nome:** Sextante  
 - **Breve (79/80):** Grade, atividades e o dia na facul — tudo no celular, sem internet.
 
 ### Headline(s) / CTA

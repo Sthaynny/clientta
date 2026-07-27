@@ -1,4 +1,4 @@
-# Hub Universitário — DESIGN
+# Sextante — DESIGN
 
 ## Scene
 
