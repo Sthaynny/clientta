@@ -1,8 +1,8 @@
-import 'package:ufersa_hub/core/utils/commands.dart';
-import 'package:ufersa_hub/core/utils/result.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_schedule_group.dart';
-import 'package:ufersa_hub/features/classes/domain/repositories/class_repository.dart';
+import 'package:university_hub/core/utils/commands.dart';
+import 'package:university_hub/core/utils/result.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/features/classes/domain/models/class_schedule_group.dart';
+import 'package:university_hub/features/classes/domain/repositories/class_repository.dart';
 
 class ClassesViewModel {
   ClassesViewModel({required ClassRepository repository})

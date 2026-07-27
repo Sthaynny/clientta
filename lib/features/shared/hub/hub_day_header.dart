@@ -1,8 +1,8 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/strings/app_mission.dart';
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/core/strings/app_mission.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
 
 class HubDayHeader extends StatelessWidget {
   const HubDayHeader({

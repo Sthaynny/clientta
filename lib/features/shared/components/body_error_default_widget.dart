@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/strings/strings.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_empty_state.dart';
+import 'package:university_hub/core/strings/strings.dart';
+import 'package:university_hub/features/shared/hub/hub_empty_state.dart';
 
 class BodyErrorDefaultWidget extends StatelessWidget {
   const BodyErrorDefaultWidget({

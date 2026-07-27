@@ -1,6 +1,6 @@
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/core/utils/result.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_day_schedule.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/core/utils/result.dart';
+import 'package:university_hub/features/classes/domain/models/class_day_schedule.dart';
 
 final _timePattern = RegExp(r'^([01]\d|2[0-3]):[0-5]\d$');
 

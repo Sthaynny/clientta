@@ -1,12 +1,12 @@
 import 'package:get_it/get_it.dart';
-import 'package:ufersa_hub/core/storage/device_json_store.dart';
-import 'package:ufersa_hub/features/activities/data/activity_repository_local.dart';
-import 'package:ufersa_hub/features/activities/domain/repositories/activity_repository.dart';
-import 'package:ufersa_hub/features/activities/view/activities_view_model.dart';
-import 'package:ufersa_hub/features/classes/data/class_repository_local.dart';
-import 'package:ufersa_hub/features/classes/domain/repositories/class_repository.dart';
-import 'package:ufersa_hub/features/classes/view/classes_view_model.dart';
-import 'package:ufersa_hub/features/home/screen/home_view_model.dart';
+import 'package:university_hub/core/storage/device_json_store.dart';
+import 'package:university_hub/features/activities/data/activity_repository_local.dart';
+import 'package:university_hub/features/activities/domain/repositories/activity_repository.dart';
+import 'package:university_hub/features/activities/view/activities_view_model.dart';
+import 'package:university_hub/features/classes/data/class_repository_local.dart';
+import 'package:university_hub/features/classes/domain/repositories/class_repository.dart';
+import 'package:university_hub/features/classes/view/classes_view_model.dart';
+import 'package:university_hub/features/home/screen/home_view_model.dart';
 
 final dependency = GetIt.instance;
 

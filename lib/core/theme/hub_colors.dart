@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Paleta ConectaFERSA — ver [DESIGN.md].
+/// Paleta do Hub Universitário — ver [DESIGN.md].
 abstract final class HubColors {
   static const Color seed = Color(0xFF1A6B52);
   static const Color seedDark = Color(0xFF0F4535);

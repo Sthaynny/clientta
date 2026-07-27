@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
 
 /// Text input using [HubTheme.inputDecorationTheme] — same outline as dropdowns.
 class HubTextFormField extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:ufersa_hub/core/router/app_router.dart';
+import 'package:university_hub/core/router/app_router.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 

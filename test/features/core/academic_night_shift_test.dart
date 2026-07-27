@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ufersa_hub/core/schedule/academic_night_shift.dart';
+import 'package:university_hub/core/schedule/academic_night_shift.dart';
 
 void main() {
   test('períodos noturnos N1–N4 batem com grade SIGAA', () {

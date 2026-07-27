@@ -1,5 +1,5 @@
-name: ufersa_hub
-description: "ConectaFERSA — organizador universitário offline: painel do dia, grade de aulas e atividades no celular."
+name: university_hub
+description: "Hub Universitário — organizador offline para estudantes: painel do dia, grade de aulas e atividades no celular."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -49,11 +49,11 @@ dev_dependencies:
   patrol_finders: ^2.7.0
 
 patrol:
-  app_name: ConectaFERSA
+  app_name: Hub Universitário
   android:
-    package_name: com.example.ufersa_hub
+    package_name: br.com.sthaynny.university_hub
   ios:
-    bundle_id: com.example.ufersa_hub
+    bundle_id: br.com.sthaynny.universityHub
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

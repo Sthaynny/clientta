@@ -1,5 +1,5 @@
-import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
 
 final tMapClassEntry = <String, dynamic>{
   'id': 'class-1',

@@ -1,10 +1,10 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
-import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_activity_kind_style.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_surface.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:university_hub/features/shared/hub/hub_activity_kind_style.dart';
+import 'package:university_hub/features/shared/hub/hub_surface.dart';
 
 class HubActivityTile extends StatelessWidget {
   const HubActivityTile({

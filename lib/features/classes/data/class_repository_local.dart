@@ -1,6 +1,6 @@
-import 'package:ufersa_hub/core/storage/device_json_store.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
-import 'package:ufersa_hub/features/classes/domain/repositories/class_repository.dart';
+import 'package:university_hub/core/storage/device_json_store.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/features/classes/domain/repositories/class_repository.dart';
 
 class ClassRepositoryLocal implements ClassRepository {
   ClassRepositoryLocal(this._store);

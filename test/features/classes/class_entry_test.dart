@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
 
 void main() {
   test('ClassEntry serializa e restaura do mapa', () {

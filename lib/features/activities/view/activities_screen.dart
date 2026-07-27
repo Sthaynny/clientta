@@ -1,15 +1,15 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/router/app_router.dart';
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
-import 'package:ufersa_hub/core/utils/extension/build_context.dart';
-import 'package:ufersa_hub/core/utils/extension/datetime.dart';
-import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
-import 'package:ufersa_hub/features/activities/view/activities_view_model.dart';
-import 'package:ufersa_hub/features/shared/components/app_loading_widget.dart';
-import 'package:ufersa_hub/features/shared/components/body_error_default_widget.dart';
-import 'package:ufersa_hub/features/shared/hub/hub.dart';
+import 'package:university_hub/core/router/app_router.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/core/utils/extension/build_context.dart';
+import 'package:university_hub/core/utils/extension/datetime.dart';
+import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:university_hub/features/activities/view/activities_view_model.dart';
+import 'package:university_hub/features/shared/components/app_loading_widget.dart';
+import 'package:university_hub/features/shared/components/body_error_default_widget.dart';
+import 'package:university_hub/features/shared/hub/hub.dart';
 
 class ActivitiesScreen extends StatefulWidget {
   const ActivitiesScreen({super.key, required this.viewmodel});

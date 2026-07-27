@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
 
 void main() {
   test('ActivityEntry serializa e restaura do mapa', () {

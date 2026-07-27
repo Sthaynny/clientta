@@ -1,4 +1,4 @@
-# ConectaFERSA — PRODUCT
+# Hub Universitário — PRODUCT
 
 ## Platform
 

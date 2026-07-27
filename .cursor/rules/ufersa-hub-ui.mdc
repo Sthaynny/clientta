@@ -1,10 +1,10 @@
 ---
-description: UI/UX e passos de construção de telas do ConectaFERSA
+description: UI/UX e passos de construção de telas do Hub Universitário
 globs: lib/**/*.dart
 alwaysApply: false
 ---
 
-# ConectaFERSA — construção de UI
+# Hub Universitário — construção de UI
 
 ## Fundação visual
 

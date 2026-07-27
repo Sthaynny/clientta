@@ -1,5 +1,5 @@
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/main.dart' as app;
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';

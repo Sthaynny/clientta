@@ -1,8 +1,8 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_section_header.dart';
-import 'package:ufersa_hub/features/shared/hub/hub_surface.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/features/shared/hub/hub_section_header.dart';
+import 'package:university_hub/features/shared/hub/hub_surface.dart';
 
 /// Bloco da home com título e conteúdo agrupado visualmente.
 class HubHomeSection extends StatelessWidget {

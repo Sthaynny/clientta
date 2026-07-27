@@ -1,9 +1,9 @@
 ---
-description: Arquitetura, estado, clean code e padrões do ConectaFERSA (ufersa_hub)
+description: Arquitetura, estado, clean code e padrões do Hub Universitário (university_hub)
 alwaysApply: true
 ---
 
-# ConectaFERSA — padrões gerais
+# Hub Universitário — padrões gerais
 
 App **offline-first**: dados em `DeviceJsonStore` (JSON no dispositivo). Sem Firebase, auth ou backend.
 
@@ -32,7 +32,7 @@ Novas features seguem o mesmo desenho de `classes` e `activities`.
 
 - `GetIt` em `lib/core/dependecy/dependency.dart`: singletons para store/repos; **factory** para ViewModels de lista/home.
 - ViewModels de formulário são criados no `app_router.dart` com `arguments` da rota (`ClassEntry?` / `ActivityEntry?`).
-- Imports sempre `package:ufersa_hub/...`, nunca relativos entre features.
+- Imports sempre `package:university_hub/...`, nunca relativos entre features.
 
 ## Rotas
 

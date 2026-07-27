@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/router/app_router.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/core/router/app_router.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
 
 class HubNavTile extends StatelessWidget {
   const HubNavTile({

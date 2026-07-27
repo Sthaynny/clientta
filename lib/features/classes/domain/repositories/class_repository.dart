@@ -1,4 +1,4 @@
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
 
 abstract class ClassRepository {
   Future<List<ClassEntry>> getAll();

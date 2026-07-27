@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
 
 /// Multi-select weekday row (1 = Monday … 7 = Sunday) for class schedules.
 class HubWeekdayChips extends StatelessWidget {

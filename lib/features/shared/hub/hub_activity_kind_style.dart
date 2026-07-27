@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
-import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
 
 class HubActivityKindStyle {
   const HubActivityKindStyle({required this.label, required this.color});

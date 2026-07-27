@@ -1,5 +1,5 @@
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
 
 /// One card in "Minha grade" — entries sharing [ClassEntry.seriesId], or a lone legacy row.
 class ClassScheduleGroup {

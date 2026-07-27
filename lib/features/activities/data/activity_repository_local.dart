@@ -1,6 +1,6 @@
-import 'package:ufersa_hub/core/storage/device_json_store.dart';
-import 'package:ufersa_hub/features/activities/domain/models/activity_entry.dart';
-import 'package:ufersa_hub/features/activities/domain/repositories/activity_repository.dart';
+import 'package:university_hub/core/storage/device_json_store.dart';
+import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
+import 'package:university_hub/features/activities/domain/repositories/activity_repository.dart';
 
 class ActivityRepositoryLocal implements ActivityRepository {
   ActivityRepositoryLocal(this._store);

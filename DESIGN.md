@@ -1,4 +1,4 @@
-# ConectaFERSA — DESIGN
+# Hub Universitário — DESIGN
 
 ## Scene
 

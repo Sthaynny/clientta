@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_entry.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_schedule_group.dart';
+import 'package:university_hub/features/classes/domain/models/class_entry.dart';
+import 'package:university_hub/features/classes/domain/models/class_schedule_group.dart';
 
 void main() {
   test('ClassScheduleGroup agrupa por seriesId e combina dias', () {

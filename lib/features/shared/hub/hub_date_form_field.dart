@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:ufersa_hub/core/theme/hub_colors.dart';
+import 'package:university_hub/core/theme/hub_colors.dart';
 
 /// Outlined date trigger aligned with [HubTheme] input decoration (dropdowns).
 class HubDateFormField extends StatelessWidget {

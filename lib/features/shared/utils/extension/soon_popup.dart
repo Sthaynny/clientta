@@ -1,4 +1,4 @@
-import 'package:ufersa_hub/core/strings/strings.dart';
+import 'package:university_hub/core/strings/strings.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 

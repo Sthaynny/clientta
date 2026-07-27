@@ -1,6 +1,6 @@
-/// Mensagens de propósito do ConectaFERSA — auxiliar do dia a dia na faculdade.
+/// Mensagens de propósito do Hub Universitário — auxiliar do dia a dia na faculdade.
 abstract final class AppMission {
-  static const String name = 'ConectaFERSA';
+  static const String name = 'Hub Universitário';
 
   static const String tagline =
       'Grade, atividades e rotina — tudo no seu celular, offline.';

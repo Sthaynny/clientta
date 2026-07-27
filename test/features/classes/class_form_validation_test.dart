@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ufersa_hub/core/strings/daily_strings.dart';
-import 'package:ufersa_hub/core/utils/result.dart';
-import 'package:ufersa_hub/features/classes/domain/class_form_validation.dart';
-import 'package:ufersa_hub/features/classes/domain/models/class_day_schedule.dart';
+import 'package:university_hub/core/strings/daily_strings.dart';
+import 'package:university_hub/core/utils/result.dart';
+import 'package:university_hub/features/classes/domain/class_form_validation.dart';
+import 'package:university_hub/features/classes/domain/models/class_day_schedule.dart';
 
 void main() {
   const defaults = (

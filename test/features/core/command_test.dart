@@ -1,5 +1,5 @@
-import 'package:ufersa_hub/core/utils/commands.dart';
-import 'package:ufersa_hub/core/utils/result.dart';
+import 'package:university_hub/core/utils/commands.dart';
+import 'package:university_hub/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
