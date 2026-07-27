@@ -23,7 +23,7 @@ Documentação de limites por tier: [features/README.md](../../features/README.m
 
 | Camada | Free (exemplo) | Pro (exemplo) |
 |--------|----------------|---------------|
-| **Android `applicationId`** | `com.sthaynny.university_hub` (atual até renomear) | `com.sthaynny.university_hub_pro` |
+| **Android `applicationId`** | `br.com.sthaynny.university_hub` | `br.com.sthaynny.university_hub_pro` |
 | **iOS bundle ID** | mesmo padrão com sufixo `_pro` na variante paga | idem |
 | **Nome na loja** | Sextante | Sextante Pro |
 | **Variante de build** | Flutter **flavors** (`free` / `pro`) e/ou `--dart-define=APP_VARIANT=free\|pro` | idem |
