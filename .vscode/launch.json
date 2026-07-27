@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ufersa_hub",
+            "name": "university_hub",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug"  
         },
         {
-            "name": "ufersa_hub (profile mode)",
+            "name": "university_hub (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "ufersa_hub (release mode)",
+            "name": "university_hub (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
