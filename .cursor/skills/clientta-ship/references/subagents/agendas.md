@@ -25,6 +25,7 @@ Papel: CRUD de `ServiceAppointment` em `/agendas` e `/agendas/registrar`.
 - `HubTextFormField`, `HubDateFormField`, `HubTimeFormField`
 - `DropdownButtonFormField` com `initialValue` + `ValueKey` (não usar API deprecated)
 - `HubFab`, `HubEmptyState`, `HubAppointmentCard`
+- Loading lista: `HubAppointmentListLoadingSkeleton` (ver [shimmer-loading.md](shimmer-loading.md))
 
 ## Arquitetura
 

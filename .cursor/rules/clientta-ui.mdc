@@ -29,7 +29,33 @@ Barrel: `lib/features/shared/hub/hub.dart`.
 | `HubEmptyState` | Sem atendimentos — CTA registrar |
 | `HubFab` | FAB em `/agendas` |
 | `HubOfflineBanner` | Offline / sync pendente |
-| `AppLoadingWidget` / `BodyErrorDefaultWidget` | Loading e erro |
+| `HubShimmer` / `HubShimmerBox` | Base do loading skeleton |
+| `Hub*LoadingSkeleton` | Loading por rota (ver abaixo) |
+| `BodyErrorDefaultWidget` | Erro com retry |
+
+## Loading (shimmer) — obrigatório
+
+**Não** usar `CircularProgressIndicator` nem `DSSpinnerLoading` em telas de feature ou bootstrap.
+
+| Rota / contexto | Skeleton |
+|-----------------|----------|
+| `/` home | `HubHomeLoadingSkeleton` |
+| `/agendas` | `HubAppointmentListLoadingSkeleton(showIntro: true, showFilter: true)` |
+| `/clientes` | `HubClientListLoadingSkeleton` |
+| `/atendimentos` | `HubClientCareLoadingSkeleton` |
+| `/plano` | `HubPlanLoadingSkeleton` |
+| Bootstrap / `AuthGate` | `HubBootstrapLoadingSkeleton` |
+| Fallback genérico | `AppLoadingWidget` → lista de cards |
+
+Padrão MVVM:
+
+```dart
+if (load.running && entries.isEmpty) return const HubHomeLoadingSkeleton();
+```
+
+Skeletons imitam o layout real (intro, cards, filtros). `HubShimmer` respeita `MediaQuery.disableAnimationsOf`.
+
+Subagente: `.cursor/skills/clientta-ship/references/subagents/shimmer-loading.md`.
 
 ## Receita de tela de lista (home, agendas)
 
@@ -41,7 +67,7 @@ Scaffold(
   body: ListenableBuilder(
     listenable: viewmodel.load,
     builder: (context, _) {
-      if (load.running && entries.isEmpty) return AppLoadingWidget();
+      if (load.running && entries.isEmpty) return const HubHomeLoadingSkeleton();
       if (load.error) return BodyErrorDefaultWidget(onPressed: load.execute);
       if (entries.isEmpty) return HubEmptyState(...);
       return ListView(...); // padding: EdgeInsets.all(DSSpacing.md.value)
@@ -68,7 +94,7 @@ Scaffold(
 - Rota `/plano`.
 - Exibir preço de `getPlanPricing`.
 - CTA assinar abre Checkout via `url_launcher`.
-- Botões sync status e cancelar assinatura.
+- Loading: `HubPlanLoadingSkeleton`.
 
 ## Navegação e layout
 
@@ -81,5 +107,6 @@ Scaffold(
 
 - [ ] Strings em `daily_strings.dart` / `strings.dart` — copy alinhada ao CRM
 - [ ] Tema via `HubTheme` / `HubColors`
-- [ ] Estados vazio, loading e erro
+- [ ] Estados vazio, **shimmer loading** e erro
+- [ ] Sem `CircularProgressIndicator` em telas de feature
 - [ ] Analyzer limpo em `lib/`

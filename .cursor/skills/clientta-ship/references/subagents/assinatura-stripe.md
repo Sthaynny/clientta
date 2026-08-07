@@ -48,6 +48,7 @@ lib/core/plan/plan_access_policy.dart
 
 - Sandbox Stripe com chaves de teste
 - `flutter analyze` + `flutter test`
+- Loading da tela plano: `HubPlanLoadingSkeleton` (sem `CircularProgressIndicator`); ver subagente `shimmer-loading.md`
 
 ## Prompt sugerido (Task)
 

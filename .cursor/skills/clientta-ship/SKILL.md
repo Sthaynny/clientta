@@ -45,6 +45,7 @@ Progresso:
 | Lembretes locais (Pro) | [lembretes-locais.md](references/subagents/lembretes-locais.md) | `Clientta: lembretes-locais` |
 | Tela Plano Pro (app) | [assinatura-stripe.md](references/subagents/assinatura-stripe.md) | `Clientta: assinatura-stripe` |
 | Cloud Functions Stripe | [billing-functions.md](references/subagents/billing-functions.md) | `Clientta: billing-functions` |
+| Shimmer loading (transversal) | [shimmer-loading.md](references/subagents/shimmer-loading.md) | `Clientta: shimmer-loading` |
 
 ### 3. Delegar (Task)
 

@@ -36,6 +36,7 @@ Papel: implementar a tela inicial `/` — atendimentos de hoje, ordenados por `s
 ## Verificação
 
 - Testes ViewModel: filtro de data, ordenação, transição de status
+- Loading: `HubHomeLoadingSkeleton` (ver [shimmer-loading.md](shimmer-loading.md))
 - `flutter analyze` + `flutter test`
 
 ## Prompt sugerido (Task)
