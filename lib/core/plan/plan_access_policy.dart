@@ -18,6 +18,14 @@ abstract final class PlanAccessPolicy {
     return hasProAccess(subscription);
   }
 
+  static bool canImportDataBackup(UserSubscription subscription) {
+    return canExportDataBackup(subscription);
+  }
+
+  static bool canExportDataBackup(UserSubscription subscription) {
+    return hasProAccess(subscription);
+  }
+
   static bool canAccessCloudSync(UserSubscription subscription) {
     return hasProAccess(subscription);
   }

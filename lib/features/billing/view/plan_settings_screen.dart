@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:clientta/core/storage/app_profile_settings.dart';
 import 'package:clientta/core/storage/app_profile_repository.dart';
 import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
+import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_settings.dart';
+import 'package:clientta/core/backup/data_backup_service.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
@@ -34,8 +37,10 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   BillingRepository get _billing => dependency<BillingRepository>();
   AppointmentReminderCoordinator get _reminders =>
       dependency<AppointmentReminderCoordinator>();
+  AppointmentSyncService get _sync => dependency<AppointmentSyncService>();
   AppProfileRepository get _profile => dependency<AppProfileRepository>();
   AppointmentRepository get _appointments => dependency<AppointmentRepository>();
+  DataBackupService get _backup => dependency<DataBackupService>();
 
   @override
   void initState() {
@@ -73,6 +78,76 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
     if (!mounted) return;
     setState(() => _reminderSettings = settings);
     context.showSnackBarSuccess(reminderSettingsSavedString);
+  }
+
+  Future<void> _exportBackup() async {
+    if (!_subscription.allowsOperationalAccess) {
+      context.showSnackBarWarning(planBackupProRequiredString);
+      return;
+    }
+
+    await _runAction(() async {
+      final result = await _backup.shareBackup();
+      if (!mounted) return;
+      switch (result) {
+        case Ok():
+          context.showSnackBarSuccess(planBackupExportSuccessString);
+        case Error(:final error):
+          final message = error.toString();
+          if (message.contains('pro_required')) {
+            context.showSnackBarWarning(planBackupProRequiredString);
+          } else {
+            context.showSnackBarError(planBackupExportErrorString);
+          }
+      }
+    });
+  }
+
+  Future<void> _importBackup() async {
+    if (!_subscription.allowsOperationalAccess) {
+      context.showSnackBarWarning(planBackupProRequiredString);
+      return;
+    }
+
+    final confirmed = await showHubConfirmDialog(
+      context: context,
+      title: planBackupImportTitleString,
+      message: planBackupImportMessageString,
+      confirmLabel: planBackupImportConfirmButtonString,
+    );
+    if (confirmed != true || !mounted) return;
+
+    await _runAction(() async {
+      final result = await _backup.importBackup();
+      if (!mounted) return;
+      switch (result) {
+        case Ok(:final value):
+          final appointments = await _appointments.getAll();
+          await _reminders.syncForAppointments(appointments);
+          if (await _sync.canSync()) {
+            _sync.scheduleSync();
+          }
+          if (!mounted) return;
+          final summary = value!;
+          context.showSnackBarSuccess(
+            planBackupImportSuccessString(
+              appointments: summary.appointmentCount,
+              notes: summary.encounterNoteCount,
+            ),
+          );
+        case Error(:final error):
+          final message = error.toString();
+          if (message.contains('pro_required')) {
+            context.showSnackBarWarning(planBackupProRequiredString);
+          } else if (message.contains('cancelled')) {
+            return;
+          } else if (message.contains('invalid_format')) {
+            context.showSnackBarError(planBackupImportInvalidString);
+          } else {
+            context.showSnackBarError(planBackupImportErrorString);
+          }
+      }
+    });
   }
 
   String _statusLabel(UserSubscription subscription) {
@@ -336,6 +411,40 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                               },
                             ),
                           ],
+                        ],
+                      ),
+                    ),
+                    DSSpacing.lg.y,
+                    HubSurface(
+                      padding: EdgeInsets.all(DSSpacing.lg.value),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DSHeadlineSmallText(
+                            planBackupSectionTitleString,
+                            color: HubColors.ink,
+                          ),
+                          DSSpacing.sm.y,
+                          DSBodyText(
+                            planBackupDescriptionString,
+                            color: HubColors.inkMuted,
+                          ),
+                          DSSpacing.md.y,
+                          HubPrimaryButton(
+                            label: planBackupExportButtonString,
+                            isLoading: _actionLoading,
+                            onPressed: _exportBackup,
+                          ),
+                          DSSpacing.sm.y,
+                          Center(
+                            child: TextButton(
+                              onPressed: _actionLoading ? null : _importBackup,
+                              child: Text(
+                                planBackupImportButtonString,
+                                style: const TextStyle(color: HubColors.seed),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

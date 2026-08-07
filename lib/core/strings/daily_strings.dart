@@ -201,7 +201,7 @@ String get authDividerOrString => 'ou';
 String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';
 String get planProDescriptionString =>
-    'Agenda ilimitada, sincronização na nuvem, lembretes antes do atendimento e suporte prioritário.';
+    'Agenda ilimitada, sincronização na nuvem, lembretes, exportação de backup e suporte prioritário.';
 String get planSubscribeButtonString => 'Assinar plano Pro';
 String get planSubscribeSuccessString => 'Assinatura ativada com sucesso!';
 String get planSubscribePendingString =>
@@ -273,6 +273,30 @@ String appointmentFormReminderSubtitle(int leadMinutes) =>
 String get appointmentFormReminderFreeSubtitleString =>
     'Recurso do plano Pro — assine para receber avisos no celular.';
 String get reminderSettingsSavedString => 'Preferências de lembrete salvas.';
+String get planBackupSectionTitleString => 'Backup dos dados';
+String get planBackupDescriptionString =>
+    'Exporte um arquivo JSON com agendamentos, clientes e notas deste aparelho.';
+String get planBackupExportButtonString => 'Exportar backup JSON';
+String get planBackupExportSuccessString =>
+    'Backup pronto para salvar ou compartilhar.';
+String get planBackupExportErrorString =>
+    'Não foi possível exportar o backup. Tente novamente.';
+String get planBackupProRequiredString =>
+    'Backup de dados está disponível no plano Pro.';
+String get planBackupImportButtonString => 'Importar backup JSON';
+String get planBackupImportTitleString => 'Substituir dados locais?';
+String get planBackupImportMessageString =>
+    'Os agendamentos e notas deste aparelho serão substituídos pelo conteúdo do arquivo. Esta ação não pode ser desfeita.';
+String get planBackupImportConfirmButtonString => 'Substituir dados';
+String planBackupImportSuccessString({
+  required int appointments,
+  required int notes,
+}) =>
+    'Backup restaurado: $appointments atendimentos e $notes notas de atendimento.';
+String get planBackupImportErrorString =>
+    'Não foi possível importar o backup. Verifique o arquivo e tente novamente.';
+String get planBackupImportInvalidString =>
+    'Arquivo inválido. Use um backup exportado pelo Clientta.';
 
 const weekdayLabels = [
   'Segunda-feira',

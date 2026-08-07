@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:clientta/core/backup/data_backup_service.dart';
 import 'package:clientta/core/router/app_navigator.dart';
 import 'package:clientta/core/network/network_status_port.dart';
 import 'package:clientta/core/network/network_status_service.dart';
@@ -35,6 +36,13 @@ void setup() {
 
   dependency.registerLazySingleton<AppProfileRepository>(
     () => AppProfileRepository(dependency()),
+  );
+
+  dependency.registerLazySingleton<DataBackupService>(
+    () => DataBackupService(
+      store: dependency(),
+      billingRepository: dependency(),
+    ),
   );
 
   dependency.registerLazySingleton<AuthRepository>(
