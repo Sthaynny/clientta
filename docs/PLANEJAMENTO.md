@@ -87,7 +87,7 @@ Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
 |---|---------|
 | 4.1 | Onboarding (valor offline + primeiro atendimento) |
 | 4.2 | Empty states e copy validada com usuários reais |
-| 4.3 | Lembretes locais (`flutter_local_notifications`) — Pro | Em preparação — ver [lembretes_locais.md](features/lembretes_locais.md) |
+| 4.3 | Lembretes locais (`flutter_local_notifications`) — Pro | Concluído — [lembretes_locais.md](features/lembretes_locais.md) |
 | 4.4 | Export JSON de backup — Pro |
 | 4.5 | Testes de integração e Patrol |
 | 4.6 | Política de privacidade (Auth, Firestore, Stripe) |

@@ -5,7 +5,7 @@
 Notificações **locais** no dispositivo para avisar o profissional quando um atendimento **agendado** está se aproximando (ex.: 15 minutos antes de `startTime`).  
 Recurso do tier **Pro** — sem servidor, sem push remoto, alinhado ao offline-first.
 
-**Status:** preparado (infra + documentação); UI e polish pendentes (C-410).
+**Status:** implementado (v1) — UI Pro, deep link e sync; polish opcional pendente.
 
 ---
 
@@ -42,8 +42,8 @@ Não substitui push na nuvem; é benefício Pro de produtividade no mesmo aparel
 | Recurso | Free | Pro |
 |---------|------|-----|
 | Lembrete antes do atendimento | — | Sim |
-| Configurar antecedência (15 / 30 / 60 min) | — | Sim (futuro na UI) |
-| Desligar lembretes | — | Sim (futuro na UI) |
+| Configurar antecedência (15 / 30 / 60 min) | — | Sim (`/plano`) |
+| Desligar lembretes | — | Sim (`/plano` e formulário) |
 
 Free: nenhum alarme é agendado; tentativa exibe CTA para `/plano`.
 

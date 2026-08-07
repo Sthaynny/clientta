@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:clientta/core/router/app_navigator.dart';
 import 'package:clientta/core/network/network_status_port.dart';
 import 'package:clientta/core/network/network_status_service.dart';
 import 'package:clientta/core/storage/app_profile_repository.dart';
@@ -75,7 +76,9 @@ void setup() {
   );
 
   dependency.registerLazySingleton<AppointmentReminderScheduler>(
-    createLocalAppointmentReminderScheduler,
+    () => createLocalAppointmentReminderScheduler(
+      onNotificationTap: AppNavigator.handleReminderNotificationPayload,
+    ),
   );
   dependency.registerLazySingleton<AppointmentReminderCoordinator>(
     () => AppointmentReminderCoordinator(
@@ -118,6 +121,7 @@ void setup() {
       repository: dependency(),
       billingRepository: dependency(),
       syncService: dependency(),
+      reminderCoordinator: dependency(),
     ),
   );
   dependency.registerFactory(

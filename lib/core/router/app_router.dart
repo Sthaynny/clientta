@@ -41,6 +41,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
         serviceTypeCatalog: dependency(),
         userRepository: dependency(),
         syncService: dependency(),
+        reminderCoordinator: dependency(),
+        appProfileRepository: dependency(),
         initial: editEntry,
         prefillClientName: prefillClientName,
         prefillClientPhone: prefillClientPhone,

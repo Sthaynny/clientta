@@ -6,9 +6,13 @@ import 'package:clientta/features/appointments/domain/reminders/appointment_remi
 import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_scheduler.dart';
 
 class LocalAppointmentReminderScheduler implements AppointmentReminderScheduler {
-  LocalAppointmentReminderScheduler(this._plugin);
+  LocalAppointmentReminderScheduler(
+    this._plugin, {
+    void Function(String? payload)? onNotificationTap,
+  }) : _onNotificationTap = onNotificationTap;
 
   final FlutterLocalNotificationsPlugin _plugin;
+  final void Function(String? payload)? _onNotificationTap;
   static const _androidChannelId = 'clientta_appointment_reminders';
   static const _androidChannelName = 'Lembretes de atendimento';
 
@@ -22,7 +26,12 @@ class LocalAppointmentReminderScheduler implements AppointmentReminderScheduler 
     );
     const settings = InitializationSettings(android: android, iOS: ios);
 
-    await _plugin.initialize(settings: settings);
+    await _plugin.initialize(
+      settings: settings,
+      onDidReceiveNotificationResponse: (response) {
+        _onNotificationTap?.call(response.payload);
+      },
+    );
 
     final androidPlugin =
         _plugin
@@ -66,6 +75,7 @@ class LocalAppointmentReminderScheduler implements AppointmentReminderScheduler 
     required DateTime fireAt,
     required String title,
     required String body,
+    String? payload,
   }) async {
     final notificationId = AppointmentReminderPolicy.notificationIdFor(
       appointment.id,
@@ -76,6 +86,7 @@ class LocalAppointmentReminderScheduler implements AppointmentReminderScheduler 
       id: notificationId,
       title: title,
       body: body,
+      payload: payload,
       scheduledDate: scheduled,
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
@@ -106,8 +117,11 @@ class LocalAppointmentReminderScheduler implements AppointmentReminderScheduler 
 }
 
 /// Factory usada pelo GetIt após [ensureLocalNotificationsReady].
-LocalAppointmentReminderScheduler createLocalAppointmentReminderScheduler() {
+LocalAppointmentReminderScheduler createLocalAppointmentReminderScheduler({
+  void Function(String? payload)? onNotificationTap,
+}) {
   return LocalAppointmentReminderScheduler(
     LocalNotificationsBootstrap.plugin,
+    onNotificationTap: onNotificationTap,
   );
 }

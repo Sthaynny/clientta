@@ -1,6 +1,7 @@
 import 'package:clientta/core/plan/plan_access_policy.dart';
 import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/domain/appointment_list_grouping.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
@@ -25,9 +26,11 @@ class AppointmentsViewModel {
     required AppointmentRepository repository,
     required BillingRepository billingRepository,
     AppointmentSyncService? syncService,
+    AppointmentReminderCoordinator? reminderCoordinator,
   }) : _repository = repository,
        _billingRepository = billingRepository,
-       _syncService = syncService {
+       _syncService = syncService,
+       _reminderCoordinator = reminderCoordinator {
     load = CommandBase(_load);
     deleteEntry = CommandAction<void, DeleteAppointmentRequest>(_deleteEntry);
   }
@@ -35,6 +38,7 @@ class AppointmentsViewModel {
   final AppointmentRepository _repository;
   final BillingRepository _billingRepository;
   final AppointmentSyncService? _syncService;
+  final AppointmentReminderCoordinator? _reminderCoordinator;
   late final CommandBase<void> load;
   late final CommandAction<void, DeleteAppointmentRequest> deleteEntry;
 
@@ -92,6 +96,7 @@ class AppointmentsViewModel {
       }
       subscription = await _billingRepository.getSubscription();
       entries = await _repository.getAll();
+      await _reminderCoordinator?.syncForAppointments(entries);
       return Result.ok();
     } catch (e) {
       return Result.errorDefault(e.toString());

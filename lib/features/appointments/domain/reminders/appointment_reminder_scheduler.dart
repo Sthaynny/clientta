@@ -11,6 +11,7 @@ abstract class AppointmentReminderScheduler {
     required DateTime fireAt,
     required String title,
     required String body,
+    String? payload,
   });
 
   Future<void> cancelAppointmentReminder(String appointmentId);

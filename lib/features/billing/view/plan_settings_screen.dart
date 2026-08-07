@@ -1,9 +1,14 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/storage/app_profile_settings.dart';
+import 'package:clientta/core/storage/app_profile_repository.dart';
+import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
+import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_settings.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
+import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:clientta/features/billing/domain/entities/plan_pricing_catalog.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
@@ -23,8 +28,14 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   bool _actionLoading = false;
   Map<String, dynamic> _pricing = {};
   UserSubscription _subscription = UserSubscription.inactive;
+  AppointmentReminderSettings _reminderSettings =
+      const AppointmentReminderSettings();
 
   BillingRepository get _billing => dependency<BillingRepository>();
+  AppointmentReminderCoordinator get _reminders =>
+      dependency<AppointmentReminderCoordinator>();
+  AppProfileRepository get _profile => dependency<AppProfileRepository>();
+  AppointmentRepository get _appointments => dependency<AppointmentRepository>();
 
   @override
   void initState() {
@@ -40,14 +51,28 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
     final results = await Future.wait([
       _billing.getPlanPricing(),
       _billing.getSubscription(),
+      _profile.load(),
     ]);
 
     if (!mounted) return;
     setState(() {
       _pricing = Map<String, dynamic>.from(results[0] as Map);
       _subscription = results[1] as UserSubscription;
+      _reminderSettings =
+          (results[2] as AppProfileSettings).appointmentReminders;
       _loading = false;
     });
+  }
+
+  Future<void> _persistReminderSettings(AppointmentReminderSettings settings) async {
+    final appointments = await _appointments.getAll();
+    await _reminders.persistSettingsAndSync(
+      settings: settings,
+      appointments: appointments,
+    );
+    if (!mounted) return;
+    setState(() => _reminderSettings = settings);
+    context.showSnackBarSuccess(reminderSettingsSavedString);
   }
 
   String _statusLabel(UserSubscription subscription) {
@@ -270,6 +295,51 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                       ],
                     ),
                   ),
+                  if (hasPro) ...[
+                    DSSpacing.lg.y,
+                    HubSurface(
+                      padding: EdgeInsets.all(DSSpacing.lg.value),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DSHeadlineSmallText(
+                            planReminderSectionTitleString,
+                            color: HubColors.ink,
+                          ),
+                          DSSpacing.sm.y,
+                          HubSwitchFormField(
+                            label: planReminderEnableLabelString,
+                            subtitle: planReminderEnableSubtitleString,
+                            value: _reminderSettings.enabled,
+                            onChanged: (enabled) {
+                              _persistReminderSettings(
+                                _reminderSettings.copyWith(enabled: enabled),
+                              );
+                            },
+                          ),
+                          if (_reminderSettings.enabled) ...[
+                            DSSpacing.md.y,
+                            DSCaptionText(
+                              planReminderLeadLabelString,
+                              color: HubColors.inkMuted,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            DSSpacing.sm.y,
+                            HubReminderLeadChips(
+                              selectedMinutes: _reminderSettings.leadMinutes,
+                              onChanged: (minutes) {
+                                _persistReminderSettings(
+                                  _reminderSettings.copyWith(
+                                    leadMinutes: minutes,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                   DSSpacing.lg.y,
                   if (!hasPro)
                     HubPrimaryButton(

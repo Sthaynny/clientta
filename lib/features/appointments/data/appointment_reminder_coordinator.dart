@@ -2,8 +2,10 @@ import 'package:clientta/core/plan/plan_access_policy.dart';
 import 'package:clientta/core/storage/app_profile_repository.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
+import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_payload.dart';
 import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_policy.dart';
 import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_scheduler.dart';
+import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_settings.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 
 /// Sincroniza alarmes do SO com a agenda local — somente Pro.
@@ -65,6 +67,7 @@ class AppointmentReminderCoordinator {
           serviceType: appointment.serviceType,
           startTime: appointment.startTime,
         ),
+        payload: AppointmentReminderPayload.encode(appointment),
       );
     }
   }
@@ -79,6 +82,22 @@ class AppointmentReminderCoordinator {
       return;
     }
     await syncForAppointments([appointment]);
+  }
+
+  Future<void> persistSettingsAndSync({
+    required AppointmentReminderSettings settings,
+    required List<ServiceAppointment> appointments,
+  }) async {
+    final profile = await _appProfileRepository.load();
+    await _appProfileRepository.save(
+      profile.copyWith(appointmentReminders: settings),
+    );
+    await syncForAppointments(appointments);
+  }
+
+  Future<AppointmentReminderSettings> readSettings() async {
+    final profile = await _appProfileRepository.load();
+    return profile.appointmentReminders;
   }
 
   /// Mensagem para exibir quando Free tenta habilitar lembrete.

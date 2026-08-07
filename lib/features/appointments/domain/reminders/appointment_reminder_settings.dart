@@ -6,6 +6,7 @@ class AppointmentReminderSettings {
   });
 
   static const defaultLeadMinutes = 15;
+  static const supportedLeadMinutes = [15, 30, 60];
   static const profileKey = 'appointmentReminders';
 
   final bool enabled;
@@ -14,9 +15,12 @@ class AppointmentReminderSettings {
   factory AppointmentReminderSettings.fromMap(Map<String, dynamic>? map) {
     if (map == null) return const AppointmentReminderSettings();
     final lead = map['leadMinutes'];
+    final parsedLead = lead is int ? lead : defaultLeadMinutes;
     return AppointmentReminderSettings(
       enabled: map['enabled'] != false,
-      leadMinutes: lead is int && lead > 0 ? lead : defaultLeadMinutes,
+      leadMinutes: supportedLeadMinutes.contains(parsedLead)
+          ? parsedLead
+          : defaultLeadMinutes,
     );
   }
 

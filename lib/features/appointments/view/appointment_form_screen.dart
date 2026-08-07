@@ -7,6 +7,8 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/core/utils/extension/datetime.dart';
 import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/core/router/app_router.dart';
+import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
 import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/view/appointment_form_view_model.dart';
@@ -52,6 +54,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
   Future<void> _loadReferenceData() async {
     await viewmodel.refreshKnownAppointments();
+    await viewmodel.loadReminderPreferences();
     if (!mounted) return;
     setState(() {});
   }
@@ -362,6 +365,38 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               maxLines: 3,
               onChanged: (value) => viewmodel.notes = value,
             ),
+            if (!widget.isEdit && !viewmodel.lockClientFields) ...[
+              DSSpacing.md.y,
+              HubSwitchFormField(
+                label: appointmentFormReminderLabelString,
+                subtitle:
+                    viewmodel.hasProReminders
+                        ? appointmentFormReminderSubtitle(
+                          viewmodel.reminderLeadMinutes,
+                        )
+                        : appointmentFormReminderFreeSubtitleString,
+                value: viewmodel.hasProReminders && viewmodel.remindersEnabled,
+                onChanged: (enabled) async {
+                  if (!viewmodel.hasProReminders) {
+                    context.showSnackBarWarning(
+                      AppointmentReminderCoordinator.proRequiredMessage(),
+                    );
+                    await context.go(AppRouters.planSettings);
+                    return;
+                  }
+                  final updated = await viewmodel.updateRemindersEnabled(
+                    enabled,
+                  );
+                  if (!mounted) return;
+                  if (updated) {
+                    setState(() {});
+                    if (context.mounted) {
+                      context.showSnackBarSuccess(reminderSettingsSavedString);
+                    }
+                  }
+                },
+              ),
+            ],
             if (!widget.isEdit && !viewmodel.lockClientFields) ...[
               DSSpacing.md.y,
               DSCaptionText(

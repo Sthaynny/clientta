@@ -13,7 +13,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Atendimento — histórico centralizado | [atendimento.md](atendimento.md) | Ambos | Implementado |
 | Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Implementado |
 | Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Implementado |
-| Lembretes locais | [lembretes_locais.md](lembretes_locais.md) | Pro | Em preparação |
+| Lembretes locais | [lembretes_locais.md](lembretes_locais.md) | Pro | Implementado |
 
 ## Comparativo Free vs Pro
 

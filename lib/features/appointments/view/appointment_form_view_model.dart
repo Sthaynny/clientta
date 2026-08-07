@@ -1,7 +1,9 @@
 import 'package:clientta/core/plan/plan_access_policy.dart';
+import 'package:clientta/core/storage/app_profile_repository.dart';
 import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/data/service_type_catalog_local.dart';
 import 'package:clientta/features/client_care/domain/client_phone_key.dart';
@@ -11,6 +13,7 @@ import 'package:clientta/features/appointments/domain/appointment_series_generat
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/domain/service_type_catalog.dart';
+import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_settings.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
@@ -31,6 +34,8 @@ class AppointmentFormViewModel {
     String? prefillServiceType,
     bool lockClientFields = false,
     AppointmentSyncService? syncService,
+    AppointmentReminderCoordinator? reminderCoordinator,
+    AppProfileRepository? appProfileRepository,
   }) : _repository = repository,
        _billingRepository = billingRepository,
        _serviceTypeCatalog = serviceTypeCatalog,
@@ -40,7 +45,9 @@ class AppointmentFormViewModel {
        _prefillClientPhone = prefillClientPhone,
        _prefillServiceType = prefillServiceType,
        _lockClientFields = lockClientFields,
-       _syncService = syncService {
+       _syncService = syncService,
+       _reminderCoordinator = reminderCoordinator,
+       _appProfileRepository = appProfileRepository {
     save = CommandBase(_save);
   }
 
@@ -54,8 +61,14 @@ class AppointmentFormViewModel {
   final String? _prefillServiceType;
   final bool _lockClientFields;
   final AppointmentSyncService? _syncService;
+  final AppointmentReminderCoordinator? _reminderCoordinator;
+  final AppProfileRepository? _appProfileRepository;
 
   late final CommandBase<void> save;
+
+  bool hasProReminders = false;
+  bool remindersEnabled = true;
+  int reminderLeadMinutes = AppointmentReminderSettings.defaultLeadMinutes;
 
   String clientName = '';
   String clientPhone = '';
@@ -190,6 +203,47 @@ class AppointmentFormViewModel {
     await refreshServiceTypeOptions();
   }
 
+  Future<void> loadReminderPreferences() async {
+    final subscription = await _billingRepository.getSubscription();
+    hasProReminders = PlanAccessPolicy.canScheduleLocalReminders(subscription);
+
+    final coordinator = _reminderCoordinator;
+    if (coordinator != null) {
+      final settings = await coordinator.readSettings();
+      remindersEnabled = settings.enabled;
+      reminderLeadMinutes = settings.leadMinutes;
+      return;
+    }
+
+    final profileRepo = _appProfileRepository;
+    if (profileRepo != null) {
+      final settings = (await profileRepo.load()).appointmentReminders;
+      remindersEnabled = settings.enabled;
+      reminderLeadMinutes = settings.leadMinutes;
+    }
+  }
+
+  Future<bool> updateRemindersEnabled(bool enabled) async {
+    if (!hasProReminders) return false;
+
+    remindersEnabled = enabled;
+    final settings = AppointmentReminderSettings(
+      enabled: enabled,
+      leadMinutes: reminderLeadMinutes,
+    );
+    final all = await _repository.getAll();
+    await _reminderCoordinator?.persistSettingsAndSync(
+      settings: settings,
+      appointments: all,
+    );
+    return true;
+  }
+
+  Future<void> _syncRemindersAfterSave() async {
+    final all = await _repository.getAll();
+    await _reminderCoordinator?.syncForAppointments(all);
+  }
+
   Future<void> refreshServiceTypeOptions() async {
     final saved = await _serviceTypeCatalog.readSaved();
     serviceTypeOptions = mergeServiceTypes(
@@ -273,6 +327,7 @@ class AppointmentFormViewModel {
       await _serviceTypeCatalog.addIfNew(trimmedServiceType);
       _syncService?.scheduleSync();
       await _userRepository?.touchLastActivity();
+      await _syncRemindersAfterSave();
       return Result.ok();
     }
 
@@ -308,6 +363,7 @@ class AppointmentFormViewModel {
     await _serviceTypeCatalog.addIfNew(trimmedServiceType);
     _syncService?.scheduleSync();
     await _userRepository?.touchLastActivity();
+    await _syncRemindersAfterSave();
     return Result.ok();
   }
 
@@ -349,6 +405,7 @@ class AppointmentFormViewModel {
       await _serviceTypeCatalog.addIfNew(trimmedServiceType);
       _syncService?.scheduleSync();
       await _userRepository?.touchLastActivity();
+      await _syncRemindersAfterSave();
       return Result.ok();
     }
 
@@ -356,6 +413,7 @@ class AppointmentFormViewModel {
     await _serviceTypeCatalog.addIfNew(trimmedServiceType);
     _syncService?.scheduleSync();
     await _userRepository?.touchLastActivity();
+    await _syncRemindersAfterSave();
     return Result.ok();
   }
 }

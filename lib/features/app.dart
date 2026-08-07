@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/core/router/app_navigator.dart';
 import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/router/hub_route_observer.dart';
 import 'package:clientta/core/storage/app_profile_repository.dart';
@@ -15,8 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _navKey = GlobalKey<NavigatorState>();
-
   bool _ready = false;
   bool _onboardingSeen = false;
 
@@ -43,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     });
     if (openForm) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _navKey.currentState?.pushNamed(AppRouters.appointmentForm.path);
+        AppNavigator.key.currentState?.pushNamed(AppRouters.appointmentForm.path);
       });
     }
   }
@@ -74,7 +73,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
-      navigatorKey: _navKey,
+      navigatorKey: AppNavigator.key,
       title: AppMission.name,
       theme: HubTheme.light(),
       darkTheme: HubTheme.dark(),

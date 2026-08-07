@@ -260,6 +260,19 @@ String appointmentReminderBody({
 }) => '$clientName · $serviceType às $startTime';
 String get planReminderProRequiredString =>
     'Lembretes antes do atendimento estão disponíveis no plano Pro.';
+String get planReminderSectionTitleString => 'Lembretes de atendimento';
+String get planReminderEnableLabelString => 'Avisar antes do horário';
+String get planReminderEnableSubtitleString =>
+    'Notificação local no celular — sem internet, apenas no plano Pro.';
+String get planReminderLeadLabelString => 'Antecedência';
+String reminderLeadMinutesLabel(int minutes) => '$minutes min antes';
+String get appointmentFormReminderLabelString =>
+    'Lembrar antes do atendimento';
+String appointmentFormReminderSubtitle(int leadMinutes) =>
+    'Notificação $leadMinutes min antes do horário (plano Pro).';
+String get appointmentFormReminderFreeSubtitleString =>
+    'Recurso do plano Pro — assine para receber avisos no celular.';
+String get reminderSettingsSavedString => 'Preferências de lembrete salvas.';
 
 const weekdayLabels = [
   'Segunda-feira',
