@@ -11,29 +11,39 @@ import 'package:clientta/features/appointments/domain/sync/appointment_sync_merg
 import 'package:clientta/features/appointments/domain/sync/sync_state.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
+import 'package:clientta/features/client_care/data/encounter_note_repository_local.dart';
+import 'package:clientta/features/client_care/domain/repositories/encounter_note_repository_remote.dart';
+import 'package:clientta/features/client_care/domain/sync/encounter_note_sync_merge.dart';
 
 class AppointmentSyncService extends ChangeNotifier {
   AppointmentSyncService({
     required DeviceJsonStore store,
     required AppointmentRepositoryLocal localRepository,
     required AppointmentRepositoryRemote remoteRepository,
+    EncounterNoteRepositoryLocal? encounterNoteLocalRepository,
+    EncounterNoteRepositoryRemote? encounterNoteRemoteRepository,
     UserRepository? userRepository,
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
   }) : _store = store,
        _localRepository = localRepository,
        _remoteRepository = remoteRepository,
+       _encounterNoteLocalRepository = encounterNoteLocalRepository,
+       _encounterNoteRemoteRepository = encounterNoteRemoteRepository,
        _userRepository = userRepository,
        _auth = auth ?? FirebaseAuth.instance,
        _firestore = firestore ?? FirebaseFirestore.instance;
 
   static const _syncKey = 'sync';
   static const _pendingDeletesKey = 'pendingDeleteIds';
+  static const _pendingEncounterDeletesKey = 'pendingEncounterDeleteIds';
   static const _lastSyncedAtKey = 'lastSyncedAt';
 
   final DeviceJsonStore _store;
   final AppointmentRepositoryLocal _localRepository;
   final AppointmentRepositoryRemote _remoteRepository;
+  final EncounterNoteRepositoryLocal? _encounterNoteLocalRepository;
+  final EncounterNoteRepositoryRemote? _encounterNoteRemoteRepository;
   final UserRepository? _userRepository;
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
@@ -53,6 +63,11 @@ class AppointmentSyncService extends ChangeNotifier {
 
   void queueDelete(String appointmentId) {
     unawaited(_addPendingDelete(appointmentId));
+    scheduleSync();
+  }
+
+  void queueEncounterNoteDelete(String noteId) {
+    unawaited(_addPendingEncounterDelete(noteId));
     scheduleSync();
   }
 
@@ -113,6 +128,8 @@ class AppointmentSyncService extends ChangeNotifier {
         await _clearPendingDeletes(merge.toDeleteRemote);
       }
 
+      await _syncEncounterNotes(user.uid);
+
       final now = DateTime.now();
       await _writeLastSyncedAt(now);
       await _userRepository?.touchLastActivity(uid: user.uid);
@@ -135,6 +152,41 @@ class AppointmentSyncService extends ChangeNotifier {
           errorMessage: error.toString(),
         ),
       );
+    }
+  }
+
+  Future<void> _syncEncounterNotes(String userId) async {
+    final localRepo = _encounterNoteLocalRepository;
+    final remoteRepo = _encounterNoteRemoteRepository;
+    if (localRepo == null || remoteRepo == null) return;
+
+    final pendingDeletes = await _readPendingEncounterDeletes();
+    final local = await localRepo.getAll();
+    final remote = await remoteRepo.fetchAll(userId);
+
+    final merge = EncounterNoteSyncMerge.merge(
+      local: local,
+      remote: remote,
+      pendingDeleteIds: pendingDeletes,
+    );
+
+    if (merge.toSaveLocal.isNotEmpty || merge.toDeleteLocal.isNotEmpty) {
+      await localRepo.saveAll(
+        merge.toSaveLocal,
+        deleteIds: merge.toDeleteLocal,
+      );
+    }
+
+    for (final note in merge.toUpsertRemote) {
+      await remoteRepo.upsert(userId, note);
+    }
+
+    for (final id in merge.toDeleteRemote) {
+      await remoteRepo.delete(userId, id);
+    }
+
+    if (merge.toDeleteRemote.isNotEmpty) {
+      await _clearPendingEncounterDeletes(merge.toDeleteRemote);
     }
   }
 
@@ -182,6 +234,42 @@ class AppointmentSyncService extends ChangeNotifier {
     await _store.writeRoot(root);
   }
 
+  Future<Set<String>> _readPendingEncounterDeletes() async {
+    final root = await _store.readRoot();
+    final sync = root[_syncKey] as Map<String, dynamic>? ?? {};
+    final raw = sync[_pendingEncounterDeletesKey] as List<dynamic>? ?? [];
+    return raw.map((e) => e as String).toSet();
+  }
+
+  Future<void> _addPendingEncounterDelete(String noteId) async {
+    final root = await _store.readRoot();
+    final sync = Map<String, dynamic>.from(
+      root[_syncKey] as Map<String, dynamic>? ?? {},
+    );
+    final pending = <String>{
+      ...((sync[_pendingEncounterDeletesKey] as List<dynamic>? ?? [])
+          .map((e) => e as String)),
+      noteId,
+    };
+    sync[_pendingEncounterDeletesKey] = pending.toList();
+    root[_syncKey] = sync;
+    await _store.writeRoot(root);
+  }
+
+  Future<void> _clearPendingEncounterDeletes(List<String> deletedIds) async {
+    final root = await _store.readRoot();
+    final sync = Map<String, dynamic>.from(
+      root[_syncKey] as Map<String, dynamic>? ?? {},
+    );
+    final pending = <String>{
+      ...((sync[_pendingEncounterDeletesKey] as List<dynamic>? ?? [])
+          .map((e) => e as String)),
+    }..removeAll(deletedIds);
+    sync[_pendingEncounterDeletesKey] = pending.toList();
+    root[_syncKey] = sync;
+    await _store.writeRoot(root);
+  }
+
   Future<void> _writeLastSyncedAt(DateTime value) async {
     final root = await _store.readRoot();
     final sync = Map<String, dynamic>.from(
@@ -197,12 +285,14 @@ class AppointmentSyncService extends ChangeNotifier {
     final sync = root[_syncKey] as Map<String, dynamic>? ?? {};
     final lastSyncedRaw = sync[_lastSyncedAtKey] as String?;
     final pending = (sync[_pendingDeletesKey] as List<dynamic>? ?? []).isNotEmpty;
+    final pendingEncounter =
+        (sync[_pendingEncounterDeletesKey] as List<dynamic>? ?? []).isNotEmpty;
 
     _setState(
       SyncState(
         lastSyncedAt:
             lastSyncedRaw != null ? DateTime.tryParse(lastSyncedRaw) : null,
-        hasPendingChanges: pending,
+        hasPendingChanges: pending || pendingEncounter,
       ),
     );
   }

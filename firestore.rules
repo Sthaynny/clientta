@@ -20,6 +20,10 @@ service cloud.firestore {
       match /appointments/{appointmentId} {
         allow read, write: if isOwner(userId);
       }
+
+      match /encounterNotes/{noteId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     match /billing_events/{eventId} {
