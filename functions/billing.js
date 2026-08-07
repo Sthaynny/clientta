@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const { onCall, onRequest, HttpsError } = require('firebase-functions/v2/https');
-const { callableWithSecrets } = require('./callable_options');
+const { CALLABLE_OPTIONS, callableWithSecrets } = require('./callable_options');
 const {
   stripeSecretKey,
   stripeWebhookSecret,
@@ -181,7 +181,7 @@ async function applyStripeSubscriptionToUser(uid, stripeSubscription, plan = 'pr
   );
 }
 
-const getPlanPricing = onCall(callableWithSecrets(BILLING_SECRETS), async () => {
+const getPlanPricing = onCall(CALLABLE_OPTIONS, async () => {
   return getPlanPricingResponse();
 });
 

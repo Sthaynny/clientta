@@ -124,7 +124,8 @@ class _HomeScreenState extends State<HomeScreen>
       body: ListenableBuilder(
         listenable: Listenable.merge([
           viewmodel.load,
-          if (viewmodel.syncService != null) viewmodel.syncService!,
+          viewmodel.markComplete,
+          viewmodel.cancelAppointment,
         ]),
         builder: (context, _) {
           if (viewmodel.load.running && viewmodel.todayAppointments.isEmpty) {
@@ -143,33 +144,7 @@ class _HomeScreenState extends State<HomeScreen>
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.all(DSSpacing.md.value),
               children: [
-                if (viewmodel.syncBannerState != HomeSyncBannerState.hidden) ...[
-                  HubOfflineBanner(
-                    message: switch (viewmodel.syncBannerState) {
-                      HomeSyncBannerState.syncing => syncingBannerMessageString,
-                      HomeSyncBannerState.syncPending =>
-                        syncPendingBannerMessageString,
-                      _ => offlineBannerMessageString,
-                    },
-                    variant:
-                        viewmodel.syncBannerState ==
-                                HomeSyncBannerState.offline
-                            ? HubOfflineBannerVariant.offline
-                            : HubOfflineBannerVariant.syncPending,
-                  ),
-                  DSSpacing.md.y,
-                ],
-                if (viewmodel.showSyncIndicator &&
-                    viewmodel.lastSyncedAt != null) ...[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: DSCaptionText(
-                      formatLastSyncLabel(viewmodel.lastSyncedAt!),
-                      color: HubColors.inkMuted,
-                    ),
-                  ),
-                  DSSpacing.sm.y,
-                ],
+                _HomeSyncStatusSection(viewmodel: viewmodel),
                 HubDayHeader(
                   weekdayLabel: weekdayLabels[now.weekday - 1],
                   dateLabel: formatHubDayHeader(now),
@@ -188,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen>
                       : viewmodel.todayAppointments.length,
                   actionLabel: myAgendaString,
                   onAction: () =>
-                      Navigator.of(context).pushReplacementNamed(
+                      Navigator.of(context).pushNamed(
                         AppRouters.agendas.path,
                       ),
                   child: viewmodel.todayAppointments.isEmpty
@@ -217,6 +192,8 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _appointmentTile(ServiceAppointment entry) {
+    final actionsEnabled = !viewmodel.isAppointmentActionRunning;
+
     return HubAppointmentCard(
       clientName: entry.clientName,
       clientPhone: entry.clientPhone,
@@ -225,16 +202,105 @@ class _HomeScreenState extends State<HomeScreen>
       endTime: entry.endTime,
       status: entry.status,
       notes: entry.notes,
+      actionsEnabled: actionsEnabled,
       onTap: () => _openClientCare(entry),
       onMarkComplete:
           entry.status == AppointmentStatus.agendado.value
-              ? () => viewmodel.markComplete.execute(entry)
+              ? () {
+                  if (!viewmodel.isAppointmentActionRunning) {
+                    viewmodel.markComplete.execute(entry);
+                  }
+                }
               : null,
       onViewCare: () => _openClientCare(entry),
       onCancel:
           entry.status == AppointmentStatus.agendado.value
-              ? () => _confirmCancel(entry)
+              ? () {
+                  if (!viewmodel.isAppointmentActionRunning) {
+                    _confirmCancel(entry);
+                  }
+                }
               : null,
+    );
+  }
+}
+
+class _HomeSyncStatusSection extends StatefulWidget {
+  const _HomeSyncStatusSection({required this.viewmodel});
+
+  final HomeViewModel viewmodel;
+
+  @override
+  State<_HomeSyncStatusSection> createState() => _HomeSyncStatusSectionState();
+}
+
+class _HomeSyncStatusSectionState extends State<_HomeSyncStatusSection> {
+  HomeViewModel get viewmodel => widget.viewmodel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewmodel.syncService?.addListener(_onSyncChanged);
+  }
+
+  @override
+  void dispose() {
+    viewmodel.syncService?.removeListener(_onSyncChanged);
+    super.dispose();
+  }
+
+  void _onSyncChanged() {
+    viewmodel.refreshSyncBanner().then((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final syncService = viewmodel.syncService;
+    final listenable =
+        syncService != null
+            ? Listenable.merge([syncService, viewmodel.load])
+            : viewmodel.load;
+
+    return ListenableBuilder(
+      listenable: listenable,
+      builder: (context, _) => _content(context),
+    );
+  }
+
+  Widget _content(BuildContext context) {
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (viewmodel.syncBannerState != HomeSyncBannerState.hidden) ...[
+          HubOfflineBanner(
+            message: switch (viewmodel.syncBannerState) {
+              HomeSyncBannerState.syncing => syncingBannerMessageString,
+              HomeSyncBannerState.syncPending => syncPendingBannerMessageString,
+              _ => offlineBannerMessageString,
+            },
+            variant:
+                viewmodel.syncBannerState == HomeSyncBannerState.offline
+                    ? HubOfflineBannerVariant.offline
+                    : HubOfflineBannerVariant.syncPending,
+          ),
+          DSSpacing.md.y,
+        ],
+        if (viewmodel.showSyncIndicator && viewmodel.lastSyncedAt != null) ...[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: DSCaptionText(
+              formatLastSyncLabel(viewmodel.lastSyncedAt!),
+              color: muted,
+            ),
+          ),
+          DSSpacing.sm.y,
+        ],
+      ],
     );
   }
 }

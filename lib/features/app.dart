@@ -53,6 +53,8 @@ class _MyAppState extends State<MyApp> {
     if (!_ready) {
       return MaterialApp(
         theme: HubTheme.light(),
+        darkTheme: HubTheme.dark(),
+        themeMode: ThemeMode.system,
         home: const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),
@@ -62,6 +64,8 @@ class _MyAppState extends State<MyApp> {
     if (!_onboardingSeen) {
       return MaterialApp(
         theme: HubTheme.light(),
+        darkTheme: HubTheme.dark(),
+        themeMode: ThemeMode.system,
         home: OnboardingScreen(
           onSkip: () => _finishOnboarding(),
           onRegister: () => _finishOnboarding(openForm: true),
@@ -73,6 +77,8 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: _navKey,
       title: AppMission.name,
       theme: HubTheme.light(),
+      darkTheme: HubTheme.dark(),
+      themeMode: ThemeMode.system,
       initialRoute: AppRouters.home.path,
       routes: routes,
       navigatorObservers: [hubRouteObserver],

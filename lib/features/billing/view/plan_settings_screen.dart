@@ -7,7 +7,6 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
-import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,7 +19,6 @@ class PlanSettingsScreen extends StatefulWidget {
 
 class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   bool _loading = true;
-  bool _pricingError = false;
   bool _actionLoading = false;
   Map<String, dynamic> _pricing = {};
   UserSubscription _subscription = UserSubscription.inactive;
@@ -36,27 +34,19 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   Future<void> _loadInitial() async {
     setState(() {
       _loading = true;
-      _pricingError = false;
     });
 
-    try {
-      final results = await Future.wait([
-        _billing.getPlanPricing(),
-        _billing.getSubscription(),
-      ]);
-      if (!mounted) return;
-      setState(() {
-        _pricing = Map<String, dynamic>.from(results[0] as Map);
-        _subscription = results[1] as UserSubscription;
-        _loading = false;
-      });
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _loading = false;
-        _pricingError = true;
-      });
-    }
+    final results = await Future.wait([
+      _billing.getPlanPricing(),
+      _billing.getSubscription(),
+    ]);
+
+    if (!mounted) return;
+    setState(() {
+      _pricing = Map<String, dynamic>.from(results[0] as Map);
+      _subscription = results[1] as UserSubscription;
+      _loading = false;
+    });
   }
 
   String _statusLabel(UserSubscription subscription) {
@@ -190,11 +180,6 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
       body:
           _loading
               ? const Center(child: CircularProgressIndicator())
-              : _pricingError
-              ? BodyErrorDefaultWidget(
-                title: planPricingErrorString,
-                onPressed: _loadInitial,
-              )
               : ListView(
                 padding: EdgeInsets.all(DSSpacing.md.value),
                 children: [

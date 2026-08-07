@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/core/theme/hub_theme.dart';
 import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/shared/hub/hub_surface.dart';
@@ -23,6 +24,7 @@ class HubAppointmentCard extends StatelessWidget {
     this.onAddNotes,
     this.onViewCare,
     this.onCancel,
+    this.actionsEnabled = true,
   });
 
   final String clientName;
@@ -39,6 +41,7 @@ class HubAppointmentCard extends StatelessWidget {
   final VoidCallback? onAddNotes;
   final VoidCallback? onViewCare;
   final VoidCallback? onCancel;
+  final bool actionsEnabled;
 
   String get _semanticLabel {
     final appointmentStatus = AppointmentStatus.fromValue(status);
@@ -123,12 +126,12 @@ class HubAppointmentCard extends StatelessWidget {
     final actions = _actions;
 
     return Semantics(
+      container: true,
       label: _semanticLabel,
-      button: onTap != null,
       child: HubSurface(
         margin: EdgeInsets.only(bottom: DSSpacing.sm.value),
         onTap: onTap,
-        semanticsLabel: _semanticLabel,
+        semanticButton: false,
         padding: EdgeInsets.all(DSSpacing.md.value),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -181,9 +184,9 @@ class HubAppointmentCard extends StatelessWidget {
             ),
             if (actions.isNotEmpty) ...[
               DSSpacing.sm.y,
-              const Divider(height: 1, color: HubColors.border),
+              Divider(height: 1, color: Theme.of(context).colorScheme.outline),
               DSSpacing.xs.y,
-              _ActionBar(actions: actions),
+              _ActionBar(actions: actions, enabled: actionsEnabled),
             ],
           ],
         ),
@@ -193,9 +196,10 @@ class HubAppointmentCard extends StatelessWidget {
 }
 
 class _ActionBar extends StatelessWidget {
-  const _ActionBar({required this.actions});
+  const _ActionBar({required this.actions, required this.enabled});
 
   final List<_CardAction> actions;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +207,7 @@ class _ActionBar extends StatelessWidget {
       children: [
         for (var i = 0; i < actions.length; i++) ...[
           if (i > 0) DSSpacing.xs.x,
-          Expanded(child: _ActionButton(action: actions[i])),
+          Expanded(child: _ActionButton(action: actions[i], enabled: enabled)),
         ],
       ],
     );
@@ -225,40 +229,55 @@ class _CardAction {
 }
 
 class _ActionButton extends StatelessWidget {
-  const _ActionButton({required this.action});
+  const _ActionButton({required this.action, required this.enabled});
 
   final _CardAction action;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final actionBg = theme.scaffoldBackgroundColor;
+    final labelColor = theme.colorScheme.onSurfaceVariant;
+
     return Semantics(
       button: true,
       label: action.label,
-      child: Material(
-        color: HubColors.canvas,
-        borderRadius: BorderRadius.circular(DSSpacing.xs.value),
-        child: InkWell(
-          onTap: action.onPressed,
+      enabled: enabled,
+      child: Opacity(
+        opacity: enabled ? 1 : 0.38,
+        child: Material(
+          color: actionBg,
           borderRadius: BorderRadius.circular(DSSpacing.xs.value),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: DSSpacing.xs.value,
-              horizontal: DSSpacing.xxs.value,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(action.icon, size: 18, color: action.color),
-                DSSpacing.xxs.y,
-                DSCaptionSmallText(
-                  action.label,
-                  color: HubColors.inkMuted,
-                  fontWeight: FontWeight.w600,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+          child: InkWell(
+            onTap: enabled ? action.onPressed : null,
+            borderRadius: BorderRadius.circular(DSSpacing.xs.value),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: HubTheme.minTouchTarget,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: DSSpacing.xs.value,
+                  horizontal: DSSpacing.xxs.value,
                 ),
-              ],
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(action.icon, size: 18, color: action.color),
+                    DSSpacing.xxs.y,
+                    DSCaptionSmallText(
+                      action.label,
+                      color: labelColor,
+                      fontWeight: FontWeight.w600,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

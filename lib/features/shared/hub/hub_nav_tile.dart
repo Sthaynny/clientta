@@ -50,7 +50,7 @@ class HubNavTile extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               if (isSelected) return;
-              Navigator.of(context).pushReplacementNamed(route.path);
+              Navigator.of(context).pushNamed(route.path);
             },
           ),
         ),

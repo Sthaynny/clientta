@@ -1,6 +1,5 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:clientta/core/theme/hub_colors.dart';
 
 class HubSurface extends StatelessWidget {
   const HubSurface({
@@ -12,6 +11,7 @@ class HubSurface extends StatelessWidget {
     this.tint,
     this.showBorder = true,
     this.semanticsLabel,
+    this.semanticButton = true,
   });
 
   final Widget child;
@@ -21,9 +21,11 @@ class HubSurface extends StatelessWidget {
   final Color? tint;
   final bool showBorder;
   final String? semanticsLabel;
+  final bool semanticButton;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final radius = BorderRadius.circular(DSSpacing.md.value);
     final content = Padding(
       padding: padding ?? EdgeInsets.all(DSSpacing.md.value),
@@ -31,13 +33,13 @@ class HubSurface extends StatelessWidget {
     );
 
     Widget surface = Material(
-      color: tint ?? HubColors.surface,
+      color: tint ?? theme.colorScheme.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: radius,
         side:
             showBorder
-                ? const BorderSide(color: HubColors.border)
+                ? BorderSide(color: theme.colorScheme.outline)
                 : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
@@ -70,7 +72,7 @@ class HubSurface extends StatelessWidget {
       child: surface,
     );
 
-    if (onTap == null) return padded;
+    if (onTap == null || !semanticButton) return padded;
 
     return Semantics(
       button: true,

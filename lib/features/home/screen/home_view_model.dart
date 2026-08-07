@@ -40,6 +40,18 @@ class HomeViewModel {
 
   AppointmentSyncService? get syncService => _syncService;
 
+  bool get isAppointmentActionRunning =>
+      markComplete.running || cancelAppointment.running;
+
+  /// Atualiza rótulo de sync e estado do banner (ex.: quando o sync notifica).
+  Future<void> refreshSyncBanner() async {
+    final sync = _syncService;
+    if (sync != null) {
+      lastSyncedAt = sync.state.lastSyncedAt;
+    }
+    await _refreshSyncBanner();
+  }
+
   Future<Result<void>> _load() async {
     try {
       final sync = _syncService;

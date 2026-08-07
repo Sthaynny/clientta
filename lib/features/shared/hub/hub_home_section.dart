@@ -1,6 +1,5 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/features/shared/hub/hub_section_header.dart';
 import 'package:clientta/features/shared/hub/hub_surface.dart';
 
@@ -35,7 +34,7 @@ class HubHomeSection extends StatelessWidget {
         HubSurface(
           showBorder: true,
           padding: EdgeInsets.all(DSSpacing.sm.value),
-          tint: HubColors.canvas,
+          tint: Theme.of(context).scaffoldBackgroundColor,
           child: child,
         ),
       ],

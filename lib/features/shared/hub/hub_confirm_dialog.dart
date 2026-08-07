@@ -23,6 +23,9 @@ Future<bool?> showHubConfirmDialog({
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
+              style: TextButton.styleFrom(
+                minimumSize: const Size(0, HubTheme.minTouchTarget),
+              ),
               child: Text(resolvedCancelLabel),
             ),
             TextButton(
@@ -60,6 +63,9 @@ Future<HubChoiceResult> showHubChoiceDialog({
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(0),
+              style: TextButton.styleFrom(
+                minimumSize: const Size(0, HubTheme.minTouchTarget),
+              ),
               child: Text(resolvedCancelLabel),
             ),
             TextButton(
