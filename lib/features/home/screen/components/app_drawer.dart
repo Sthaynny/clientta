@@ -95,6 +95,7 @@ class AppDrawer extends StatelessWidget {
                 ],
               ),
             ),
+            const Divider(height: 1),
             Padding(
               padding: EdgeInsets.fromLTRB(
                 DSSpacing.sm.value,
