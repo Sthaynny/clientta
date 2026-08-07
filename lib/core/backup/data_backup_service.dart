@@ -69,16 +69,14 @@ class DataBackupService {
         return Result.error(Exception('pro_required'));
       }
 
-      final picked = await FilePicker.platform.pickFiles(
+      final file = await FilePicker.pickFile(
         type: FileType.custom,
         allowedExtensions: const ['json'],
-        withData: true,
       );
-      if (picked == null || picked.files.isEmpty) {
+      if (file == null) {
         return Result.error(Exception('cancelled'));
       }
 
-      final file = picked.files.first;
       final contents = await _readPickedFile(file);
       if (contents == null || contents.trim().isEmpty) {
         return Result.error(Exception('invalid_format'));
@@ -97,13 +95,14 @@ class DataBackupService {
   }
 
   Future<String?> _readPickedFile(PlatformFile file) async {
-    final bytes = file.bytes;
-    if (bytes != null) {
+    try {
+      final bytes = await file.readAsBytes();
       return utf8.decode(bytes);
+    } catch (_) {
+      final path = file.path;
+      if (path == null) return null;
+      return File(path).readAsString();
     }
-    final path = file.path;
-    if (path == null) return null;
-    return File(path).readAsString();
   }
 
   String _backupFileName(DateTime exportedAt) {
