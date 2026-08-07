@@ -16,6 +16,11 @@ String get clientsScreenIntroString =>
     'Clientes dos seus atendimentos. Toque para ver histórico e anotar.';
 String get agendaScreenIntroString =>
     'Todos os horários agendados. Use os filtros para focar em um tipo de serviço.';
+String get clientCareTimelineIntroString =>
+    'Histórico de ligações, reuniões e o que foi combinado com o cliente.';
+String get appointmentFormIntroString =>
+    'Preencha cliente, horário e observações. Você pode editar depois na agenda.';
+String get formSectionOptionsString => 'Opções do agendamento';
 String clientProfileAppointmentsLabel(int count) =>
     count == 1 ? '1 agendamento' : '$count agendamentos';
 String clientProfileEncountersLabel(int count) =>
@@ -70,6 +75,10 @@ String get deleteString => 'Excluir';
 String get editActionString => 'Editar';
 String get cancelString => 'Cancelar';
 String get errorLoadDailyString => 'Não foi possível carregar seus registros.';
+String get errorLoadDailyHintString =>
+    'Verifique o armazenamento do aparelho e tente de novo.';
+String get homeScreenIntroString =>
+    'Painel do dia: veja quem vem hoje e registre atendimentos em um toque.';
 String get errorSaveString => 'Não foi possível salvar. Tente novamente.';
 String get emptyAppointmentsHomeTitle => 'Sem atendimentos hoje';
 String get emptyAppointmentsHomeMessage =>

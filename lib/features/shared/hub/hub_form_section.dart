@@ -1,8 +1,9 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/features/shared/hub/hub_surface.dart';
 
-/// Agrupa campos de formulário com título e espaçamento consistente.
+/// Agrupa campos de formulário com título e card HubSurface.
 class HubFormSection extends StatelessWidget {
   const HubFormSection({
     super.key,
@@ -36,7 +37,13 @@ class HubFormSection extends StatelessWidget {
           ),
         ],
         DSSpacing.sm.y,
-        ...children,
+        HubSurface(
+          padding: EdgeInsets.all(DSSpacing.lg.value),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
+          ),
+        ),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/strings/strings.dart';
 import 'package:clientta/features/shared/hub/hub_empty_state.dart';
 
@@ -17,7 +18,7 @@ class BodyErrorDefaultWidget extends StatelessWidget {
     return HubEmptyState(
       icon: Icons.wifi_off_rounded,
       title: title,
-      message: 'Verifique o armazenamento do aparelho e tente de novo.',
+      message: errorLoadDailyHintString,
       actionLabel: tenteNovamenteString,
       onAction: onPressed,
     );
