@@ -1,46 +1,37 @@
-# Funcionalidades — Sextante
+# Funcionalidades — Clientta
 
-Catálogo de funcionalidades do app com visão de **plano Free** vs **Pro**.  
-**Arquitetura de monetização alvo:** dois apps nas lojas (**Sextante** gratuito e **Sextante Pro** pago), **um repositório** com variantes de build (estilo cura.li) — ver [tasks/a_fazer/monetizacao.md](../tasks/a_fazer/monetizacao.md). Hoje só existe um binário publicável e **não** há paywall nem cobrança in-app ([PLANEJAMENTO.md](../PLANEJAMENTO.md)).
+Catálogo de funcionalidades com visão de **plano Free** vs **Pro**.  
+Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore `users/{uid}.subscription`.
 
 ## Índice
 
 | Funcionalidade | Arquivo | Plano principal | Status |
 |----------------|---------|-----------------|--------|
-| Início — Seu dia | [home_hoje.md](home_hoje.md) | Ambos | Implementado |
-| Cadastro de disciplinas | [disciplinas.md](disciplinas.md) | Free (limites) / Pro | Implementado |
-| Grade horária | [grade_horaria.md](grade_horaria.md) | Ambos | Implementado |
-| Atividades e prazos | [atividades.md](atividades.md) | Free (limites) / Pro | Implementado |
-| Nome da universidade | [perfil_universidade.md](perfil_universidade.md) | Ambos | Implementado |
-| Exportar / importar backup | [export_backup.md](export_backup.md) | Pro | Planejado |
-| Lembretes e notificações | [lembretes_notificacoes.md](lembretes_notificacoes.md) | Pro | Planejado |
-| Estatísticas e progresso | [estatisticas_progresso.md](estatisticas_progresso.md) | Pro | Planejado |
-| Temas personalizados | [temas_personalizados.md](temas_personalizados.md) | Pro | Planejado |
-| Materiais e anexos | [materiais_anexos.md](materiais_anexos.md) | Pro | Planejado |
-| Widgets na tela inicial | [widgets_tela_inicial.md](widgets_tela_inicial.md) | Pro | Planejado |
-| Múltiplos semestres | [multiplos_semestres.md](multiplos_semestres.md) | Pro | Planejado |
-| Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro (futuro) | Planejado |
+| Início — painel do dia | [home_hoje.md](home_hoje.md) | Ambos | Planejado (migração) |
+| Minha Agenda + formulário | [agendas.md](agendas.md) | Free (limites) / Pro | Planejado |
+| Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Planejado |
+| Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Planejado |
 
-## Comparativo Free vs Pro (visão de produto)
+## Comparativo Free vs Pro
 
 | Área | Free | Pro |
 |------|------|-----|
-| Painel do dia, grade e atividades | Uso completo com limites de volume | Sem limites de cadastro |
-| Perfil (nome da universidade) | Sim | Sim |
-| Série de aulas em vários dias | Sim | Sim |
-| Backup JSON export/import | — | Sim |
-| Notificações locais | — | Sim |
-| Estatísticas de conclusão | — | Sim |
-| Temas além do padrão Sextante (`HubTheme` claro) | Tema claro padrão | Paletas / escuro estendido |
-| Anexos por aula/atividade | — | Sim |
-| Widget Android (próxima aula) | — | Sim |
-| Arquivar vários semestres | Um período ativo | Vários períodos |
-| Sync na nuvem | — | Futuro; fora do escopo offline atual |
+| Painel do dia | Completo | Completo |
+| Cadastro de atendimentos | Até **50** ativos (configurável) | Ilimitado |
+| Notas por atendimento | Sim | Sim |
+| Séries recorrentes | Até **3** séries ativas | Ilimitado |
+| Sync Firestore multi-dispositivo | — | Sim |
+| Export JSON backup | — | Sim (futuro) |
+| Lembretes locais | — | Sim (futuro) |
+| Suporte | Comunidade | Prioritário (futuro) |
+
+Limites Free são enforcement no app + validação opcional em Functions.
 
 ## Documentação relacionada
 
-- [guia_sextante.md](../guia_sextante.md) — como rodar e arquitetura
+- [guia_clientta.md](../guia_clientta.md) — como rodar e arquitetura
 - [PROPOSITO.md](../PROPOSITO.md) — visão do produto
 - [PLANEJAMENTO.md](../PLANEJAMENTO.md) — fases de entrega
-- [mapeamento_tarefas.md](../mapeamento_tarefas.md) — tarefas com objetivo, impacto e status
-- [tasks/README.md](../tasks/README.md) — tarefas **a fazer** e **finalizadas**, agrupadas por feature
+- [billing/readme.md](../billing/readme.md) — setup Stripe
+- [mapeamento_tarefas.md](../mapeamento_tarefas.md) — tarefas com objetivo e impacto
+- [tasks/README.md](../tasks/README.md) — tarefas a fazer e finalizadas

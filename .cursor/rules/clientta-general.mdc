@@ -1,0 +1,78 @@
+---
+description: Arquitetura, estado, clean code e padrões do Clientta (pacote clientta / migração university_hub)
+alwaysApply: true
+---
+
+# Clientta — padrões gerais
+
+App **offline-first**: dados imediatos em `DeviceJsonStore` (JSON no dispositivo). **Firebase Auth + Firestore** para sync (Pro). **Stripe** via Cloud Functions para assinatura Pro — sem Stripe SDK no Flutter.
+
+## Estrutura por feature
+
+```
+lib/features/<feature>/
+  domain/models/          # entidades imutáveis, fromMap/toMap/copyWith
+  domain/repositories/    # contratos abstratos (local + remote)
+  data/                   # implementações (*_repository_local.dart, *_repository_remote.dart)
+  view/                   # telas + *ViewModel
+lib/core/                 # router, DI, theme, strings, utils compartilhados
+lib/features/shared/      # widgets/hub reutilizáveis entre features
+```
+
+Novas features seguem o desenho de `appointments` (substitui `classes` / `activities` legado).
+
+## Modelo principal
+
+`ServiceAppointment`: id, clientName, clientPhone, serviceType, appointmentDate, startTime, endTime, status (agendado/concluido/cancelado), notes, seriesId.
+
+Arquivo local: `crm_appointments.json`.
+
+## Estado (MVVM + Commands)
+
+- ViewModels **não** estendem `ChangeNotifier`; expõem `CommandBase` / `CommandAction` de `lib/core/utils/commands.dart`.
+- Ações assíncronas retornam `Result<T>` (`lib/core/utils/result.dart`).
+- Telas escutam comandos com `ListenableBuilder(listenable: viewmodel.load, ...)`.
+- Formulários: ViewModel recebido pelo construtor; `hydrate()` no `initState`; `save.addListener` para sucesso/erro e `context.back(true)` no sucesso.
+
+## Injeção de dependência
+
+- `GetIt` em `lib/core/dependecy/dependency.dart`: singletons para store/repos; **factory** para ViewModels de lista/home.
+- ViewModels de formulário criados no `app_router.dart` com `arguments` da rota (`ServiceAppointment?`).
+- Imports: `package:clientta/...` (ou `package:university_hub/...` durante migração); nunca relativos entre features.
+
+## Rotas
+
+- Enum `AppRouters` + mapa `routes` em `app_router.dart`.
+- Navegação: `context.go(AppRouters.xxx, arguments: entry)` (`build_context.dart`).
+- Rotas núcleo: `/`, `/agendas`, `/agendas/registrar`, `/configuracoes/plano`.
+
+## Firebase
+
+- **Auth:** uid para paths Firestore e Stripe customer linkage.
+- **Firestore:** `users/{uid}`, `users/{uid}/appointments/{id}`; entitlement em `users/{uid}.subscription`.
+- Cliente **não** escreve `subscription` — apenas Functions/webhook.
+
+## Stripe (app)
+
+- Callables: `getPlanPricing`, `createSubscription`, `syncSubscriptionStatus`, `cancelSubscription`.
+- Checkout: `url_launcher` com URL retornada pela Function.
+- Gates Pro: checar `subscription.status == active` antes de sync e limites elevados.
+
+## Clean code
+
+- Textos de UI em `lib/core/strings/` (`strings.dart`, `daily_strings.dart`), não hardcoded em widgets.
+- Repositórios encapsulam I/O; ViewModels orquestram, não acessam arquivo direto.
+- Preferir `copyWith` e modelos imutáveis (`final` nos campos).
+- Não reintroduzir domínio Sextante (ClassEntry, ActivityEntry) em novas features.
+
+## APIs e analyzer
+
+- **Não** usar membros `@deprecated` do Flutter/Dart; preferir alternativas do analyzer (ex.: `DropdownButtonFormField.initialValue` + `ValueKey`).
+- Dependências usadas no código devem estar em `pubspec.yaml`.
+- Antes de concluir: `flutter analyze` e `flutter test` sem erros.
+
+## Testes
+
+- Mocks/fixtures em `test/mock/` alinhados a `ServiceAppointment`.
+- Testes de domínio em `test/features/appointments/`.
+- Não referenciar features removidas (classes, activities).

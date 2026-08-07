@@ -1,4 +1,4 @@
-import 'package:university_hub/core/strings/strings.dart';
+import 'package:clientta/core/strings/strings.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ extension PopupExt on BuildContext {
             ],
           ),
           actions: [
-            DSGhostButton(
+            DSClassicGhostButton(
               onPressed: () => Navigator.pop(context),
               label: closeString,
             ),

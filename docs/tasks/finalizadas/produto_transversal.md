@@ -2,9 +2,9 @@
 
 ---
 
-## T-009 — Rebrand Sextante
+## C-001 — Documentação Clientta
 
-- **O que fazer:** **Rebrand** para Sextante (nome, copy, migração de arquivo legado).
-- **Objetivo:** Alinhar produto à metáfora e à loja.
-- **Impacto:** **Médio** — go-to-market.
+- **O que fazer:** Substituir documentação **Sextante** por **Clientta** (README, PRODUCT, DESIGN, features, tasks, billing).
+- **Objetivo:** Alinhar time e roadmap ao CRM de atendimentos.
+- **Impacto:** **Alto** — direção de produto.
 - **Feature:** [PROPOSITO.md](../../PROPOSITO.md)

@@ -2,9 +2,9 @@
 
 ---
 
-## T-008 — Identidade Sextante (design system `Hub*`)
+## C-004 — HubTheme e componentes Hub*
 
-- **O que fazer:** Identidade visual **Sextante** (`HubTheme`, componentes `Hub*`, verde marca).
-- **Objetivo:** UI consistente nas telas principais.
+- **O que fazer:** Identidade visual com `HubTheme`, `HubColors` e componentes `Hub*` nas telas.
+- **Objetivo:** UI consistente durante migração de produto.
 - **Impacto:** **Médio** — confiança e marca.
 - **Feature:** [DESIGN.md](../../../DESIGN.md)

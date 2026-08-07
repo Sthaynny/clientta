@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
 
 abstract final class HubTheme {
   static ThemeData light() {

@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
 
 /// Toggle row for forms — label + optional subtitle on the left, switch on the right.
 /// Not an [InputDecorator]; avoids the empty “text field” look.

@@ -1,4 +1,4 @@
-import 'package:university_hub/core/strings/app_mission.dart';
+import 'package:clientta/core/strings/app_mission.dart';
 
 String get appNameString => AppMission.name;
 String get errorDefaultString => 'Ops! Ocorreu um erro inesperado.';

@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
-import 'package:university_hub/core/strings/strings.dart';
-import 'package:university_hub/core/utils/result.dart';
+import 'package:clientta/core/strings/strings.dart';
+import 'package:clientta/core/utils/result.dart';
 
 mixin RequestMixin {
   Future<Result<T>> request<T>(Future<T> Function() function) async {

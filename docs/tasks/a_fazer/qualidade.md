@@ -2,50 +2,40 @@
 
 ---
 
-## T-201 — flutter analyze verde
+## C-401 — Flutter analyze
 
 - **Status:** Em andamento
-- **O que fazer:** Manter **`flutter analyze`** sem erros no `main`.
+- **O que fazer:** Manter `flutter analyze` sem erros no branch principal.
 - **Objetivo:** Evitar regressões em release.
 - **Impacto:** **Alto** — manutenção.
-- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §3
+- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md)
 
 ---
 
-## T-202 — Testes de domínio
+## C-402 — Testes de domínio
 
 - **Status:** Não iniciado
-- **O que fazer:** Expandir **testes de domínio** (ViewModels home, grade, atividades com `mocktail`).
+- **O que fazer:** Testes de ViewModels de appointments com `mocktail`.
 - **Objetivo:** Refatorar com segurança.
 - **Impacto:** **Médio** — manutenção.
-- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §4
+- **Feature:** [guia_clientta.md](../../guia_clientta.md)
 
 ---
 
-## T-203 — integration_test
+## C-405 — Política de privacidade
 
 - **Status:** Não iniciado
-- **O que fazer:** **Restaurar / alinhar** `integration_test/` ao fluxo principal do Sextante.
-- **Objetivo:** CI e regressão de navegação.
-- **Impacto:** **Alto** — manutenção.
-- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §6
+- **O que fazer:** Documento legal cobrindo Auth, Firestore, Stripe e dados locais.
+- **Objetivo:** Conformidade Play/App Store.
+- **Impacto:** **Alto** — confiança.
+- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md)
 
 ---
 
-## T-204 — Testes Patrol
+## C-406 — Testes de integração
 
 - **Status:** Não iniciado
-- **O que fazer:** Testes **Patrol** ou em dispositivo (drawer, FAB).
-- **Objetivo:** Cobrir gestos difíceis em widget test.
+- **O que fazer:** `integration_test` do fluxo: login → registrar → painel do dia.
+- **Objetivo:** Regressão de navegação.
 - **Impacto:** **Médio** — manutenção.
-- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §6
-
----
-
-## T-212 — Internacionalização
-
-- **Status:** Não iniciado
-- **O que fazer:** **Internacionalização** (opcional; hoje PT em `strings.dart`).
-- **Objetivo:** Ampliar mercado.
-- **Impacto:** **Baixo** — conversão.
-- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md) §6
+- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md)

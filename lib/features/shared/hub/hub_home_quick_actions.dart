@@ -1,69 +1,22 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
-import 'package:university_hub/features/shared/hub/hub_surface.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/features/shared/hub/hub_surface.dart';
 
 class HubHomeQuickActions extends StatelessWidget {
   const HubHomeQuickActions({
     super.key,
-    required this.addClassLabel,
-    required this.addActivityLabel,
-    required this.onAddClass,
-    required this.onAddActivity,
+    required this.addAppointmentLabel,
+    required this.onAddAppointment,
   });
 
-  final String addClassLabel;
-  final String addActivityLabel;
-  final VoidCallback onAddClass;
-  final VoidCallback onAddActivity;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _QuickAction(
-            icon: Icons.schedule_outlined,
-            label: addClassLabel,
-            accent: HubColors.schedule,
-            accentMuted: HubColors.scheduleMuted,
-            onTap: onAddClass,
-          ),
-        ),
-        DSSpacing.sm.x,
-        Expanded(
-          child: _QuickAction(
-            icon: Icons.task_alt_outlined,
-            label: addActivityLabel,
-            accent: HubColors.seed,
-            accentMuted: HubColors.successTint,
-            onTap: onAddActivity,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _QuickAction extends StatelessWidget {
-  const _QuickAction({
-    required this.icon,
-    required this.label,
-    required this.accent,
-    required this.accentMuted,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final Color accent;
-  final Color accentMuted;
-  final VoidCallback onTap;
+  final String addAppointmentLabel;
+  final VoidCallback onAddAppointment;
 
   @override
   Widget build(BuildContext context) {
     return HubSurface(
-      onTap: onTap,
+      onTap: onAddAppointment,
       padding: EdgeInsets.symmetric(
         horizontal: DSSpacing.md.value,
         vertical: DSSpacing.md.value,
@@ -72,18 +25,22 @@ class _QuickAction extends StatelessWidget {
         children: [
           DecoratedBox(
             decoration: BoxDecoration(
-              color: accentMuted,
+              color: HubColors.scheduleMuted,
               borderRadius: BorderRadius.circular(DSSpacing.xs.value),
             ),
             child: Padding(
               padding: EdgeInsets.all(DSSpacing.xs.value),
-              child: Icon(icon, size: 22, color: accent),
+              child: const Icon(
+                Icons.event_available_outlined,
+                size: 22,
+                color: HubColors.schedule,
+              ),
             ),
           ),
           DSSpacing.sm.x,
           Expanded(
             child: DSBodyText(
-              label,
+              addAppointmentLabel,
               fontWeight: FontWeight.w600,
               color: HubColors.ink,
               maxLines: 2,

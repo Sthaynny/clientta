@@ -1,19 +1,19 @@
-# Mapeamento de tarefas — Sextante
+# Mapeamento de tarefas — Clientta
 
-Índice de trabalho possível para o **Sextante** (`university_hub`), com **o que fazer**, **objetivo** e **impacto** por item.  
+Índice de trabalho para o **Clientta** (CRM de atendimentos), com **o que fazer**, **objetivo** e **impacto** por item.  
 Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](features/README.md) (catálogo Free/Pro).
 
-**Visão operacional por feature:** [tasks/README.md](tasks/README.md) — pastas [tasks/a_fazer/](tasks/a_fazer/) e [tasks/finalizadas/](tasks/finalizadas/) com os mesmos IDs (T-001…).
+**Visão operacional:** [tasks/README.md](tasks/README.md) — pastas [tasks/a_fazer/](tasks/a_fazer/) e [tasks/finalizadas/](tasks/finalizadas/) com os mesmos IDs (C-001…).
 
-**Produto:** nome de exibição **Sextante** (`AppMission.name` em `lib/core/strings/app_mission.dart`).  
-**Monetização:** alvo **dois apps** (Free + Pro), um repo — [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md); billing/paywall **não** estão no código hoje.
+**Produto:** **Clientta** — pacote Dart em migração de `university_hub` → `clientta`.  
+**Monetização:** assinatura **Pro** via Stripe (Cloud Functions); entitlement em Firestore.
 
 ## Como ler a tabela
 
 | Campo | Descrição |
 |-------|-----------|
-| **ID** | Identificador curto (ex. T-001) |
-| **Área** | produto / engenharia / design / loja / monetização / qualidade |
+| **ID** | Identificador curto (ex. C-101) |
+| **Área** | produto / engenharia / design / billing / qualidade |
 | **O que fazer** | Ação concreta |
 | **Objetivo** | Por que existe |
 | **Impacto** | Alto / Médio / Baixo + efeito esperado |
@@ -22,106 +22,65 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 
 ---
 
-## 1. Já entregue
+## 1. Baseline (legado Sextante + docs)
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-001 | produto | Manter painel **Início** com aulas e atividades de hoje | Reduzir tempo até o que importa no dia | Alto — retenção e hábito diário | Concluído | [home_hoje.md](features/home_hoje.md) |
-| T-002 | produto | Cadastro de **disciplinas** na grade | Base para horário e sala por dia da semana | Alto — núcleo do valor | Concluído | [disciplinas.md](features/disciplinas.md) |
-| T-003 | produto | **Grade horária** semanal (dia, horário, sala) | Resolver “onde e quando” é a aula | Alto — retenção | Concluído | [grade_horaria.md](features/grade_horaria.md) |
-| T-004 | produto | **Atividades** com tipo, data e marcação de concluída | Centralizar entregas e provas | Alto — retenção | Concluído | [atividades.md](features/atividades.md) |
-| T-005 | produto | **Perfil** com nome da universidade (local) | Personalizar sem conta | Médio — identidade e confiança | Concluído | [perfil_universidade.md](features/perfil_universidade.md) |
-| T-006 | engenharia | Persistência **offline** em `DeviceJsonStore` (JSON no dispositivo) | Funcionar sem internet após instalar | Alto — proposta do produto | Concluído | [guia_sextante.md](guia_sextante.md) |
-| T-007 | engenharia | Arquitetura **MVVM + GetIt** e repositórios locais por feature | Manter evolução previsível | Médio — manutenção | Concluído | [guia_sextante.md](guia_sextante.md) |
-| T-008 | design | Identidade **Sextante** (`HubTheme`, componentes `Hub*`, verde marca) | UI consistente nas telas principais | Médio — confiança e marca | Concluído | [../DESIGN.md](../DESIGN.md) |
-| T-009 | produto | **Rebrand** para Sextante (nome, copy, migração de arquivo legado) | Alinhar produto à metáfora e à loja | Médio — go-to-market | Concluído | [PROPOSITO.md](PROPOSITO.md) |
-| T-010 | produto | Série de aulas em **vários dias** com exclusão por dia ou série | Atender turmas que repetem na semana | Médio — retenção | Concluído | [design-brief-class-multi-day.md](design-brief-class-multi-day.md) |
-| T-011 | produto | Ordenar atividades de hoje (não concluídas primeiro) | Priorizar o que ainda falta fazer | Médio — retenção | Concluído | [home_hoje.md](features/home_hoje.md) |
-| T-012 | produto | Diálogo de confirmação ao **excluir** aula (dia ou série) | Evitar perda acidental de dados | Médio — confiança | Concluído | [grade_horaria.md](features/grade_horaria.md) |
-| T-013 | engenharia | Remover **Firebase, auth e IAP** do escopo atual | Release limpo e alinhado ao offline-first | Alto — confiança e manutenção | Concluído | [PLANEJAMENTO.md](PLANEJAMENTO.md) |
+| C-001 | produto | Documentação **Clientta** (substituir Sextante) | Alinhar time e roadmap ao novo produto | Alto — direção | Concluído | [PROPOSITO.md](PROPOSITO.md) |
+| C-002 | engenharia | `DeviceJsonStore` offline-first | Base de persistência local | Alto — proposta | Concluído | [guia_clientta.md](guia_clientta.md) |
+| C-003 | engenharia | Arquitetura **MVVM + GetIt** | Evolução previsível | Médio — manutenção | Concluído | [guia_clientta.md](guia_clientta.md) |
+| C-004 | design | Tema **HubTheme** + componentes `Hub*` | UI consistente | Médio — confiança | Concluído | [../DESIGN.md](../DESIGN.md) |
 
 ---
 
-## 2. Próximo trimestre (roadmap Pro e núcleo)
-
-Prioridade sugerida alinhada a [PLANEJAMENTO.md](PLANEJAMENTO.md) Fases 1–2.
+## 2. Fase 1 — MVP (auth + agendamentos)
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-101 | produto | **Formulários** com componentes `Hub*` (observação multilinha, validação de horário) | Menos atrito ao cadastrar | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
-| T-102 | produto | Ordenar **aulas de hoje** por `startTime` | Leitura natural da agenda do dia | Médio — retenção | Não iniciado | [home_hoje.md](features/home_hoje.md) |
-| T-103 | design | Revisar **empty states** com copy validada (TCC/extensão) | Primeira impressão quando não há dados | Médio — conversão de uso | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
-| T-104 | produto | **Onboarding** leve (1–2 telas: dados no celular + primeira aula) | Ativar usuário na primeira sessão | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
-| T-105 | produto | **Busca / filtro** de atividades (tipo ou período) | Encontrar entregas em listas longas | Médio — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §5 |
-| T-106 | produto | **Exportar / importar** backup JSON com share intent e validação | Trocar de aparelho sem perder grade | Alto — conversão Pro futura | Não iniciado | [export_backup.md](features/export_backup.md) |
-| T-107 | produto | **Lembretes locais** (`flutter_local_notifications`) | Reduzir esquecimento de prazos | Alto — conversão Pro / retenção | Não iniciado | [lembretes_notificacoes.md](features/lembretes_notificacoes.md) |
-| T-108 | produto | **Estatísticas** de conclusão e resumo por período | Feedback de progresso | Médio — conversão Pro | Não iniciado | [estatisticas_progresso.md](features/estatisticas_progresso.md) |
-| T-109 | design | **Temas** além do claro padrão (incl. escuro estendido no Pro) | Conforto visual e diferenciação Pro | Médio — conversão Pro | Não iniciado | [temas_personalizados.md](features/temas_personalizados.md) |
-| T-110 | produto | **Anexos** por aula/atividade (armazenamento local) | Materiais junto do contexto da aula | Médio — conversão Pro | Não iniciado | [materiais_anexos.md](features/materiais_anexos.md) |
-| T-111 | produto | **Widget** Android “próxima aula” (+ iOS se viável) | Valor na tela inicial do SO | Alto — conversão Pro / retenção | Não iniciado | [widgets_tela_inicial.md](features/widgets_tela_inicial.md) |
-| T-112 | produto | **Múltiplos semestres** (arquivar períodos) | Histórico sem poluir o período ativo | Médio — conversão Pro | Não iniciado | [multiplos_semestres.md](features/multiplos_semestres.md) |
-| T-113 | produto | **Sincronização na nuvem** (somente após decisão explícita) | Backup automático multi-dispositivo | Baixo hoje — contraria offline atual | Bloqueado | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) |
-
-### Dependências sugeridas (roadmap Pro)
-
-```mermaid
-flowchart LR
-  T106[Backup JSON] --> T107[Lembretes]
-  T107 --> T105[Busca / filtro]
-  T105 --> T111[Widget]
-  T106 -.-> T108[Estatísticas]
-  T109[Temas] -.-> T110[Anexos]
-```
+| C-101 | produto | Modelo `ServiceAppointment` + repo local | Base de domínio Clientta | Alto — núcleo | Não iniciado | [agendas.md](features/agendas.md) |
+| C-102 | produto | **Painel do dia** (`/`) | Quem atender hoje | Alto — retenção | Não iniciado | [home_hoje.md](features/home_hoje.md) |
+| C-103 | produto | **Minha Agenda** (`/agendas`) | Histórico e filtros | Alto — retenção | Não iniciado | [agendas.md](features/agendas.md) |
+| C-104 | produto | **Formulário** (`/agendas/registrar`) | Cadastro com notas e séries | Alto — conversão | Não iniciado | [agendas.md](features/agendas.md) |
+| C-105 | engenharia | **Firebase Auth** (login/cadastro) | Identidade para sync e billing | Alto — infra | Não iniciado | [guia_clientta.md](guia_clientta.md) |
+| C-106 | engenharia | Remover features **Sextante** (classes, activities) | Código alinhado ao CRM | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
+| C-107 | produto | Ordenar painel do dia por `startTime` | Leitura natural da agenda | Médio — UX | Não iniciado | [home_hoje.md](features/home_hoje.md) |
+| C-108 | produto | Diálogo de confirmação ao excluir | Evitar perda de dados | Médio — confiança | Não iniciado | [agendas.md](features/agendas.md) |
+| C-109 | produto | **Onboarding** leve (offline + primeiro atendimento) | Ativar na primeira sessão | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 
 ---
 
-## 3. Fundação técnica
+## 3. Fase 2 — Sync na nuvem (Pro)
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-201 | qualidade | Manter **`flutter analyze`** sem erros no `main` | Evitar regressões em release | Alto — manutenção | Em andamento | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
-| T-202 | qualidade | Expandir **testes de domínio** (ViewModels home, grade, atividades com `mocktail`) | Refatorar com segurança | Médio — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §4 |
-| T-203 | qualidade | **Restaurar / alinhar** `integration_test/` ao fluxo principal do Sextante | CI e regressão de navegação | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
-| T-204 | qualidade | Testes **Patrol** ou em dispositivo (drawer, FAB) | Cobrir gestos difíceis em widget test | Médio — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
-| T-205 | engenharia | **Build release** Android (`appbundle`) com `versionCode` incremental | Publicar na Play Store | Alto — distribuição | Em andamento | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
-| T-206 | engenharia | Auditar **AndroidManifest** (permissões de mídia não usadas) | Conformidade e revisão da loja | Médio — confiança | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
-| T-207 | engenharia | **Codemagic**: analyze + bundle sem secrets Firebase | Pipeline confiável | Alto — manutenção | Em andamento | [guia_sextante.md](guia_sextante.md) |
-| T-208 | engenharia | Migrar `DropdownButtonFormField` deprecado para **`initialValue`** | Compatibilidade com SDK Flutter | Baixo — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §8 |
-| T-209 | engenharia | Declarar ou remover uso de **`url_launcher`** | `depend_on_referenced_packages` limpo | Baixo — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §8 |
-| T-210 | engenharia | Acompanhar compatibilidade do **`design_system`** (Git) com o SDK | Evitar quebra de build | Médio — manutenção | Em andamento | [guia_sextante.md](guia_sextante.md) |
-| T-211 | engenharia | Atualizar **remote** e links do repositório canonical | Onboarding de contribuidores e CI | Baixo — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
-| T-212 | qualidade | **Internacionalização** (opcional; hoje PT em `strings.dart`) | Ampliar mercado | Baixo — conversão | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
+| C-201 | engenharia | Repositório Firestore de appointments | Espelho na nuvem | Alto — Pro | Não iniciado | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) |
+| C-202 | engenharia | Sync bidirecional local ↔ Firestore | Multi-dispositivo | Alto — Pro | Não iniciado | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) |
+| C-203 | engenharia | **Regras Firestore** por `uid` | Segurança | Alto — confiança | Não iniciado | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) |
+| C-204 | design | Indicador de sync / offline na UI | Transparência operacional | Médio — UX | Não iniciado | [home_hoje.md](features/home_hoje.md) |
 
 ---
 
-## 4. Go-to-market
+## 4. Fase 3 — Billing Stripe (Pro)
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-301 | loja | Manter **listing** Play (nome, descrições, versão) alinhado ao app | ASO e clareza na instalação | Alto — aquisição | Em andamento | [stores/LISTING.md](stores/LISTING.md) |
-| T-302 | loja | Atualizar **screenshots** e ordem na galeria | Mostrar painel do dia e grade | Alto — conversão na loja | Em andamento | [stores/prints/README.md](stores/prints/README.md) |
-| T-303 | loja | **Política de privacidade** refletindo só armazenamento local | Aprovação na Play Console | Alto — confiança | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
-| T-304 | loja | Materiais de campanha Play ([CAMPANHA-PLAY](stores/CAMPANHA-PLAY.md), entrega) | Lançamento coordenado | Médio — aquisição | Em andamento | [stores/ENTREGA-PLAY.md](stores/ENTREGA-PLAY.md) |
-| T-305 | loja | **TestFlight** / App Store (quando iOS estiver no escopo) | Segundo canal de distribuição | Médio — aquisição | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
-| T-306 | loja | Publicação **LinkedIn** e copy de lançamento | Alcance orgânico inicial | Baixo — aquisição | Em andamento | [stores/LINKEDIN-PUBLICACAO.md](stores/LINKEDIN-PUBLICACAO.md) |
-| T-307 | design | Feature graphic e ícone consistentes com **Sextante** | Reconhecimento na loja | Médio — conversão na loja | Em andamento | [stores/store-assets/](stores/store-assets/) |
+| C-301 | billing | Callables Stripe (`getPlanPricing`, `createSubscription`, …) | Cobrança sem SDK no app | Alto — receita | Não iniciado | [assinatura_stripe.md](features/assinatura_stripe.md) |
+| C-302 | billing | Webhook `stripeBillingWebhook` | Entitlement em Firestore | Alto — receita | Não iniciado | [billing/readme.md](billing/readme.md) |
+| C-303 | produto | Tela **Plano Pro** (`/configuracoes/plano`) | Descoberta e gestão da assinatura | Alto — conversão | Não iniciado | [assinatura_stripe.md](features/assinatura_stripe.md) |
+| C-304 | engenharia | **Gates Free/Pro** (limites + sync) | Diferenciar tiers | Alto — valor Pro | Não iniciado | [features/README.md](features/README.md) |
 
 ---
 
-## 5. Monetização (dois apps na loja — sem billing no código hoje)
+## 5. Fundação técnica contínua
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| T-401 | monetização | Documentar **limites Free** vs **benefícios Pro** (volume, features) | Base para tiers Free/Pro | Médio — conversão Pro | Concluído | [features/README.md](features/README.md) |
-| T-402 | monetização | Definir **preço** do app **Sextante Pro** na loja (compra única) | Viabilidade econômica | Alto — receita | Não iniciado | [PRODUCT.md](../PRODUCT.md) |
-| T-403 | design | Esboçar **descoberta Pro** no Free (link para listing; não paywall) | UX clara sem frustrar o Free | Alto — conversão Pro | Não iniciado | [export_backup.md](features/export_backup.md) |
-| T-404 | monetização | Plano **IAP/Billing 8+** como **alternativa futura** (app único) | Opção de pivot | Baixo — curto prazo | Bloqueado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §7 |
-| T-405 | monetização | Avaliar **anúncios** no Free (hoje desligados) | Monetização complementar | Baixo — decisão futura | Bloqueado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §7 |
-| T-406 | produto | **Enforcement** Free vs Pro por variante de build | Diferenciar tiers entre binários | Alto — valor Pro | Não iniciado | [features/README.md](features/README.md) |
-| T-407 | engenharia | Definir **flavors** Android/iOS e IDs (`…hub` / `…hub_pro`) | Dois artefatos, um repo | Alto — publicação | Não iniciado | [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md) |
-| T-408 | engenharia | **CI Codemagic** — matriz free + pro (AAB/APK/IPA) | Releases sincronizados | Alto — operação | Não iniciado | [stores/ENTREGA-PLAY.md](stores/ENTREGA-PLAY.md) |
-| T-409 | loja | **Listings duplos** Play/App Store em `docs/stores/` | Descoberta e conformidade | Alto — conversão | Não iniciado | [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md) |
-| T-410 | engenharia | **Gates compile-time** (`APP_VARIANT`, `AppVariant`) | Um código, dois comportamentos | Alto — manutenção | Não iniciado | [features/README.md](features/README.md) |
+| C-401 | qualidade | `flutter analyze` sem erros | Release confiável | Alto — manutenção | Em andamento | [PLANEJAMENTO.md](PLANEJAMENTO.md) |
+| C-402 | qualidade | Testes de domínio (appointments ViewModels) | Refatorar com segurança | Médio — manutenção | Não iniciado | [guia_clientta.md](guia_clientta.md) |
+| C-403 | engenharia | Migrar pacote a **`clientta`** | Namespace alinhado ao produto | Médio — manutenção | Não iniciado | [guia_clientta.md](guia_clientta.md) |
+| C-404 | engenharia | CI Codemagic (analyze + test + bundle) | Pipeline confiável | Alto — distribuição | Em andamento | [guia_clientta.md](guia_clientta.md) |
+| C-405 | qualidade | Política de privacidade (Auth, Firestore, Stripe) | Conformidade loja | Alto — confiança | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
+| C-406 | qualidade | Testes de integração fluxo principal | Regressão de navegação | Médio — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) |
 
 ---
 
@@ -129,19 +88,18 @@ flowchart LR
 
 | Status | Quantidade (IDs) |
 |--------|------------------|
-| Concluído | 14 (T-001–T-013, T-401) |
-| Em andamento | 9 (T-201, T-205, T-207, T-210, T-301, T-302, T-304, T-306, T-307) — *ajustar conforme sprint* |
-| Não iniciado | 29 |
-| Bloqueado | 3 (T-113, T-404, T-405) |
+| Concluído | 4 (C-001–C-004) |
+| Em andamento | 2 (C-401, C-404) |
+| Não iniciado | 23 |
+| Bloqueado | 0 |
 
-**Total de tarefas listadas:** 55
+**Total de tarefas listadas:** 29
 
 ---
 
-## Manutenção deste documento
+## Manutenção
 
-- Ao concluir entrega: atualizar **Status** e, se relevante, [features/README.md](features/README.md) e [PLANEJAMENTO.md](PLANEJAMENTO.md).
-- Novas ideias: adicionar linha com novo ID na seção adequada; evitar duplicar itens já cobertos em `docs/features/`.
-- Sprint: escolher 2–3 itens de **Em andamento** ou **Não iniciado** com impacto **Alto**.
+- Ao concluir entrega: atualizar **Status** e [features/README.md](features/README.md).
+- Sprint: 2–3 itens de impacto **Alto** da Fase 1.
 
-*Última atualização: julho de 2026.*
+*Última atualização: agosto de 2026.*

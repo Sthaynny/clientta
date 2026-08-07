@@ -1,30 +1,21 @@
 # Finalizadas — Engenharia
 
-Tarefas de fundação técnica já entregues (sem feature de produto única).
+Baseline técnico herdado do Sextante, válido para Clientta.
 
 ---
 
-## T-006 — Persistência offline
+## C-002 — DeviceJsonStore offline-first
 
-- **O que fazer:** Persistência **offline** em `DeviceJsonStore` (JSON no dispositivo).
-- **Objetivo:** Funcionar sem internet após instalar.
-- **Impacto:** **Alto** — proposta do produto.
-- **Feature:** [guia_sextante.md](../../guia_sextante.md) (arquitetura)
+- **O que fazer:** Persistência local em `DeviceJsonStore` (JSON no dispositivo).
+- **Objetivo:** Operação sem internet após instalar.
+- **Impacto:** **Alto** — proposta offline-first.
+- **Feature:** [guia_clientta.md](../../guia_clientta.md)
 
 ---
 
-## T-007 — MVVM + GetIt
+## C-003 — MVVM + GetIt
 
-- **O que fazer:** Arquitetura **MVVM + GetIt** e repositórios locais por feature.
-- **Objetivo:** Manter evolução previsível.
+- **O que fazer:** Arquitetura MVVM + GetIt com repositórios por feature.
+- **Objetivo:** Evolução previsível do codebase.
 - **Impacto:** **Médio** — manutenção.
-- **Feature:** [guia_sextante.md](../../guia_sextante.md) (arquitetura)
-
----
-
-## T-013 — Remover Firebase e IAP
-
-- **O que fazer:** Remover **Firebase, auth e IAP** do escopo atual.
-- **Objetivo:** Release limpo e alinhado ao offline-first.
-- **Impacto:** **Alto** — confiança e manutenção.
-- **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md)
+- **Feature:** [guia_clientta.md](../../guia_clientta.md)

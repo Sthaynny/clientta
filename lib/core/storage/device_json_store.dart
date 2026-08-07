@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 
 /// Persistência local em arquivo JSON no dispositivo (sem servidor nem SQL).
 class DeviceJsonStore {
-  static const fileName = 'university_hub_daily.json';
-  static const legacyFileName = 'conectafersa_daily.json';
+  static const fileName = 'clientta_data.json';
+  static const legacyFileName = 'university_hub_daily.json';
 
   Future<File> _file() async {
     final dir = await getApplicationDocumentsDirectory();

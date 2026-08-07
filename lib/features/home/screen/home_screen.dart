@@ -1,18 +1,17 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/router/app_router.dart';
-import 'package:university_hub/core/strings/daily_strings.dart';
-import 'package:university_hub/core/strings/strings.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
-import 'package:university_hub/core/utils/extension/build_context.dart';
-import 'package:university_hub/core/utils/extension/datetime.dart';
-import 'package:university_hub/features/activities/domain/models/activity_entry.dart';
-import 'package:university_hub/features/classes/domain/models/class_entry.dart';
-import 'package:university_hub/features/home/screen/components/app_drawer.dart';
-import 'package:university_hub/features/home/screen/home_view_model.dart';
-import 'package:university_hub/features/shared/components/app_loading_widget.dart';
-import 'package:university_hub/features/shared/components/body_error_default_widget.dart';
-import 'package:university_hub/features/shared/hub/hub.dart';
+import 'package:clientta/core/router/app_router.dart';
+import 'package:clientta/core/strings/daily_strings.dart';
+import 'package:clientta/core/strings/strings.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/core/utils/extension/build_context.dart';
+import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
+import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
+import 'package:clientta/features/home/screen/components/app_drawer.dart';
+import 'package:clientta/features/home/screen/home_view_model.dart';
+import 'package:clientta/features/shared/components/app_loading_widget.dart';
+import 'package:clientta/features/shared/components/body_error_default_widget.dart';
+import 'package:clientta/features/shared/hub/hub.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.viewmodel});
@@ -36,16 +35,44 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void onHubRouteVisible() => viewmodel.load.execute();
 
-  Future<void> _openClassForm({ClassEntry? entry}) async {
-    await context.go(AppRouters.classForm, arguments: entry);
+  Future<void> _openAppointmentForm({ServiceAppointment? entry}) async {
+    await context.go(AppRouters.appointmentForm, arguments: entry);
     if (!mounted) return;
     viewmodel.load.execute();
   }
 
-  Future<void> _openActivityForm({ActivityEntry? entry}) async {
-    await context.go(AppRouters.activityForm, arguments: entry);
-    if (!mounted) return;
-    viewmodel.load.execute();
+  Future<void> _showQuickNotes(ServiceAppointment entry) async {
+    final controller = TextEditingController(text: entry.notes ?? '');
+    final saved = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(quickNotesDialogTitleString),
+            content: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: quickNotesDialogHintString,
+              ),
+              maxLines: 3,
+              autofocus: true,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(cancelString),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(saveString),
+              ),
+            ],
+          ),
+    );
+    if (saved == true && mounted) {
+      await viewmodel.updateNotes.execute(
+        QuickNotesInput(appointment: entry, notes: controller.text),
+      );
+    }
   }
 
   @override
@@ -72,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
       body: ListenableBuilder(
         listenable: viewmodel.load,
         builder: (context, _) {
-          if (viewmodel.load.running && viewmodel.todayClasses.isEmpty) {
+          if (viewmodel.load.running && viewmodel.todayAppointments.isEmpty) {
             return const AppLoadingWidget();
           }
           if (viewmodel.load.error) {
@@ -91,67 +118,37 @@ class _HomeScreenState extends State<HomeScreen>
                 HubDayHeader(
                   weekdayLabel: weekdayLabels[now.weekday - 1],
                   dateLabel: formatHubDayHeader(now),
-                  classesTodayCount: viewmodel.todayClasses.length,
-                  activitiesTodayCount: viewmodel.todayActivities.length,
+                  appointmentsTodayCount: viewmodel.todayAppointments.length,
                 ),
                 DSSpacing.md.y,
                 HubHomeQuickActions(
-                  addClassLabel: addClassString,
-                  addActivityLabel: addActivityString,
-                  onAddClass: () => _openClassForm(),
-                  onAddActivity: () => _openActivityForm(),
+                  addAppointmentLabel: quickAddAppointmentString,
+                  onAddAppointment: () => _openAppointmentForm(),
                 ),
                 DSSpacing.lg.y,
                 HubHomeSection(
-                  title: classesTodayString,
-                  count: viewmodel.todayClasses.isEmpty
+                  title: appointmentsTodayString,
+                  count: viewmodel.todayAppointments.isEmpty
                       ? null
-                      : viewmodel.todayClasses.length,
-                  actionLabel: myScheduleString,
+                      : viewmodel.todayAppointments.length,
+                  actionLabel: myAgendaString,
                   onAction: () =>
                       Navigator.of(context).pushReplacementNamed(
-                        AppRouters.classes.path,
+                        AppRouters.agendas.path,
                       ),
-                  child: viewmodel.todayClasses.isEmpty
+                  child: viewmodel.todayAppointments.isEmpty
                       ? HubEmptyState(
                           embedded: true,
-                          icon: Icons.schedule_outlined,
-                          title: emptyClassesHomeTitle,
-                          message: emptyClassesHomeMessage,
-                          actionLabel: addClassString,
-                          onAction: () => _openClassForm(),
+                          icon: Icons.event_note_outlined,
+                          title: emptyAppointmentsHomeTitle,
+                          message: emptyAppointmentsHomeMessage,
+                          actionLabel: addAppointmentString,
+                          onAction: () => _openAppointmentForm(),
                         )
                       : Column(
                           children:
-                              viewmodel.todayClasses
-                                  .map(_classTile)
-                                  .toList(),
-                        ),
-                ),
-                DSSpacing.lg.y,
-                HubHomeSection(
-                  title: activitiesTodayString,
-                  count: viewmodel.todayActivities.isEmpty
-                      ? null
-                      : viewmodel.todayActivities.length,
-                  actionLabel: myActivitiesString,
-                  onAction: () =>
-                      Navigator.of(context).pushReplacementNamed(
-                        AppRouters.activities.path,
-                      ),
-                  child: viewmodel.todayActivities.isEmpty
-                      ? HubEmptyState(
-                          embedded: true,
-                          icon: Icons.task_alt_outlined,
-                          title: emptyActivitiesHomeTitle,
-                          message: emptyActivitiesHomeMessage,
-                          actionLabel: addActivityString,
-                          onAction: () => _openActivityForm(),
-                        )
-                      : Column(
-                          children:
-                              viewmodel.todayActivities
-                                  .map((a) => _activityTile(a))
+                              viewmodel.todayAppointments
+                                  .map(_appointmentTile)
                                   .toList(),
                         ),
                 ),
@@ -164,24 +161,19 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _classTile(ClassEntry entry) {
-    return HubClassCard(
-      subject: entry.subject,
+  Widget _appointmentTile(ServiceAppointment entry) {
+    return HubAppointmentCard(
+      clientName: entry.clientName,
+      serviceType: entry.serviceType,
       startTime: entry.startTime,
       endTime: entry.endTime,
-      room: entry.room,
-      onTap: () => _openClassForm(entry: entry),
-    );
-  }
-
-  Widget _activityTile(ActivityEntry entry) {
-    return HubActivityTile(
-      title: entry.title,
-      subtitle: '${entry.kind.label} • ${entry.date.toDateAt}',
-      kind: entry.kind,
-      done: entry.done,
-      onChanged: (_) => viewmodel.toggleActivity.execute(entry),
-      onTap: () => _openActivityForm(entry: entry),
+      status: entry.status,
+      onTap: () => _openAppointmentForm(entry: entry),
+      onMarkComplete:
+          entry.status == AppointmentStatus.agendado.value
+              ? () => viewmodel.markComplete.execute(entry)
+              : null,
+      onAddNotes: () => _showQuickNotes(entry),
     );
   }
 }

@@ -1,60 +1,73 @@
-# Propósito do Sextante
+# Propósito do Clientta
 
 ## Em uma frase
 
-**Sextante** é um **auxiliar do dia a dia** para quem estuda em qualquer universidade: grade de aulas, registro de atividades e visão do que importa **hoje** — **sem login, sem servidor e sem banco de dados na nuvem**.
+**Clientta** é um **CRM de atendimentos** para agentes de crédito, seguros e profissionais autônomos: painel do **dia**, **agenda** de clientes, **notas de negociação** e **sincronização na nuvem** — com operação **offline-first** no celular.
 
-Os dados ficam em um **arquivo JSON no próprio celular** (`DeviceJsonStore`).
+## Dores do público
 
-## Dores do estudante
+1. **Quem atender hoje** — sem abrir planilha ou WhatsApp para ver a agenda do dia.
+2. **Contexto da negociação** — propostas, objeções e follow-up perdidos entre ligações.
+3. **Mobilidade** — internet instável em campo; o app precisa funcionar sem rede.
+4. **Histórico disperso** — séries de reuniões (ex.: follow-up semanal) sem vínculo claro.
+5. **Multi-dispositivo** — trocar de celular sem perder cadastros (sync Pro).
 
-1. **Sala e horário** — em semanas atípicas, não lembrar onde é a aula.
-2. **Entregas e provas** — anotar em um lugar só, em vez de prints perdidos no chat.
-3. **Rotina fragmentada** — listas soltas no WhatsApp e na galeria.
-4. **Fricção** — não querer criar conta ou depender de internet só para organizar a semana.
-
-## O que o app faz hoje
+## O que o app entrega
 
 | Função | Descrição |
 |--------|-----------|
-| **Início** | Aulas de hoje + atividades de hoje |
-| **Minha grade** | Cadastro de disciplinas por dia da semana, horário e sala |
-| **Minhas atividades** | Trabalhos, estudos, provas e presenças, com data e “concluída” |
-| **Perfil** | Nome da universidade no menu (opcional, local) |
+| **Início** | Atendimentos de hoje ordenados por horário; atalho para concluir e anotar |
+| **Minha Agenda** | Listagem agrupada por data ou série; filtro por tipo de serviço |
+| **Registrar atendimento** | Cliente, telefone, tipo, data, horários, notas, série recorrente |
+| **Sync na nuvem** | Firestore após login (tier Pro) |
+| **Plano Pro** | Assinatura Stripe para sync e recursos avançados |
 
-Catálogo **Free / Pro** e modelo alvo **dois apps na loja** (um repositório): [features/README.md](features/README.md), [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md).
+Catálogo **Free / Pro**: [features/README.md](features/README.md).
+
+## Modelo de dados
+
+Entidade principal: `ServiceAppointment`
+
+| Campo | Descrição |
+|-------|-----------|
+| `id` | Identificador único |
+| `clientName` | Nome do cliente |
+| `clientPhone` | Telefone |
+| `serviceType` | Ex.: Empréstimo Consignado, Seguro Auto |
+| `appointmentDate` | Data do atendimento |
+| `startTime` / `endTime` | Horário (string `HH:mm`) |
+| `status` | `agendado`, `concluido`, `cancelado` |
+| `notes` | Bloco de anotações da negociação |
+| `seriesId` | Opcional — vínculo em séries recorrentes |
+
+Persistência local: `crm_appointments.json` via `DeviceJsonStore`.
 
 ## Rotas
 
 | Tela | Caminho |
 |------|---------|
-| Início | `/` |
-| Grade | `/aulas` |
-| Registrar aula | `/aulas/registrar` |
-| Atividades | `/atividades` |
-| Registrar atividade | `/atividades/registrar` |
+| Início (painel do dia) | `/` |
+| Minha Agenda | `/agendas` |
+| Registrar atendimento | `/agendas/registrar` |
+| Plano / assinatura | `/configuracoes/plano` |
 
 Detalhes em [ROTEAMENTO.md](ROTEAMENTO.md).
-
-Roteiro de evolução: [PLANEJAMENTO.md](PLANEJAMENTO.md).
 
 ## Arquitetura
 
 ```
 Flutter (MVVM + GetIt)
-  └── DeviceJsonStore (arquivo local)
-        ├── ClassRepositoryLocal
-        └── ActivityRepositoryLocal
+  ├── DeviceJsonStore (JSON local, offline-first)
+  │     └── ServiceAppointmentRepositoryLocal
+  ├── Firebase Auth (identidade)
+  ├── Firestore (sync de agendamentos — Pro)
+  └── Cloud Functions + Stripe (assinatura Pro)
+        └── users/{uid}.subscription (entitlement)
 ```
 
-Não há Firebase, autenticação nem Firestore.
+Guia técnico: [guia_clientta.md](guia_clientta.md).
 
-## Evoluções possíveis (sem nuvem)
+## Evolução
 
-Itens abaixo estão detalhados em `docs/features/`; a maioria está no tier **Pro** do roadmap de produto:
-
-- [Lembretes locais](features/lembretes_notificacoes.md) (`flutter_local_notifications`)
-- [Exportar/importar JSON](features/export_backup.md)
-- [Widget “próxima aula”](features/widgets_tela_inicial.md)
-
-Sincronização na nuvem: apenas [futuro explícito](features/sincronizacao_nuvem.md), fora do escopo offline atual.
+Roteiro de fases: [PLANEJAMENTO.md](PLANEJAMENTO.md).  
+Origem do produto: adaptação do codebase **Sextante** (`proposta.md`).

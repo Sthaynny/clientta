@@ -1,7 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
-import 'package:university_hub/features/shared/hub/hub_primary_button.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/features/shared/hub/hub_primary_button.dart';
 
 class HubEmptyState extends StatelessWidget {
   const HubEmptyState({

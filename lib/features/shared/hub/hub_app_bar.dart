@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/features/shared/components/app_icon.dart';
+import 'package:clientta/features/shared/components/app_icon.dart';
 
 class HubAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HubAppBar({

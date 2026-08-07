@@ -1,0 +1,247 @@
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:clientta/core/strings/daily_strings.dart';
+import 'package:clientta/core/strings/strings.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/core/utils/extension/build_context.dart';
+import 'package:clientta/core/utils/extension/datetime.dart';
+import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
+import 'package:clientta/features/appointments/domain/models/service_type.dart';
+import 'package:clientta/features/appointments/view/appointment_form_view_model.dart';
+import 'package:clientta/features/shared/hub/hub.dart';
+
+class AppointmentFormScreen extends StatefulWidget {
+  const AppointmentFormScreen({
+    super.key,
+    required this.viewmodel,
+    this.isEdit = false,
+  });
+
+  final AppointmentFormViewModel viewmodel;
+  final bool isEdit;
+
+  @override
+  State<AppointmentFormScreen> createState() => _AppointmentFormScreenState();
+}
+
+class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
+  late final AppointmentFormViewModel viewmodel;
+  late final TextEditingController clientNameController;
+  late final TextEditingController clientPhoneController;
+  late final TextEditingController notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    viewmodel = widget.viewmodel;
+    viewmodel.hydrate();
+    clientNameController = TextEditingController(text: viewmodel.clientName);
+    clientPhoneController = TextEditingController(text: viewmodel.clientPhone);
+    notesController = TextEditingController(text: viewmodel.notes);
+    viewmodel.save.addListener(_onSave);
+  }
+
+  @override
+  void dispose() {
+    viewmodel.save.removeListener(_onSave);
+    clientNameController.dispose();
+    clientPhoneController.dispose();
+    notesController.dispose();
+    super.dispose();
+  }
+
+  String _saveErrorMessage() {
+    final result = viewmodel.save.result;
+    if (result case Error(:final error)) {
+      final text = error.toString();
+      const prefix = 'Exception: ';
+      if (text.startsWith(prefix)) {
+        return text.substring(prefix.length);
+      }
+      return text;
+    }
+    return errorSaveString;
+  }
+
+  void _onSave() {
+    if (viewmodel.save.completed) {
+      viewmodel.save.clearResult();
+      context.back(true);
+    }
+    if (viewmodel.save.error) {
+      context.showSnackBarError(_saveErrorMessage());
+      viewmodel.save.clearResult();
+    }
+  }
+
+  TimeOfDay _timeFromHhMm(String value) {
+    final parts = value.split(':');
+    if (parts.length >= 2) {
+      final hour = int.tryParse(parts[0]) ?? 9;
+      final minute = int.tryParse(parts[1]) ?? 0;
+      return TimeOfDay(
+        hour: hour.clamp(0, 23),
+        minute: minute.clamp(0, 59),
+      );
+    }
+    return const TimeOfDay(hour: 9, minute: 0);
+  }
+
+  String _hhMmFromTime(TimeOfDay time) =>
+      '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+
+  Future<TimeOfDay?> _pickTime(TimeOfDay initial) {
+    return showTimePicker(
+      context: context,
+      initialTime: initial,
+      builder: (context, child) {
+        final theme = Theme.of(context);
+        return Theme(
+          data: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(primary: HubColors.seed),
+          ),
+          child: child!,
+        );
+      },
+    );
+  }
+
+  Future<void> _pickStartTime() async {
+    final picked = await _pickTime(_timeFromHhMm(viewmodel.startTime));
+    if (picked != null) {
+      setState(() => viewmodel.startTime = _hhMmFromTime(picked));
+    }
+  }
+
+  Future<void> _pickEndTime() async {
+    final picked = await _pickTime(_timeFromHhMm(viewmodel.endTime));
+    if (picked != null) {
+      setState(() => viewmodel.endTime = _hhMmFromTime(picked));
+    }
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+      initialDate: viewmodel.appointmentDate,
+    );
+    if (picked != null) {
+      setState(() => viewmodel.appointmentDate = picked);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: HubAppBar(
+        canPop: true,
+        showBrandMark: false,
+        title: widget.isEdit ? editAppointmentString : addAppointmentString,
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(DSSpacing.md.value),
+        children: [
+          HubTextFormField(
+            controller: clientNameController,
+            label: clientNameString,
+            onChanged: (v) => viewmodel.clientName = v,
+          ),
+          DSSpacing.md.y,
+          HubTextFormField(
+            controller: clientPhoneController,
+            label: clientPhoneString,
+            keyboardType: TextInputType.phone,
+            onChanged: (v) => viewmodel.clientPhone = v,
+          ),
+          DSSpacing.md.y,
+          DropdownButtonFormField<String>(
+            key: ValueKey(viewmodel.serviceType),
+            initialValue: viewmodel.serviceType,
+            decoration: InputDecoration(labelText: serviceTypeString),
+            items:
+                ServiceType.all
+                    .map(
+                      (type) => DropdownMenuItem(
+                        value: type,
+                        child: Text(type),
+                      ),
+                    )
+                    .toList(),
+            onChanged:
+                (v) => setState(
+                  () => viewmodel.serviceType = v ?? ServiceType.outros,
+                ),
+          ),
+          DSSpacing.md.y,
+          HubDateFormField(
+            label: appointmentDateString,
+            value: viewmodel.appointmentDate.toDateAt,
+            onTap: _pickDate,
+          ),
+          DSSpacing.md.y,
+          Row(
+            children: [
+              Expanded(
+                child: HubTimeFormField(
+                  label: startTimeString,
+                  value: viewmodel.startTime,
+                  onTap: _pickStartTime,
+                ),
+              ),
+              DSSpacing.sm.x,
+              Expanded(
+                child: HubTimeFormField(
+                  label: endTimeString,
+                  value: viewmodel.endTime,
+                  onTap: _pickEndTime,
+                ),
+              ),
+            ],
+          ),
+          DSSpacing.md.y,
+          DropdownButtonFormField<String>(
+            key: ValueKey(viewmodel.status),
+            initialValue: viewmodel.status,
+            decoration: InputDecoration(labelText: appointmentStatusString),
+            items:
+                AppointmentStatus.values
+                    .map(
+                      (s) => DropdownMenuItem(
+                        value: s.value,
+                        child: Text(s.label),
+                      ),
+                    )
+                    .toList(),
+            onChanged:
+                (v) => setState(
+                  () =>
+                      viewmodel.status =
+                          v ?? AppointmentStatus.agendado.value,
+                ),
+          ),
+          DSSpacing.md.y,
+          HubTextFormField(
+            controller: notesController,
+            label: notesOptionalString,
+            maxLines: 3,
+            onChanged: (v) => viewmodel.notes = v,
+          ),
+          DSSpacing.xl.y,
+          ListenableBuilder(
+            listenable: viewmodel.save,
+            builder:
+                (_, __) => HubPrimaryButton(
+                  label: saveString,
+                  isLoading: viewmodel.save.running,
+                  onPressed: () => viewmodel.save.execute(),
+                ),
+          ),
+          DSSpacing.md.y,
+        ],
+      ),
+    );
+  }
+}

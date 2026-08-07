@@ -1,65 +1,70 @@
-# Sextante — DESIGN
+# Clientta — DESIGN
 
 ## Scene
 
-Estudante no corredor ou na biblioteca, consulta o celular entre aulas — luz ambiente variável, pouco tempo, precisa de clareza imediata (horário, sala, o que falta hoje).
+Profissional **em movimento** — corretor de seguros no estacionamento, atendente de crédito entre ligações, consultor autônomo no cliente. Luz ambiente variável, **pouco tempo**, precisa de clareza imediata: **quem**, **quando**, **o que foi discutido** e **próximo passo**.
+
+Contraste com o Sextante (estudante na biblioteca): aqui o tom é **profissional e confiável**, não acadêmico.
 
 ## Color strategy
 
-**Restrained** com acento verde (confiança, foco acadêmico) + neutros frios. Calor só em detalhes de horário (`schedule`).
+**Restrained** com acento **azul-verde profissional** (confiança financeira + ação) + neutros frios. O verde Hub do legado pode permanecer como `seed` ou migrar gradualmente ao azul-teal abaixo — manter consistência entre `HubColors` e `DSColors.inicialize`.
 
-| Token | Role | Hex |
-|-------|------|-----|
-| `seed` | Marca, ações primárias | `#1A6B52` |
-| `seedDark` | App bar, drawer header | `#0F4535` |
+| Token | Role | Hex (proposta Clientta) |
+|-------|------|-------------------------|
+| `seed` | Marca, ações primárias, FAB | `#1B6B5C` |
+| `seedDark` | App bar, drawer header | `#0F4A3F` |
 | `canvas` | Fundo do app | `#F4F6F8` |
 | `surface` | Cards, sheets | `#FFFFFF` |
 | `ink` | Texto principal | `#1A1F24` |
-| `inkMuted` | Subtítulos, meta | `#5C6670` |
+| `inkMuted` | Subtítulos, meta (telefone, tipo) | `#5C6670` |
 | `border` | Contornos sutis | `#E2E6EA` |
-| `schedule` | Bloco de horário | `#2D6A8F` |
-| `error` | Destrutivo | herda `DSColors.error` |
+| `schedule` | Bloco de horário / badge de serviço | `#2D6A8F` |
+| `success` | Status concluído | `#2E7D52` |
+| `warning` | Status agendado / pendente | `#C47A2A` |
+| `error` | Cancelado, erro, destrutivo | herda `DSColors.error` |
 
 ## Boot (Hub wins over DS primary)
 
-Antes de `runApp`, `main.dart` chama `DSColors.inicialize(...)`. **O primário do pacote `design_system` deve ser o verde do produto, não o azul padrão do DS.**
+Antes de `runApp`, `main.dart` chama `DSColors.inicialize(...)`. O primário do pacote `design_system` deve ser o token `seed` do Clientta, não o azul padrão do DS.
 
 - Em `main.dart`: `DSColors.inicialize(primaryColor: HubColors.seed, secundaryColor: HubColors.schedule)` antes de `runApp`.
-- `MyApp` usa `HubTheme.light()`, que já fixa `ColorScheme.primary` em `HubColors.seed`; a inicialização do DS precisa estar alinhada para widgets DS (`DSTextFormField`, `DSSnackBar`, botões do pacote) não herdarem azul de biblioteca.
-- Regra: **produto Hub > defaults do design_system** em qualquer token de marca (primário primeiro).
+- `MyApp` usa `HubTheme.light()`, que fixa `ColorScheme.primary` em `HubColors.seed`.
+- Regra: **produto Hub > defaults do design_system** em qualquer token de marca.
 
 ## Primary actions
 
-Ações principais e foco de marca usam **verde `seed` (`#1A6B52`)**, nunca o azul primário default do DS.
+Ações principais usam **verde-azulado `seed`**, nunca o azul primário default do DS.
 
-- FAB (`HubFab`), CTAs em `HubEmptyState`, `RefreshIndicator`, checkboxes selecionados e borda de foco de inputs: `HubColors.seed`.
+- FAB (`HubFab`), CTAs em `HubEmptyState`, `RefreshIndicator`, status “concluir atendimento”: `HubColors.seed`.
 - Barras e cabeçalhos de destaque: `HubColors.seedDark`.
-- Secundário semântico de horário/bloco: `HubColors.schedule` — não substitui o verde em salvar, criar ou navegação primária.
+- Tipo de serviço e horário: `HubColors.schedule` — não substitui o `seed` em salvar, criar ou navegação primária.
 
 ## Typography
 
-Design System (`DSHeadline*`, `DSBodyText`) com hierarquia fixa em rem. Títulos de seção: `HubSectionHeader`. Data do dia: `HubDayHeader`.
+Design System (`DSHeadline*`, `DSBodyText`) com hierarquia fixa. Títulos de seção: `HubSectionHeader`. Data do dia: `HubDayHeader`. Nome do cliente em destaque; telefone e tipo de serviço em `inkMuted`.
 
 ## Form controls
 
-Objetivo: **vocabulário visual único** entre campos DS e controles Material nativos.
+Objetivo: vocabulário visual único entre campos DS e Material nativo.
 
-- **Texto:** `HubTextFormField` (`TextFormField` + `InputDecoration` do `HubTheme`) — não usar `DSTextFormField` em formulários Hub (evita borda dupla do pacote DS).
-- **Data:** `HubDateFormField` (rótulo + valor formatado, abre `showDatePicker` no `onTap`).
-- **Boolean:** `HubSwitchFormField` (mesmo contorno de dropdown/data).
-- **Salvar / CTA de formulário:** `HubPrimaryButton` (verde `seed`, loading via `isLoading`).
-- **Dropdowns / seleção:** `DropdownButtonFormField` (ou equivalente Material) com `InputDecoration` que herda o tema do app — ou seja, `Theme.of(context).inputDecorationTheme` definido em `HubTheme.light()` (preenchido `surface`, borda `border`, foco `seed` 1.5px).
-- Não misturar estilos ad hoc (bordas/cores soltas); todos os campos usam o mesmo outline + foco verde via `inputDecorationTheme`.
-- Espaçamento entre blocos: `DSSpacing.md` do DS.
+- **Texto:** `HubTextFormField` — nome do cliente, telefone, notas multilinha.
+- **Data:** `HubDateFormField` — data do atendimento.
+- **Horário:** campos de texto ou picker alinhado ao padrão de grade legada (`startTime` / `endTime` como string `HH:mm`).
+- **Tipo de serviço:** `DropdownButtonFormField` com `initialValue` + `ValueKey`.
+- **Salvar / CTA:** `HubPrimaryButton` (verde `seed`, loading via `isLoading`).
+- Espaçamento entre blocos: `DSSpacing.md`.
 
 ## Components (namespace `Hub*`)
 
-Barrel: `hub.dart` em `lib/features/shared/hub/`. Não usar `Card` Material cru — preferir `HubSurface`, `HubClassCard`, `HubActivityTile`, `HubEmptyState`, `HubAppBar`, `HubOfflineBanner`, `HubNavTile`, `HubFab`, `HubPrimaryButton`, `HubTextFormField`, `HubDateFormField`, `HubSwitchFormField`.
+Barrel: `hub.dart` em `lib/features/shared/hub/`. Preferir `HubSurface`, `HubAppointmentCard` (ou adaptação de `HubClassCard`), `HubEmptyState`, `HubAppBar`, `HubOfflineBanner`, `HubNavTile`, `HubFab`, `HubPrimaryButton`, `HubTextFormField`, `HubDateFormField`.
+
+Cards de atendimento devem hierarquizar: **horário → nome do cliente → tipo de serviço → status**.
 
 ## Motion
 
-150–200 ms, `Curves.easeOutCubic`. Sem animações de entrada em listas (produto em fluxo).
+150–200 ms, `Curves.easeOutCubic`. Sem animações de entrada em listas (fluxo operacional).
 
 ## Anti-patterns
 
-Bordas laterais coloridas em cards, gradient text, glassmorphism decorativo, cards idênticos empilhados sem hierarquia de horário. Primário azul do DS em botões/FAB/CTA quando o verde Hub está definido no produto.
+Bordas laterais coloridas decorativas, gradient text, glassmorphism, cards empilhados sem hierarquia de horário. Primário azul do DS em FAB/CTA quando o `seed` Clientta está definido. Copy de “faculdade”, “aula” ou “disciplina” na UI.

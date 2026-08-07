@@ -1,8 +1,8 @@
-/// Perfil fixo para uso estudantil local (sem serviços em nuvem).
-enum AppProfile { university }
+/// Perfil fixo para CRM de agendamentos.
+enum AppProfile { crm }
 
 abstract final class AppConfig {
-  static const AppProfile profile = AppProfile.university;
+  static const AppProfile profile = AppProfile.crm;
 
-  static bool get isUniversityMode => true;
+  static bool get isCrmMode => profile == AppProfile.crm;
 }

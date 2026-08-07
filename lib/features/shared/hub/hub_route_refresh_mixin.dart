@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/router/hub_route_observer.dart';
+import 'package:clientta/core/router/hub_route_observer.dart';
 
 /// Recarrega dados quando a rota volta a ficar visível (ex.: após fechar formulário).
 mixin HubRouteRefreshMixin<T extends StatefulWidget> on State<T>, RouteAware {

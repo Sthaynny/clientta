@@ -1,7 +1,7 @@
-# Planejamento — próximos passos (Sextante)
+# Planejamento — Clientta
 
-Documento de roteiro para evolução do app após a refatoração para **organizador offline** e a identidade visual **Sextante** (verde `#1A6B52` em `hub_colors.dart`).  
-Referências: [PROPOSITO.md](PROPOSITO.md), [guia_sextante.md](guia_sextante.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
+Documento de roteiro para evolução do **Clientta** após a migração de produto desde o **Sextante**.  
+Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---
 
@@ -9,127 +9,111 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [guia_sextante.md](guia_sextante.md)
 
 | Área | Situação |
 |------|----------|
-| **Produto** | Início (hoje), grade semanal, atividades com conclusão; dados em `DeviceJsonStore` |
-| **Arquitetura** | Flutter, MVVM, GetIt, repositórios locais |
-| **UI** | Tema `HubTheme` + componentes `Hub*` nas telas principais |
-| **Nuvem / login** | Removidos (sem Firebase, sem auth) |
-| **Monetização** | Ads e IAP **desligados**; alvo **dois apps** (Free + Pro) no mesmo repo — [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md); catálogo Free/Pro em [features/README.md](features/README.md) |
-| **Publicação** | `main` no GitHub — repositório `https://github.com/Sthaynny/university-` |
+| **Produto** | Documentação Clientta; código em transição do domínio universitário |
+| **Arquitetura** | Flutter MVVM + GetIt + `DeviceJsonStore` (legado Sextante) |
+| **UI** | Tema `HubTheme` + componentes `Hub*` |
+| **Auth / sync** | Planejado — Firebase Auth + Firestore |
+| **Billing** | Planejado — Stripe via Cloud Functions |
+| **Pacote Dart** | `university_hub` (migração a `clientta` pendente) |
 
 ---
 
 ## 2. Princípios para priorizar trabalho
 
-1. **Offline first** — valor sem internet após instalar.
-2. **Baixa fricção** — poucos passos para cadastrar aula ou atividade.
-3. **Clareza do “hoje”** — início do app como painel do dia.
-4. **Sem infraestrutura** — evitar backend salvo necessidade forte e documentada.
-5. **Consistência de UI** — novas telas usam componentes `Hub*` em `lib/features/shared/hub/`, não widgets soltos.
+1. **Offline first** — valor sem internet após instalar; sync é complemento Pro.
+2. **Baixa fricção** — poucos passos para registrar um atendimento.
+3. **Clareza do “hoje”** — início do app como painel operacional do dia.
+4. **Segurança de dados** — Auth Firebase; regras Firestore por `uid`.
+5. **Billing fora do app** — Stripe Checkout via URL; entitlement em Firestore.
+6. **Consistência de UI** — novas telas usam componentes `Hub*` em `lib/features/shared/hub/`.
 
 ---
 
-## 3. Fase 0 — Estabilização (imediato)
+## 3. Fase 1 — MVP (auth + agendamentos locais)
 
-Objetivo: build confiável e base limpa para releases na Play Store / TestFlight.
+Objetivo: app utilizável no dia a dia sem sync nem cobrança.
 
 | # | Entrega | Notas |
 |---|---------|--------|
-| 0.1 | Commitar correções pendentes de analyzer | Formulários (`DSTextFormField`), `app_router`, remoção de `firebase_options` / `premission_service` órfãos |
-| 0.2 | `flutter analyze` + testes existentes verdes | `test/features/activities`, `test/features/classes` |
-| 0.3 | Build release Android | `flutter build appbundle`; `versionCode` incremental |
-| 0.4 | Revisar `AndroidManifest` | Permissões de mídia ainda listadas — manter só o que o app usa hoje |
-| 0.5 | Conferir `remote` do Git | Canonical: `https://github.com/Sthaynny/university-` |
-| 0.6 | Codemagic | Garantir pipeline sem secrets Firebase; analyze + bundle |
+| 1.1 | Modelo `ServiceAppointment` + repositório local | `crm_appointments.json` |
+| 1.2 | **Home** — painel do dia | Ordenação por `startTime`; ações concluir / notas |
+| 1.3 | **Minha Agenda** — lista agrupada | Filtro por `serviceType` |
+| 1.4 | **Formulário** `/agendas/registrar` | Cliente, telefone, tipo, data, horários, notas, `seriesId` |
+| 1.5 | Firebase **Auth** (e-mail/senha ou Google) | Gate mínimo para futuro sync |
+| 1.6 | Remover / migrar features Sextante | classes, activities, perfil universidade |
+| 1.7 | `flutter analyze` + testes de domínio | ViewModels de appointments |
 
-**Critério de conclusão:** AAB publicável sem erros de análise; documentação de release alinhada à versão no `pubspec.yaml`.
-
----
-
-## 4. Fase 1 — Produto núcleo (curto prazo, 2–4 semanas)
-
-Objetivo: reduzir atrito e aumentar retenção sem novas dependências pesadas.
-
-| # | Entrega | Prioridade | Detalhe |
-|---|---------|------------|---------|
-| 1.1 | **Formulários** (componentes `Hub*`) | Alta | Campos de observação multilinha (API do `design_system` ou `TextFormField` temático); validação de horário |
-| 1.2 | **Ordenação inteligente** | Alta | Aulas de hoje por `startTime`; atividades por data + não concluídas primeiro |
-| 1.3 | **Confirmação ao excluir** | Média | Dialog antes de apagar aula/atividade |
-| 1.4 | **Empty states** | Média | Revisar copy com estudantes reais (TCC/extensão) |
-| 1.5 | **Onboarding leve** | Média | 1–2 telas: “dados só no celular” + atalho para cadastrar primeira aula |
-| 1.6 | **Testes de ViewModel** | Média | `HomeViewModel`, `ClassesViewModel`, `ActivitiesViewModel` com `mocktail` |
+**Critério de conclusão:** fluxo completo offline (criar → listar → concluir → anotar) com login opcional ou obrigatório conforme decisão de produto.
 
 ---
 
-## 5. Fase 2 — Funcionalidades planejadas no propósito (médio prazo)
+## 4. Fase 2 — Sincronização na nuvem (Pro)
 
-Itens já citados em [PROPOSITO.md](PROPOSITO.md), mantendo **sem nuvem**.
+Objetivo: backup automático e multi-dispositivo.
 
-| # | Entrega | Dependência sugerida | Escopo mínimo |
-|---|---------|----------------------|---------------|
-| 2.1 | **Exportar / importar JSON** | `share_plus` ou intent nativo | [export_backup.md](features/export_backup.md) — tier Pro |
-| 2.2 | **Lembretes locais** | `flutter_local_notifications` | [lembretes_notificacoes.md](features/lembretes_notificacoes.md) — tier Pro |
-| 2.3 | **Widget “próxima aula”** | Android App Widget (+ iOS se viável) | [widgets_tela_inicial.md](features/widgets_tela_inicial.md) — tier Pro |
-| 2.4 | **Busca / filtro** | — | Filtrar atividades por tipo ou período |
+| # | Entrega | Dependência |
+|---|---------|-------------|
+| 2.1 | `ServiceAppointmentRepositoryRemote` (Firestore) | Auth |
+| 2.2 | Sync bidirecional local ↔ nuvem | Repositório local estável |
+| 2.3 | Regras Firestore `appointments/{id}` por `uid` | Firebase project |
+| 2.4 | Indicador de sync / offline na UI | `HubOfflineBanner` |
+| 2.5 | Gate Pro — sync só com entitlement ativo | Fase 3 ou flag de dev |
 
-**Ordem sugerida:** 2.1 → 2.2 → 2.4 → 2.3 (widget é o mais custoso).
+Detalhe: [features/sincronizacao_nuvem.md](features/sincronizacao_nuvem.md).
 
 ---
 
-## 6. Fase 3 — Qualidade e distribuição (contínuo)
+## 5. Fase 3 — Billing Stripe (Pro)
+
+Objetivo: monetização por assinatura mensal.
+
+| # | Entrega | Notas |
+|---|---------|--------|
+| 3.1 | Cloud Functions callables | `getPlanPricing`, `createSubscription`, etc. |
+| 3.2 | Webhook `stripeBillingWebhook` | Atualiza `users/{uid}.subscription` |
+| 3.3 | Tela `/configuracoes/plano` | `url_launcher` para Checkout |
+| 3.4 | Sandbox com chaves de teste | Ver [billing/readme.md](billing/readme.md) |
+| 3.5 | Cancelamento e sync de status | `cancelSubscription`, `syncSubscriptionStatus` |
+
+Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
+
+---
+
+## 6. Fase 4 — Polish e distribuição
 
 | # | Entrega |
 |---|---------|
-| 3.1 | Testes de integração (`integration_test/home_test.dart`) alinhados ao fluxo principal do Sextante |
-| 3.2 | Patrol / testes em dispositivo para drawer e FAB |
-| 3.3 | Política de privacidade (Play Console) refletindo **apenas armazenamento local** |
-| 3.4 | Screenshots e descrição da loja alinhadas ao propósito (sem menção a login/nuvem) |
-| 3.5 | Internacionalização (opcional) — hoje strings em `daily_strings.dart` / `strings.dart` |
+| 4.1 | Onboarding (valor offline + primeiro atendimento) |
+| 4.2 | Empty states e copy validada com usuários reais |
+| 4.3 | Lembretes locais (`flutter_local_notifications`) — Pro |
+| 4.4 | Export JSON de backup — Pro |
+| 4.5 | Testes de integração e Patrol |
+| 4.6 | Política de privacidade (Auth, Firestore, Stripe) |
+| 4.7 | Listing Play Store / App Store |
+| 4.8 | Migração namespace `clientta` no pacote Dart |
 
 ---
 
-## 7. Fase 4 — Backlog (quando houver decisão explícita)
-
-Não priorizar até validação com usuários ou orientação do TCC.
-
-| Item | Observação |
-|------|------------|
-| **Dois apps Free/Pro** | Prioridade de monetização — variantes de build e listings duplos; ver [tasks/a_fazer/monetizacao.md](tasks/a_fazer/monetizacao.md) |
-| **Anúncios / IAP em app único** | Removidos em 2026-03; alternativa futura (T-404), não modelo principal |
-| **Sincronização na nuvem** | [sincronizacao_nuvem.md](features/sincronizacao_nuvem.md) — contraria princípio atual |
-| **Múltiplos campi / cursos** | [multiplos_semestres.md](features/multiplos_semestres.md) |
-| **Integração calendário ICS** | Import de grade exportada pela instituição |
-| **Tema escuro** | [temas_personalizados.md](features/temas_personalizados.md) |
-
----
-
-## 8. Débito técnico conhecido
+## 7. Débito técnico conhecido
 
 | Item | Ação |
 |------|------|
-| `DropdownButtonFormField.value` deprecado | Migrar para `initialValue` nos formulários |
-| `url_launcher` usado via transitivo | Declarar dependência direta ou remover `string.dart` extension |
-| `design_system` git + `DSIconData` / Flutter | Acompanhar compatibilidade do pacote com SDK Flutter do projeto |
-| Permissões READ_MEDIA_* no manifest | Auditar uso real (app não parece usar galeria hoje) |
-| Repositório renomeado no GitHub | Atualizar links no README e CI |
+| Pacote `university_hub` | Renomear a `clientta` e atualizar imports |
+| Features legadas Sextante | Remover após migração de appointments |
+| `DropdownButtonFormField` deprecado | `initialValue` + `ValueKey` |
+| Secrets Stripe / Firebase | Apenas em Cloud Functions e CI, nunca no app |
 
 ---
 
-## 9. Como usar este documento
-
-- **Sprint / semana:** escolher 2–3 itens da Fase 0 ou 1; ver também [mapeamento_tarefas.md](mapeamento_tarefas.md) (objetivo e impacto por tarefa).
-- **Antes de feature nova:** atualizar [PROPOSITO.md](PROPOSITO.md), entrada em [features/](features/README.md) e, se mudar UI, [DESIGN.md](../DESIGN.md).
-- **Após entrega:** marcar item como feito (data + versão do app) neste arquivo ou em issues do GitHub.
-
----
-
-## 10. Histórico de decisões
+## 8. Histórico de decisões
 
 | Data | Decisão |
 |------|---------|
-| 2026-03 | App focado em grade/atividades locais; Firebase e login removidos |
-| 2026-03 | Identidade visual Sextante (`HubTheme`, componentes `Hub*`) |
-| 2026-03 | Ads e IAP removidos temporariamente; foco em release limpo na Play Store |
+| 2026-08 | Produto redefinido como **Clientta** (CRM de atendimentos) |
+| 2026-08 | Firebase Auth + Firestore **no escopo** (sync Pro) |
+| 2026-08 | Billing **Stripe** via Cloud Functions (sem SDK Flutter) |
+| 2026-03 | Legado Sextante: offline-only, sem nuvem |
 
 ---
 
-*Última atualização: março de 2026 — revisar a cada release minor.*
+*Última atualização: agosto de 2026 — revisar a cada release minor.*

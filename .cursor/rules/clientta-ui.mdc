@@ -1,0 +1,83 @@
+---
+description: UI/UX e passos de construção de telas do Clientta
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Clientta — construção de UI
+
+## Fundação visual
+
+1. Tema global: `HubTheme.light()` em `MyApp` (`lib/features/app.dart`).
+2. Cores: `HubColors` (`lib/core/theme/hub_colors.dart`); tokens `DSSpacing`, `DSSnackBar` do `design_system`.
+3. `main.dart`: `DSColors.inicialize(secundaryColor: HubColors.schedule)` antes de `runApp`.
+4. Cena: profissional em movimento — hierarquia **horário → cliente → serviço → status**. Ver [DESIGN.md](../../DESIGN.md).
+
+## Componentes Hub (preferir)
+
+Barrel: `lib/features/shared/hub/hub.dart`.
+
+| Componente | Uso |
+|------------|-----|
+| `HubAppBar` | Todas as telas; `canPop: true` em fluxos secundários |
+| `HubSurface` | Cards de atendimento |
+| `HubClassCard` / tile de agenda | Adaptar para appointment até `HubAppointmentCard` existir |
+| `HubSectionHeader` | Seções na home e lista |
+| `HubDayHeader` | Cabeçalho “Hoje” no painel do dia |
+| `HubEmptyState` | Sem atendimentos — CTA registrar |
+| `HubFab` | FAB em `/agendas` |
+| `HubOfflineBanner` | Offline / sync pendente |
+| `AppLoadingWidget` / `BodyErrorDefaultWidget` | Loading e erro |
+
+## Receita de tela de lista (home, agendas)
+
+```dart
+Scaffold(
+  appBar: HubAppBar(...),
+  drawer: AppDrawer(), // home
+  floatingActionButton: HubFab(...), // agendas
+  body: ListenableBuilder(
+    listenable: viewmodel.load,
+    builder: (context, _) {
+      if (load.running && entries.isEmpty) return AppLoadingWidget();
+      if (load.error) return BodyErrorDefaultWidget(onPressed: load.execute);
+      if (entries.isEmpty) return HubEmptyState(...);
+      return ListView(...); // padding: EdgeInsets.all(DSSpacing.md.value)
+    },
+  ),
+);
+```
+
+- Pull-to-refresh: `RefreshIndicator(color: HubColors.seed, ...)`.
+- Após formulário: `await context.go(...); viewmodel.load.execute();`
+- Badge de status: `agendado` (warning), `concluido` (success), `cancelado` (muted/error).
+
+## Receita de formulário (atendimento)
+
+1. `StatefulWidget` + ViewModel injetado + `isEdit`.
+2. `initState`: `hydrate()`, controllers, `save.addListener(_onSave)`.
+3. `Scaffold` + `HubAppBar(canPop: true, showBrandMark: false)`.
+4. Campos: nome, telefone, tipo de serviço, data, horários, notas multilinha.
+5. Série recorrente: chips de dias (padrão multi-dia legado).
+6. Salvar: `viewmodel.save.execute()`; erros via `context.showSnackBarError`.
+
+## Tela de plano Pro
+
+- Rota `/configuracoes/plano`.
+- Exibir preço de `getPlanPricing`.
+- CTA assinar abre Checkout via `url_launcher`.
+- Botões sync status e cancelar assinatura.
+
+## Navegação e layout
+
+- Espaçamento: `DSSpacing.*.x` / `.y`.
+- Ícones: `Icons.*_outlined` / `_rounded`.
+- Drawer: Agenda, Plano Pro, Sair.
+- Feedback: `showSnackBarInfo|Error|Success|Warning` em `build_context.dart`.
+
+## Checklist antes de PR de UI
+
+- [ ] Strings em `daily_strings.dart` / `strings.dart` — sem copy de faculdade/aula
+- [ ] Tema via `HubTheme` / `HubColors`
+- [ ] Estados vazio, loading e erro
+- [ ] Analyzer limpo em `lib/`

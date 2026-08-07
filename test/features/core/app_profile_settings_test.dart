@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:university_hub/core/storage/app_profile_settings.dart';
+import 'package:clientta/core/storage/app_profile_settings.dart';
 
 void main() {
   test('AppProfileSettings usa rótulo padrão sem nome', () {

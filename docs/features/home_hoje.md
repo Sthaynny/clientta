@@ -1,31 +1,44 @@
-# Início — Seu dia
+# Início — Painel do dia
 
 ## Resumo
 
-Tela inicial com aulas e atividades do dia atual, atalhos para cadastro e navegação pelo menu lateral (drawer). É o painel “o que importa hoje”.
+Tela inicial (`/`) com **atendimentos do dia corrente**, ordenados por `startTime`. É o painel operacional “quem atender agora” — atalhos para **marcar como concluído**, **adicionar notas** e abrir o formulário de novo atendimento.
 
 ## Plano
 
-**Ambos**
+**Ambos** (Free e Pro)
 
 ### Free
 
-- Painel completo: aulas de hoje, atividades de hoje, cabeçalho com data e missão do app.
-- Atalhos rápidos para registrar aula ou atividade.
-- Banner offline quando aplicável.
+- Lista completa dos atendimentos de hoje (`appointmentDate == hoje`).
+- Ordenação por horário de início.
+- Ações rápidas: concluir, editar notas, cancelar.
+- Banner offline quando sem rede (`HubOfflineBanner`).
+- Drawer com navegação (Agenda, Plano Pro).
 
 ### Pro
 
-- Mesma experiência do Free, sem restrições de volume herdadas das outras features (disciplinas/atividades).
-- Espaço reservado para personalização futura do painel (ordem de seções, widgets — ver [widgets_tela_inicial.md](widgets_tela_inicial.md)).
+- Mesma experiência, sem limites de volume herdados da agenda.
+- Indicador de sync (última sincronização, pendências) quando Fase 2 ativa.
+
+## UX
+
+| Elemento | Comportamento |
+|----------|---------------|
+| Cabeçalho de data | `HubDayHeader` — “Hoje, 7 de agosto” |
+| Card de atendimento | Horário, nome, telefone, tipo de serviço, badge de status |
+| Status `agendado` | Ação primária “Concluir” |
+| Status `concluido` | Notas visíveis; opção editar |
+| Empty state | CTA “Registrar atendimento” → `/agendas/registrar` |
+| Pull-to-refresh | Recarrega local; dispara sync se Pro + online |
 
 ## Status no app
 
-**Implementado** — `features/home`, rota `/`.
+**Planejado** — migração desde `features/home` (Sextante). Rota `/`.
 
-## Dependências / notas técnicas
+## Dependências técnicas
 
-- `HomeViewModel` agrega `ClassRepository` e `ActivityRepository`.
-- Filtro de aulas: `weekday == DateTime.now().weekday`.
-- Atividades: data igual ao dia corrente.
-- Ver [ROTEAMENTO.md](../ROTEAMENTO.md).
+- `HomeViewModel` (ou `TodayPanelViewModel`) agrega `ServiceAppointmentRepository`.
+- Filtro: `appointmentDate` no dia local + `status != cancelado` (opcional: toggle para mostrar cancelados).
+- `ListenableBuilder(listenable: viewmodel.load, ...)`.
+- Ver [ROTEAMENTO.md](../ROTEAMENTO.md), [agendas.md](agendas.md).

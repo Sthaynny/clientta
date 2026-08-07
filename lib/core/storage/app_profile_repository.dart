@@ -1,5 +1,5 @@
-import 'package:university_hub/core/storage/app_profile_settings.dart';
-import 'package:university_hub/core/storage/device_json_store.dart';
+import 'package:clientta/core/storage/app_profile_settings.dart';
+import 'package:clientta/core/storage/device_json_store.dart';
 
 class AppProfileRepository {
   AppProfileRepository(this._store);

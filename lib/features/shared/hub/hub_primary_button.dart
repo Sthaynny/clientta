@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
 
 /// Primary call-to-action using Hub brand green.
 class HubPrimaryButton extends StatelessWidget {
@@ -23,7 +23,7 @@ class HubPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DSPrimaryButton(
+    return DSClassicPrimaryButton(
       onPressed: onPressed,
       label: label,
       isLoading: isLoading,

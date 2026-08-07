@@ -1,4 +1,4 @@
-import 'package:university_hub/core/router/app_router.dart';
+import 'package:clientta/core/router/app_router.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -14,22 +14,46 @@ extension BuildContextExt on BuildContext {
 
 extension BuildContextSnackBarExt on BuildContext {
   void showSnackBarInfo(String message, {SnackBarAction? action}) =>
-      ScaffoldMessenger.of(
-        this,
-      ).showSnackBar(DSSnackBar.info(message, action: action));
+      ScaffoldMessenger.of(this).showSnackBar(
+        DSSnackBar(
+          context: this,
+          content: Text(message),
+          type: DSSnackBarType.info,
+          onPressed: action?.onPressed,
+          actionLabel: action?.label,
+        ),
+      );
 
   void showSnackBarError(String message, {SnackBarAction? action}) =>
-      ScaffoldMessenger.of(
-        this,
-      ).showSnackBar(DSSnackBar.error(message, action: action));
+      ScaffoldMessenger.of(this).showSnackBar(
+        DSSnackBar(
+          context: this,
+          content: Text(message),
+          type: DSSnackBarType.error,
+          onPressed: action?.onPressed,
+          actionLabel: action?.label,
+        ),
+      );
 
   void showSnackBarSuccess(String message, {SnackBarAction? action}) =>
-      ScaffoldMessenger.of(
-        this,
-      ).showSnackBar(DSSnackBar.success(message, action: action));
+      ScaffoldMessenger.of(this).showSnackBar(
+        DSSnackBar(
+          context: this,
+          content: Text(message),
+          type: DSSnackBarType.positive,
+          onPressed: action?.onPressed,
+          actionLabel: action?.label,
+        ),
+      );
 
   void showSnackBarWarning(String message, {SnackBarAction? action}) =>
-      ScaffoldMessenger.of(
-        this,
-      ).showSnackBar(DSSnackBar.warning(message, action: action));
+      ScaffoldMessenger.of(this).showSnackBar(
+        DSSnackBar(
+          context: this,
+          content: Text(message),
+          type: DSSnackBarType.warning,
+          onPressed: action?.onPressed,
+          actionLabel: action?.label,
+        ),
+      );
 }

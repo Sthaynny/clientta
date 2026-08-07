@@ -1,22 +1,20 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:university_hub/core/strings/app_mission.dart';
-import 'package:university_hub/core/strings/daily_strings.dart';
-import 'package:university_hub/core/theme/hub_colors.dart';
+import 'package:clientta/core/strings/app_mission.dart';
+import 'package:clientta/core/strings/daily_strings.dart';
+import 'package:clientta/core/theme/hub_colors.dart';
 
 class HubDayHeader extends StatelessWidget {
   const HubDayHeader({
     super.key,
     required this.weekdayLabel,
     required this.dateLabel,
-    this.classesTodayCount,
-    this.activitiesTodayCount,
+    this.appointmentsTodayCount,
   });
 
   final String weekdayLabel;
   final String dateLabel;
-  final int? classesTodayCount;
-  final int? activitiesTodayCount;
+  final int? appointmentsTodayCount;
 
   @override
   Widget build(BuildContext context) {
@@ -57,23 +55,11 @@ class HubDayHeader extends StatelessWidget {
                 height: 1.15,
               ),
             ),
-            if (classesTodayCount != null || activitiesTodayCount != null) ...[
+            if (appointmentsTodayCount != null) ...[
               DSSpacing.md.y,
-              Wrap(
-                spacing: DSSpacing.sm.value,
-                runSpacing: DSSpacing.xs.value,
-                children: [
-                  if (classesTodayCount != null)
-                    _StatChip(
-                      icon: Icons.schedule_outlined,
-                      label: homeDayStatClasses(classesTodayCount!),
-                    ),
-                  if (activitiesTodayCount != null)
-                    _StatChip(
-                      icon: Icons.task_alt_outlined,
-                      label: homeDayStatActivities(activitiesTodayCount!),
-                    ),
-                ],
+              _StatChip(
+                icon: Icons.event_note_outlined,
+                label: homeDayStatAppointments(appointmentsTodayCount!),
               ),
             ],
             DSSpacing.sm.y,
