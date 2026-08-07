@@ -12,9 +12,9 @@ import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
-import 'package:clientta/features/billing/domain/entities/plan_pricing_catalog.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
+import 'package:clientta/features/billing/shared/plan_pro_catalog.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
 import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
@@ -285,43 +285,59 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
         showBrandMark: false,
         title: planSettingsTitleString,
       ),
-      body:
-          _loading
-              ? const AppLoadingWidget()
-              : ListView(
-                padding: EdgeInsets.all(DSSpacing.md.value),
-                children: [
+      body: _loading
+          ? const AppLoadingWidget()
+          : ListView(
+              padding: EdgeInsets.all(DSSpacing.md.value),
+              children: [
+                if (!hasPro) ...[
                   HubSurface(
-                    padding: EdgeInsets.all(DSSpacing.lg.value),
-                    child: Column(
+                    padding: EdgeInsets.all(DSSpacing.md.value),
+                    tint: HubColors.canvas,
+                    showBorder: true,
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        DSCaptionText(
-                          planCurrentStatusLabelString,
-                          color: HubColors.inkMuted,
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          size: 20,
+                          color: HubColors.schedule,
                         ),
-                        DSSpacing.xs.y,
-                        DSHeadlineSmallText(
-                          _statusLabel(_subscription),
-                          color: hasPro ? HubColors.seed : HubColors.ink,
-                        ),
-                        DSSpacing.md.y,
-                        DSBodyText(
-                          hasPro
-                              ? (isComplimentary
-                                  ? planComplimentaryAccessString
-                                  : planManageProString)
-                              : planUpgradeHintString,
-                          color: HubColors.inkMuted,
-                        ),
-                        DSSpacing.sm.y,
-                        DSBodyText(
-                          planInactivityPolicyString,
-                          color: HubColors.inkMuted,
+                        DSSpacing.sm.x,
+                        Expanded(
+                          child: DSBodyText(
+                            planFreeStatusHintString,
+                            color: HubColors.inkMuted,
+                            height: 1.4,
+                          ),
                         ),
                       ],
                     ),
                   ),
+                  DSSpacing.md.y,
+                ],
+                HubProPlanHero(
+                  price: price,
+                  showPrice: !hasPro,
+                  isProActive: hasPro,
+                  statusLabel: hasPro ? _statusLabel(_subscription) : null,
+                  percentOff: hasDiscount ? percentOff : null,
+                  basePriceCents: basePrice,
+                  action: !hasPro
+                      ? HubProHeroButton(
+                          label: planSubscribeButtonString,
+                          isLoading: _actionLoading,
+                          onPressed: _subscribe,
+                        )
+                      : null,
+                ),
+                DSSpacing.lg.y,
+                HubSectionHeader(title: planProBenefitsSectionTitleString),
+                DSSpacing.sm.y,
+                HubProBenefitsGrid(
+                  benefits: buildPlanProBenefitCatalog(),
+                ),
+                if (hasPro) ...[
                   DSSpacing.lg.y,
                   HubSurface(
                     padding: EdgeInsets.all(DSSpacing.lg.value),
@@ -329,146 +345,144 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         DSHeadlineSmallText(
-                          planProTitleString,
+                          planReminderSectionTitleString,
+                          color: HubColors.ink,
+                        ),
+                        DSSpacing.sm.y,
+                        HubSwitchFormField(
+                          label: planReminderEnableLabelString,
+                          subtitle: planReminderEnableSubtitleString,
+                          value: _reminderSettings.enabled,
+                          onChanged: (enabled) {
+                            _persistReminderSettings(
+                              _reminderSettings.copyWith(enabled: enabled),
+                            );
+                          },
+                        ),
+                        if (_reminderSettings.enabled) ...[
+                          DSSpacing.md.y,
+                          DSCaptionText(
+                            planReminderLeadLabelString,
+                            color: HubColors.inkMuted,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          DSSpacing.sm.y,
+                          HubReminderLeadChips(
+                            selectedMinutes: _reminderSettings.leadMinutes,
+                            onChanged: (minutes) {
+                              _persistReminderSettings(
+                                _reminderSettings.copyWith(
+                                  leadMinutes: minutes,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  DSSpacing.md.y,
+                  HubSurface(
+                    padding: EdgeInsets.all(DSSpacing.lg.value),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DSHeadlineSmallText(
+                          planBackupSectionTitleString,
                           color: HubColors.ink,
                         ),
                         DSSpacing.sm.y,
                         DSBodyText(
-                          planProDescriptionString,
+                          planBackupDescriptionString,
                           color: HubColors.inkMuted,
                         ),
                         DSSpacing.md.y,
-                        HubProBenefitsList(benefits: planProBenefits),
-                        DSSpacing.md.y,
-                        if (hasDiscount && !hasPro) ...[
-                          DSBodyText(
-                            planDiscountAppliedString(percentOff),
-                            color: HubColors.seed,
-                          ),
-                          DSSpacing.xs.y,
-                        ],
-                        DSHeadlineSmallText(
-                          price,
-                          color: HubColors.seed,
+                        HubPrimaryButton(
+                          label: planBackupExportButtonString,
+                          isLoading: _actionLoading,
+                          onPressed: _exportBackup,
                         ),
-                        if (hasDiscount && basePrice != null && !hasPro) ...[
-                          DSSpacing.xs.y,
-                          DSBodyText(
-                            '$planBasePriceLabelString: ${PlanPricingCatalog.formatBrlMonthly(basePrice)}',
-                            color: HubColors.inkMuted,
+                        DSSpacing.sm.y,
+                        Center(
+                          child: TextButton(
+                            onPressed: _actionLoading ? null : _importBackup,
+                            child: Text(
+                              planBackupImportButtonString,
+                              style: const TextStyle(color: HubColors.seed),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                if ((hasPro || _subscription.plan == SubscriptionPlan.pro) &&
+                    !isComplimentary) ...[
+                  DSSpacing.lg.y,
+                  HubSectionHeader(title: planManageSectionTitleString),
+                  DSSpacing.sm.y,
+                  HubSurface(
+                    padding: EdgeInsets.all(DSSpacing.lg.value),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        HubPrimaryButton(
+                          label: planSyncStatusButtonString,
+                          isLoading: _actionLoading,
+                          onPressed: _syncStatus,
+                        ),
+                        if (canCancel) ...[
+                          DSSpacing.sm.y,
+                          Center(
+                            child: TextButton(
+                              onPressed:
+                                  _actionLoading ? null : _cancelSubscription,
+                              child: Text(
+                                planCancelButtonString,
+                                style: const TextStyle(color: HubColors.error),
+                              ),
+                            ),
                           ),
                         ],
                       ],
                     ),
                   ),
-                  if (hasPro) ...[
-                    DSSpacing.lg.y,
-                    HubSurface(
-                      padding: EdgeInsets.all(DSSpacing.lg.value),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DSHeadlineSmallText(
-                            planReminderSectionTitleString,
-                            color: HubColors.ink,
-                          ),
-                          DSSpacing.sm.y,
-                          HubSwitchFormField(
-                            label: planReminderEnableLabelString,
-                            subtitle: planReminderEnableSubtitleString,
-                            value: _reminderSettings.enabled,
-                            onChanged: (enabled) {
-                              _persistReminderSettings(
-                                _reminderSettings.copyWith(enabled: enabled),
-                              );
-                            },
-                          ),
-                          if (_reminderSettings.enabled) ...[
-                            DSSpacing.md.y,
-                            DSCaptionText(
-                              planReminderLeadLabelString,
-                              color: HubColors.inkMuted,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            DSSpacing.sm.y,
-                            HubReminderLeadChips(
-                              selectedMinutes: _reminderSettings.leadMinutes,
-                              onChanged: (minutes) {
-                                _persistReminderSettings(
-                                  _reminderSettings.copyWith(
-                                    leadMinutes: minutes,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    DSSpacing.lg.y,
-                    HubSurface(
-                      padding: EdgeInsets.all(DSSpacing.lg.value),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DSHeadlineSmallText(
-                            planBackupSectionTitleString,
-                            color: HubColors.ink,
-                          ),
-                          DSSpacing.sm.y,
-                          DSBodyText(
-                            planBackupDescriptionString,
-                            color: HubColors.inkMuted,
-                          ),
-                          DSSpacing.md.y,
-                          HubPrimaryButton(
-                            label: planBackupExportButtonString,
-                            isLoading: _actionLoading,
-                            onPressed: _exportBackup,
-                          ),
-                          DSSpacing.sm.y,
-                          Center(
-                            child: TextButton(
-                              onPressed: _actionLoading ? null : _importBackup,
-                              child: Text(
-                                planBackupImportButtonString,
-                                style: const TextStyle(color: HubColors.seed),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  DSSpacing.lg.y,
-                  if (!hasPro)
-                    HubPrimaryButton(
-                      label: planSubscribeButtonString,
-                      isLoading: _actionLoading,
-                      onPressed: _subscribe,
-                    ),
-                  if ((hasPro || _subscription.plan == SubscriptionPlan.pro) &&
-                      !isComplimentary) ...[
-                    HubPrimaryButton(
-                      label: planSyncStatusButtonString,
-                      isLoading: _actionLoading,
-                      onPressed: _syncStatus,
-                    ),
-                    if (canCancel) ...[
-                      DSSpacing.sm.y,
-                      Center(
-                        child: TextButton(
-                          onPressed: _actionLoading ? null : _cancelSubscription,
-                          child: Text(
-                            planCancelButtonString,
-                            style: const TextStyle(color: HubColors.error),
-                          ),
+                ],
+                DSSpacing.lg.y,
+                HubSurface(
+                  padding: EdgeInsets.all(DSSpacing.md.value),
+                  tint: HubColors.canvas,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (hasPro) ...[
+                        DSBodyText(
+                          isComplimentary
+                              ? planComplimentaryAccessString
+                              : planManageProString,
+                          color: HubColors.inkMuted,
+                          height: 1.4,
                         ),
+                        DSSpacing.sm.y,
+                      ] else ...[
+                        DSBodyText(
+                          planUpgradeHintString,
+                          color: HubColors.inkMuted,
+                          height: 1.4,
+                        ),
+                        DSSpacing.sm.y,
+                      ],
+                      DSBodyText(
+                        planInactivityPolicyString,
+                        color: HubColors.inkMuted,
+                        height: 1.4,
                       ),
                     ],
-                  ],
-                ],
-              ),
+                  ),
+                ),
+                DSSpacing.xl.y,
+              ],
+            ),
     );
   }
 }

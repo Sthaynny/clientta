@@ -200,14 +200,30 @@ String get authDividerOrString => 'ou';
 
 String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';
+String get planProPitchString =>
+    'Mais agenda, outro celular, avisos e cópia dos seus dados — tudo no mesmo login.';
+String get planProBadgeString => 'PRO';
+String get planProPriceHintString => 'Cobrança mensal. Cancele quando quiser.';
+String get planProBenefitsSectionTitleString => 'O que está no Pro';
+String get planProActiveBenefitsHintString =>
+    'Todos os recursos abaixo já estão liberados na sua conta.';
+String get planProBenefitLimitsTitleString => 'Mais atendimentos';
+String get planProBenefitLimitsDescString =>
+    'Agenda e repetições sem o limite do plano gratuito.';
+String get planProBenefitSyncTitleString => 'Outro celular';
+String get planProBenefitSyncDescString =>
+    'Mesma agenda em outro aparelho com o mesmo login.';
+String get planProBenefitRemindersTitleString => 'Aviso antes';
+String get planProBenefitRemindersDescString =>
+    'O celular avisa antes do horário, mesmo offline.';
+String get planProBenefitBackupTitleString => 'Cópia dos dados';
+String get planProBenefitBackupDescString =>
+    'Salva e restaura agenda e anotações em arquivo.';
+String get planManageSectionTitleString => 'Gerenciar assinatura';
+String get planFreeStatusHintString =>
+    'No gratuito você agenda no celular sem pagar. O Pro remove limites e adiciona sync, avisos e backup.';
 String get planProDescriptionString =>
     'Mais atendimentos na agenda, mesma conta em outro celular, aviso antes do horário e cópia dos seus dados.';
-const planProBenefits = [
-  'Mais atendimentos e repetições na agenda',
-  'Mesma agenda em outro celular',
-  'Aviso antes do horário do atendimento',
-  'Exportar e importar seus dados',
-];
 String get formSectionClientString => 'Cliente';
 String get formSectionAppointmentString => 'Horário e status';
 String get formSectionNotesString => 'Observações';
