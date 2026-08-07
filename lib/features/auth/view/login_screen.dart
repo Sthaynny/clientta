@@ -115,17 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
           label: authHighlightSecureString,
         ),
       ],
-      footer: Center(
-        child: TextButton(
-          onPressed:
-              _loading
-                  ? null
-                  : () => Navigator.of(context).pushReplacementNamed(
-                    AuthRouters.register.path,
-                  ),
-          child: Text(createAccountString),
-        ),
-      ),
       child: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -171,7 +160,19 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             DSSpacing.lg.y,
             _buildGoogleSignInButton(),
-            DSSpacing.lg.y,
+            DSSpacing.md.y,
+            Center(
+              child: TextButton(
+                onPressed:
+                    _loading
+                        ? null
+                        : () => Navigator.of(context).pushReplacementNamed(
+                          AuthRouters.register.path,
+                        ),
+                child: Text(createAccountString),
+              ),
+            ),
+            DSSpacing.sm.y,
             const HubLegalLinks(),
           ],
         ),
