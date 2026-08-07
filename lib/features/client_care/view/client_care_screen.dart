@@ -1,9 +1,11 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/input_masks.dart';
+import 'package:clientta/features/appointments/domain/models/appointment_form_launch_args.dart';
 import 'package:clientta/features/client_care/domain/models/care_timeline_entry.dart';
 import 'package:clientta/features/client_care/view/client_care_view_model.dart';
 import 'package:clientta/features/shared/components/app_loading_widget.dart';
@@ -53,6 +55,20 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
     await viewmodel.addNote.execute(_noteController.text);
   }
 
+  Future<void> _openScheduleAppointment() async {
+    final args = viewmodel.args;
+    await context.go(
+      AppRouters.appointmentForm,
+      arguments: AppointmentFormLaunchArgs.prefill(
+        clientName: args.clientName,
+        clientPhone: args.clientPhone,
+        serviceType: args.serviceType,
+      ),
+    );
+    if (!mounted) return;
+    viewmodel.load.execute();
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = viewmodel.args;
@@ -90,6 +106,7 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                         clientName: args.clientName,
                         clientPhone: args.clientPhone,
                         serviceType: args.serviceType,
+                        onScheduleAppointment: _openScheduleAppointment,
                         onContactLaunchFailed: () => context.showSnackBarError(
                           clientContactLaunchFailedString,
                         ),
@@ -180,12 +197,14 @@ class _ClientHeader extends StatelessWidget {
     required this.clientName,
     required this.clientPhone,
     this.serviceType,
+    this.onScheduleAppointment,
     this.onContactLaunchFailed,
   });
 
   final String clientName;
   final String clientPhone;
   final String? serviceType;
+  final VoidCallback? onScheduleAppointment;
   final VoidCallback? onContactLaunchFailed;
 
   @override
@@ -209,6 +228,44 @@ class _ClientHeader extends StatelessWidget {
             clientPhone: clientPhone,
             onLaunchFailed: onContactLaunchFailed,
           ),
+          if (onScheduleAppointment != null) ...[
+            DSSpacing.md.y,
+            HubSurface(
+              onTap: onScheduleAppointment,
+              semanticsLabel: clientCareScheduleAppointmentString,
+              padding: EdgeInsets.symmetric(
+                horizontal: DSSpacing.md.value,
+                vertical: DSSpacing.sm.value,
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.event_available_outlined,
+                    size: 20,
+                    color: HubColors.schedule,
+                  ),
+                  DSSpacing.sm.x,
+                  Expanded(
+                    child: DSBodyText(
+                      clientCareScheduleAppointmentString,
+                      fontWeight: FontWeight.w600,
+                      color: HubColors.ink,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: HubColors.inkMuted,
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
+            DSSpacing.xxs.y,
+            DSCaptionSmallText(
+              clientCareScheduleAppointmentHintString,
+              color: HubColors.inkMuted,
+            ),
+          ],
         ],
       ),
     );

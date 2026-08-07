@@ -62,11 +62,15 @@ String get clientCareEmptyTitleString => 'Nenhuma anotação ainda';
 String get clientCareEmptyMessageString =>
     'Registre encontros, ligações e negociações aqui — sem precisar marcar horário na agenda.';
 String get clientCareComposerHintString =>
-    'Anote o que aconteceu agora com este cliente';
+    'Opcional: anote o que aconteceu. Sem texto, registra só o início do atendimento.';
 String get clientCareNoteLabelString => 'Nova anotação';
 String get clientCareAddNoteString => 'Registrar encontro';
 String get clientCareFromAppointmentString => 'Agendamento';
 String get clientCareActionString => 'Ver atendimento';
+String get clientCareScheduleAppointmentString => 'Agendar na home';
+String get clientCareScheduleAppointmentHintString =>
+    'Cria um agendamento que aparece no painel do dia.';
+String get encounterStartedDefaultBodyString => 'Atendimento iniciado.';
 String get clientCallActionString => 'Ligar';
 String get clientWhatsAppActionString => 'WhatsApp';
 String get clientContactLaunchFailedString =>

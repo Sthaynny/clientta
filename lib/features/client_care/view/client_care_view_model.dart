@@ -1,3 +1,4 @@
+import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
@@ -54,17 +55,15 @@ class ClientCareViewModel {
   Future<Result<void>> _addNote(String body) async {
     try {
       final trimmed = body.trim();
-      if (trimmed.isEmpty) {
-        return Result.errorDefault('empty');
-      }
+      final noteBody =
+          trimmed.isEmpty ? encounterStartedDefaultBodyString : trimmed;
 
       final note = EncounterNote(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         clientPhone: _args.clientPhone,
         clientName: _args.clientName,
         serviceType: _args.serviceType,
-        appointmentId: _args.appointmentId,
-        body: trimmed,
+        body: noteBody,
         createdAt: DateTime.now(),
       );
       await _encounterRepository.save(note);

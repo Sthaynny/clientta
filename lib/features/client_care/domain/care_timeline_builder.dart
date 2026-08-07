@@ -36,13 +36,7 @@ List<CareTimelineEntry> buildCareTimeline({
           (appointment) => CareTimelineEntry(
             id: 'appointment-${appointment.id}',
             body: appointment.notes!.trim(),
-            createdAt: DateTime(
-              appointment.appointmentDate.year,
-              appointment.appointmentDate.month,
-              appointment.appointmentDate.day,
-              _hourFromTime(appointment.startTime),
-              _minuteFromTime(appointment.startTime),
-            ),
+            createdAt: _sortTimestampForAppointment(appointment),
             source: CareTimelineSource.appointment,
             contextLabel:
                 '${_formatDate(appointment.appointmentDate)} · ${appointment.startTime}',
@@ -53,6 +47,20 @@ List<CareTimelineEntry> buildCareTimeline({
 
   entries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
   return entries;
+}
+
+DateTime _sortTimestampForAppointment(ServiceAppointment appointment) {
+  if (appointment.updatedAt != null) {
+    return appointment.updatedAt!;
+  }
+
+  return DateTime(
+    appointment.appointmentDate.year,
+    appointment.appointmentDate.month,
+    appointment.appointmentDate.day,
+    _hourFromTime(appointment.startTime),
+    _minuteFromTime(appointment.startTime),
+  );
 }
 
 int _hourFromTime(String time) {

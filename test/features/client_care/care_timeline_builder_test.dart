@@ -58,6 +58,35 @@ void main() {
       );
     });
 
+    test('ordena encontros recentes acima de agendamentos futuros', () {
+      final encounterNotes = [
+        EncounterNote(
+          id: 'note-now',
+          clientPhone: '(11) 99999-0000',
+          clientName: 'Maria',
+          body: 'Ligação de retorno hoje.',
+          createdAt: DateTime(2026, 8, 7, 15, 30),
+        ),
+      ];
+
+      final appointments = [
+        _appointment(
+          id: 'apt-future',
+          notes: 'Nota em agendamento futuro.',
+          date: DateTime(2026, 8, 14),
+          updatedAt: DateTime(2026, 8, 1, 9),
+        ),
+      ];
+
+      final timeline = buildCareTimeline(
+        clientPhone: '11999990000',
+        encounterNotes: encounterNotes,
+        appointments: appointments,
+      );
+
+      expect(timeline.first.body, 'Ligação de retorno hoje.');
+    });
+
     test('retorna lista vazia sem notas nem agendamentos', () {
       final timeline = buildCareTimeline(
         clientPhone: '11999990000',
@@ -74,6 +103,7 @@ ServiceAppointment _appointment({
   required String id,
   required DateTime date,
   String? notes,
+  DateTime? updatedAt,
 }) {
   return ServiceAppointment(
     id: id,
@@ -85,5 +115,6 @@ ServiceAppointment _appointment({
     endTime: '10:00',
     status: AppointmentStatus.concluido.value,
     notes: notes,
+    updatedAt: updatedAt,
   );
 }

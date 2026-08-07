@@ -20,11 +20,17 @@ class AppointmentFormViewModel {
     required BillingRepository billingRepository,
     UserRepository? userRepository,
     ServiceAppointment? initial,
+    String? prefillClientName,
+    String? prefillClientPhone,
+    String? prefillServiceType,
     AppointmentSyncService? syncService,
   }) : _repository = repository,
        _billingRepository = billingRepository,
        _userRepository = userRepository,
        _initial = initial,
+       _prefillClientName = prefillClientName,
+       _prefillClientPhone = prefillClientPhone,
+       _prefillServiceType = prefillServiceType,
        _syncService = syncService {
     save = CommandBase(_save);
   }
@@ -33,6 +39,9 @@ class AppointmentFormViewModel {
   final BillingRepository _billingRepository;
   final UserRepository? _userRepository;
   final ServiceAppointment? _initial;
+  final String? _prefillClientName;
+  final String? _prefillClientPhone;
+  final String? _prefillServiceType;
   final AppointmentSyncService? _syncService;
 
   late final CommandBase<void> save;
@@ -56,16 +65,24 @@ class AppointmentFormViewModel {
 
   void hydrate() {
     final entry = _initial;
-    if (entry == null) return;
+    if (entry != null) {
+      clientName = entry.clientName;
+      clientPhone = entry.clientPhone;
+      serviceType = entry.serviceType;
+      appointmentDate = entry.appointmentDate;
+      startTime = entry.startTime;
+      endTime = entry.endTime;
+      status = entry.status;
+      notes = entry.notes ?? '';
+      return;
+    }
 
-    clientName = entry.clientName;
-    clientPhone = entry.clientPhone;
-    serviceType = entry.serviceType;
-    appointmentDate = entry.appointmentDate;
-    startTime = entry.startTime;
-    endTime = entry.endTime;
-    status = entry.status;
-    notes = entry.notes ?? '';
+    final prefillName = _prefillClientName;
+    if (prefillName != null) {
+      clientName = prefillName;
+      clientPhone = _prefillClientPhone ?? '';
+      serviceType = _prefillServiceType ?? ServiceType.emprestimoConsignado;
+    }
   }
 
   void clearFieldError(String field) {

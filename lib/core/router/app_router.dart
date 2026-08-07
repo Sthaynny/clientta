@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/features/appointments/domain/models/appointment_form_launch_args.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/view/appointment_form_screen.dart';
 import 'package:clientta/features/appointments/view/appointment_form_view_model.dart';
@@ -14,17 +15,33 @@ final Map<String, Widget Function(BuildContext)> routes = {
   AppRouters.home.path: (context) => HomeScreen(viewmodel: dependency()),
   AppRouters.agendas.path: (context) => AppointmentsScreen(viewmodel: dependency()),
   AppRouters.appointmentForm.path: (context) {
-    final entry =
-        ModalRoute.of(context)?.settings.arguments as ServiceAppointment?;
+    final rawArgs = ModalRoute.of(context)?.settings.arguments;
+    ServiceAppointment? editEntry;
+    String? prefillClientName;
+    String? prefillClientPhone;
+    String? prefillServiceType;
+
+    if (rawArgs is ServiceAppointment) {
+      editEntry = rawArgs;
+    } else if (rawArgs is AppointmentFormLaunchArgs) {
+      editEntry = rawArgs.editEntry;
+      prefillClientName = rawArgs.prefillClientName;
+      prefillClientPhone = rawArgs.prefillClientPhone;
+      prefillServiceType = rawArgs.prefillServiceType;
+    }
+
     return AppointmentFormScreen(
       viewmodel: AppointmentFormViewModel(
         repository: dependency(),
         billingRepository: dependency(),
         userRepository: dependency(),
         syncService: dependency(),
-        initial: entry,
+        initial: editEntry,
+        prefillClientName: prefillClientName,
+        prefillClientPhone: prefillClientPhone,
+        prefillServiceType: prefillServiceType,
       ),
-      isEdit: entry != null,
+      isEdit: editEntry != null,
     );
   },
   AppRouters.planSettings.path: (context) => const PlanSettingsScreen(),
