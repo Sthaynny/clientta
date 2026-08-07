@@ -10,7 +10,6 @@ import 'package:clientta/features/appointments/domain/models/service_appointment
 import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
 import 'package:clientta/features/home/screen/components/app_drawer.dart';
 import 'package:clientta/features/home/screen/home_view_model.dart';
-import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 
@@ -129,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen>
         ]),
         builder: (context, _) {
           if (viewmodel.load.running && viewmodel.todayAppointments.isEmpty) {
-            return const AppLoadingWidget();
+            return const HubHomeLoadingSkeleton();
           }
           if (viewmodel.load.error) {
             return BodyErrorDefaultWidget(

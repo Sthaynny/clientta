@@ -7,7 +7,7 @@ import 'package:clientta/features/app.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/auth/view/auth_shell.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
-import 'package:clientta/features/shared/components/app_loading_widget.dart';
+import 'package:clientta/features/shared/hub/hub_loading_skeletons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthGate extends StatelessWidget {
@@ -55,7 +55,7 @@ class _AuthLoadingShell extends StatelessWidget {
       home: Scaffold(
         body: Semantics(
           label: 'Carregando',
-          child: const AppLoadingWidget(),
+          child: const HubBootstrapLoadingSkeleton(),
         ),
       ),
     );

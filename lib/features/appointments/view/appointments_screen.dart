@@ -8,7 +8,6 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/view/appointments_view_model.dart';
 import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
-import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 
@@ -223,7 +222,10 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
         listenable: viewmodel.load,
         builder: (context, _) {
           if (viewmodel.load.running && viewmodel.entries.isEmpty) {
-            return const AppLoadingWidget();
+            return const HubAppointmentListLoadingSkeleton(
+              showIntro: true,
+              showFilter: true,
+            );
           }
           if (viewmodel.load.error) {
             return BodyErrorDefaultWidget(

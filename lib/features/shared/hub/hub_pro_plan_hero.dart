@@ -4,6 +4,7 @@ import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/theme/hub_theme.dart';
 import 'package:clientta/features/billing/domain/entities/plan_pricing_catalog.dart';
+import 'package:clientta/features/shared/hub/hub_shimmer.dart';
 
 /// Cabeçalho visual do Clientta Pro — gradiente, preço e CTA integrados.
 class HubProPlanHero extends StatelessWidget {
@@ -267,12 +268,12 @@ class HubProHeroButton extends StatelessWidget {
             ),
           ),
           child: isLoading
-              ? const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: HubColors.seed,
+              ? HubShimmer(
+                  child: HubShimmerBox(
+                    height: 20,
+                    width: 120,
+                    color: HubColors.seed.withValues(alpha: 0.2),
+                    radius: DSSpacing.xs.value,
                   ),
                 )
               : Text(

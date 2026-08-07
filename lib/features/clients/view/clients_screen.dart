@@ -7,7 +7,6 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
 import 'package:clientta/features/clients/domain/models/client_profile.dart';
 import 'package:clientta/features/clients/view/clients_view_model.dart';
-import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 
@@ -75,7 +74,7 @@ class _ClientsScreenState extends State<ClientsScreen>
         listenable: viewmodel.load,
         builder: (context, _) {
           if (viewmodel.load.running && viewmodel.profiles.isEmpty) {
-            return const AppLoadingWidget();
+            return const HubClientListLoadingSkeleton();
           }
           if (viewmodel.load.error) {
             return BodyErrorDefaultWidget(

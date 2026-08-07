@@ -8,7 +8,6 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_form_launch_args.dart';
 import 'package:clientta/features/client_care/view/client_care_view_model.dart';
-import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 
@@ -90,7 +89,7 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
         listenable: Listenable.merge([viewmodel.load, viewmodel.addNote]),
         builder: (context, _) {
           if (viewmodel.load.running && viewmodel.timeline.isEmpty) {
-            return const AppLoadingWidget();
+            return const HubClientCareLoadingSkeleton();
           }
           if (viewmodel.load.error) {
             return BodyErrorDefaultWidget(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/features/shared/hub/hub_loading_skeletons.dart';
 import 'package:clientta/core/router/app_navigator.dart';
 import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/router/hub_route_observer.dart';
@@ -55,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         darkTheme: HubTheme.dark(),
         themeMode: ThemeMode.system,
         home: const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
+          body: HubBootstrapLoadingSkeleton(),
         ),
       );
     }

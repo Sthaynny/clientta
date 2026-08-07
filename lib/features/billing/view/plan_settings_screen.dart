@@ -16,7 +16,6 @@ import 'package:clientta/features/billing/domain/entities/user_subscription.dart
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/plan_pro_catalog.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
-import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -286,7 +285,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
         title: planSettingsTitleString,
       ),
       body: _loading
-          ? const AppLoadingWidget()
+          ? const HubPlanLoadingSkeleton()
           : ListView(
               padding: EdgeInsets.all(DSSpacing.md.value),
               children: [
