@@ -247,6 +247,11 @@ String planFreeLimitSeriesMessage(int limit) =>
     'O plano gratuito permite até $limit séries recorrentes ativas. Assine o Pro para continuar.';
 String get planFreeSyncBlockedMessageString =>
     'A sincronização na nuvem está disponível apenas no plano Pro.';
+String planFreeUsageAppointmentsLabel(int current, int max) =>
+    '$current de $max atendimentos ativos';
+String planFreeUsageSeriesLabel(int current, int max) =>
+    '$current de $max séries recorrentes ativas';
+String get planFreeUsageUpgradeActionString => 'Ver plano Pro';
 
 const weekdayLabels = [
   'Segunda-feira',

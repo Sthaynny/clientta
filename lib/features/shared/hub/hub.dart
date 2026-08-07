@@ -13,6 +13,7 @@ export 'hub_home_quick_actions.dart';
 export 'hub_home_section.dart';
 export 'hub_route_refresh_mixin.dart';
 export 'hub_offline_banner.dart';
+export 'hub_plan_usage_banner.dart';
 export 'hub_primary_button.dart';
 export 'hub_section_header.dart';
 export 'hub_service_type_field.dart';

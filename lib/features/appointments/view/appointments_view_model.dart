@@ -1,9 +1,12 @@
+import 'package:clientta/core/plan/plan_access_policy.dart';
 import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/domain/appointment_list_grouping.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
+import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
+import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 
 class DeleteAppointmentRequest {
   const DeleteAppointmentRequest({
@@ -20,19 +23,36 @@ class DeleteAppointmentRequest {
 class AppointmentsViewModel {
   AppointmentsViewModel({
     required AppointmentRepository repository,
+    required BillingRepository billingRepository,
     AppointmentSyncService? syncService,
   }) : _repository = repository,
+       _billingRepository = billingRepository,
        _syncService = syncService {
     load = CommandBase(_load);
     deleteEntry = CommandAction<void, DeleteAppointmentRequest>(_deleteEntry);
   }
 
   final AppointmentRepository _repository;
+  final BillingRepository _billingRepository;
   final AppointmentSyncService? _syncService;
   late final CommandBase<void> load;
   late final CommandAction<void, DeleteAppointmentRequest> deleteEntry;
 
   List<ServiceAppointment> entries = [];
+  UserSubscription subscription = UserSubscription.inactive;
+
+  bool get showPlanUsageBanner =>
+      PlanAccessPolicy.shouldShowPlanGate(subscription);
+
+  int get activeAppointmentsCount =>
+      PlanAccessPolicy.countActiveAppointments(entries);
+
+  int get activeSeriesCount => PlanAccessPolicy.countActiveSeries(entries);
+
+  bool get isAtAppointmentLimit => !PlanAccessPolicy.canAddAppointment(
+    subscription: subscription,
+    existingAppointments: entries,
+  );
 
   List<ServiceAppointment> sortedEntries() {
     final sorted = List<ServiceAppointment>.from(entries)
@@ -70,6 +90,7 @@ class AppointmentsViewModel {
       if (sync != null && await sync.canSync()) {
         await sync.sync();
       }
+      subscription = await _billingRepository.getSubscription();
       entries = await _repository.getAll();
       return Result.ok();
     } catch (e) {

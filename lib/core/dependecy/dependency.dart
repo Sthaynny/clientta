@@ -101,6 +101,7 @@ void setup() {
   dependency.registerFactory(
     () => AppointmentsViewModel(
       repository: dependency(),
+      billingRepository: dependency(),
       syncService: dependency(),
     ),
   );

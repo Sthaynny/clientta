@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/plan/plan_access_policy.dart';
 import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
@@ -49,9 +50,32 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
   }
 
   Future<void> _openAppointmentForm({ServiceAppointment? entry}) async {
+    if (entry == null && viewmodel.isAtAppointmentLimit) {
+      context.showSnackBarWarning(
+        planFreeLimitAppointmentsMessage(
+          PlanAccessPolicy.freeMaxActiveAppointments,
+        ),
+      );
+      return;
+    }
+
     await context.go(AppRouters.appointmentForm, arguments: entry);
     if (!mounted) return;
     viewmodel.load.execute();
+  }
+
+  Widget _buildPlanUsageBanner() {
+    if (!viewmodel.showPlanUsageBanner) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: DSSpacing.md.value),
+      child: HubPlanUsageBanner(
+        activeAppointments: viewmodel.activeAppointmentsCount,
+        activeSeries: viewmodel.activeSeriesCount,
+      ),
+    );
   }
 
   Future<void> _confirmDelete(ServiceAppointment entry) async {
@@ -132,6 +156,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              _buildPlanUsageBanner(),
               HubSectionHeader(
                 title: myAgendaString,
                 count: totalCount,
@@ -220,12 +245,19 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.65,
-                  child: HubEmptyState(
-                    icon: Icons.event_note_outlined,
-                    title: emptyAgendaTitle,
-                    message: emptyAgendaMessage,
-                    actionLabel: addAppointmentString,
-                    onAction: () => _openAppointmentForm(),
+                  child: Column(
+                    children: [
+                      _buildPlanUsageBanner(),
+                      Expanded(
+                        child: HubEmptyState(
+                          icon: Icons.event_note_outlined,
+                          title: emptyAgendaTitle,
+                          message: emptyAgendaMessage,
+                          actionLabel: addAppointmentString,
+                          onAction: () => _openAppointmentForm(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -240,6 +272,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.all(DSSpacing.md.value),
                 children: [
+                  _buildPlanUsageBanner(),
                   HubSectionHeader(
                     title: myAgendaString,
                     count: 0,
