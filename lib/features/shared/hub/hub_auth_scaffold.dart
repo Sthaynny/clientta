@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/features/shared/components/app_icon.dart';
+import 'package:clientta/features/shared/hub/hub_surface.dart';
 
 /// Layout compartilhado para telas de autenticação — limpo, focado e acessível.
 class HubAuthScaffold extends StatelessWidget {
@@ -22,58 +23,76 @@ class HubAuthScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HubColors.canvas,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: DSSpacing.lg.value,
-              vertical: DSSpacing.xl.value,
+      body: Column(
+        children: [
+          DecoratedBox(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [HubColors.seedDark, HubColors.seed],
+              ),
             ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Semantics(
-                    header: true,
+            child: const SizedBox(height: 4, width: double.infinity),
+          ),
+          Expanded(
+            child: SafeArea(
+              top: false,
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: DSSpacing.lg.value,
+                    vertical: DSSpacing.xl.value,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        AppIcon.onLight(size: 52),
-                        DSSpacing.lg.y,
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            color: HubColors.ink,
-                            letterSpacing: -0.03,
-                            height: 1.15,
+                        Semantics(
+                          header: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppIcon.onLight(size: 52),
+                              DSSpacing.lg.y,
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w700,
+                                  color: HubColors.ink,
+                                  letterSpacing: -0.03,
+                                  height: 1.15,
+                                ),
+                              ),
+                              DSSpacing.sm.y,
+                              Text(
+                                subtitle,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: HubColors.inkMuted,
+                                  height: 1.45,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        DSSpacing.sm.y,
-                        Text(
-                          subtitle,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: HubColors.inkMuted,
-                            height: 1.45,
-                          ),
+                        DSSpacing.xl.y,
+                        HubSurface(
+                          padding: EdgeInsets.all(DSSpacing.lg.value),
+                          child: child,
                         ),
+                        if (footer != null) ...[
+                          DSSpacing.lg.y,
+                          footer!,
+                        ],
                       ],
                     ),
                   ),
-                  DSSpacing.xl.y,
-                  child,
-                  if (footer != null) ...[
-                    DSSpacing.lg.y,
-                    footer!,
-                  ],
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
