@@ -91,6 +91,12 @@ class _ClientsScreenState extends State<ClientsScreen>
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.all(DSSpacing.md.value),
               children: [
+                HubScreenIntro(
+                  icon: Icons.people_outline_rounded,
+                  message: clientsScreenIntroString,
+                  iconColor: HubColors.seed,
+                ),
+                DSSpacing.md.y,
                 HubSectionHeader(
                   title: myClientsString,
                   count: viewmodel.visibleProfiles.isEmpty
@@ -106,7 +112,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                 DSSpacing.md.y,
                 if (viewmodel.profiles.isEmpty)
                   SizedBox(
-                    height: MediaQuery.sizeOf(context).height * 0.45,
+                    height: MediaQuery.sizeOf(context).height * 0.38,
                     child: HubEmptyState(
                       embedded: true,
                       icon: Icons.people_outline_rounded,
@@ -115,11 +121,14 @@ class _ClientsScreenState extends State<ClientsScreen>
                     ),
                   )
                 else if (viewmodel.visibleProfiles.isEmpty)
-                  HubEmptyState(
-                    embedded: true,
-                    icon: Icons.person_search_outlined,
-                    title: clientsSearchEmptyTitleString,
-                    message: clientsSearchEmptyMessageString,
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: DSSpacing.lg.value),
+                    child: HubEmptyState(
+                      embedded: true,
+                      icon: Icons.person_search_outlined,
+                      title: clientsSearchEmptyTitleString,
+                      message: clientsSearchEmptyMessageString,
+                    ),
                   )
                 else
                   ...viewmodel.visibleProfiles.map(
