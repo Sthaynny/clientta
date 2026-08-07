@@ -34,6 +34,8 @@ flowchart LR
 | `createSubscription` | Cria sessão Checkout ou Subscription; retorna `checkoutUrl` |
 | `syncSubscriptionStatus` | Consulta Stripe e atualiza Firestore (refresh manual na tela de plano) |
 | `cancelSubscription` | Cancela assinatura no fim do período ou imediato (política de produto) |
+| `cancelInactiveSubscriptions` | **Agendada** — cancela assinaturas Pro sem atividade por 2 meses |
+| `trackUserActivityOnAppointmentWrite` | **Trigger Firestore** — atualiza `lastActivityAt` em escritas na subcoleção `appointments` |
 | `stripeBillingWebhook` | **HTTP** (não callable) — eventos Stripe |
 
 ### Eventos webhook relevantes
@@ -55,6 +57,12 @@ Webhook atualiza `users/{uid}.subscription`:
 }
 ```
 
+### Política de inatividade (2 meses)
+
+Assinaturas Pro **ativas** sem uso por **2 meses** são canceladas automaticamente ao fim do período já pago.
+
+→ Detalhes: [politica-assinatura.md](../legal/politica-assinatura.md) (usuário) · [billing/readme.md](../billing/readme.md) §7 (operacional)
+
 ## App Flutter
 
 | Aspecto | Implementação |
@@ -71,9 +79,9 @@ Webhook atualiza `users/{uid}.subscription`:
 - Cartões de teste Stripe (ex.: `4242 4242 4242 4242`).
 - App em debug pode exibir badge “Sandbox” quando `priceId` de teste.
 
-## Status no app
+## Status
 
-**Planejado** — Fase 3 do [PLANEJAMENTO.md](../PLANEJAMENTO.md).
+**Implementado** — Fase 3 do [PLANEJAMENTO.md](../PLANEJAMENTO.md).
 
 ## Dependências técnicas
 
@@ -84,5 +92,6 @@ Webhook atualiza `users/{uid}.subscription`:
 ## Documentação relacionada
 
 - [billing/readme.md](../billing/readme.md) — setup operacional
+- [legal/politica-assinatura.md](../legal/politica-assinatura.md) — cancelamento por inatividade
 - [sincronizacao_nuvem.md](sincronizacao_nuvem.md) — feature gated por Pro
 - [README.md](README.md) — comparativo Free/Pro

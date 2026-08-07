@@ -139,6 +139,8 @@ Fluxo resumido:
 4. Webhooks da Stripe atualizam o status da assinatura no Firestore.
 5. O App consulta o entitlement para liberar sincronização e demais benefícios Pro.
 
+**Cancelamento automático por inatividade:** assinaturas Pro sem uso por 2 meses consecutivos são canceladas ao fim do período já pago. Detalhes em [politica-assinatura.md](politica-assinatura.md).
+
 Dados tratados pela Stripe podem incluir nome, e-mail, informações de pagamento e identificadores de cliente/assinatura. A Stripe atua como **operadora** independente; consulte a [política de privacidade da Stripe](https://stripe.com/br/privacy).
 
 ---

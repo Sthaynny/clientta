@@ -36,13 +36,7 @@ Adicionar secrets no grupo de Functions deploy; não incluir em `codemagic.yaml`
 
 ## 3. Deploy das Functions
 
-Estrutura sugerida em `functions/src/`:
-
-- `stripe/getPlanPricing.ts`
-- `stripe/createSubscription.ts`
-- `stripe/syncSubscriptionStatus.ts`
-- `stripe/cancelSubscription.ts`
-- `stripe/stripeBillingWebhook.ts`
+Código em `functions/` (`billing.js`, `billing_inactivity.js`, `pricing.js`, etc.).
 
 ```bash
 cd functions
@@ -103,6 +97,12 @@ URLs de retorno Checkout (Dashboard Stripe):
 - Function cancela na Stripe (`cancel_at_period_end` recomendado).
 - Webhook atualiza status; app reflete na UI.
 
+### Cancelamento automático por inatividade
+
+Job `cancelInactiveSubscriptions` (diário, 03:00 BRT) cancela assinaturas Pro sem atividade por 2 meses.
+
+→ Política completa: [legal/politica-assinatura.md](../legal/politica-assinatura.md)
+
 ## 8. Testes
 
 | Caso | Verificação |
@@ -111,6 +111,7 @@ URLs de retorno Checkout (Dashboard Stripe):
 | Pagamento falho | `past_due` ou `canceled` após `invoice.payment_failed` |
 | Free user | Sync bloqueado; limites de agenda aplicados |
 | Webhook replay | Idempotência por `event.id` na Function |
+| Inatividade 2 meses | Job cancela assinatura; `canceledReason == inactivity` |
 
 ## 9. Checklist de produção
 
@@ -123,5 +124,6 @@ URLs de retorno Checkout (Dashboard Stripe):
 ## Documentação relacionada
 
 - [features/assinatura_stripe.md](../features/assinatura_stripe.md)
+- [legal/politica-assinatura.md](../legal/politica-assinatura.md)
 - [features/sincronizacao_nuvem.md](../features/sincronizacao_nuvem.md)
 - [guia_clientta.md](../guia_clientta.md)
