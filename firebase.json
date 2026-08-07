@@ -17,5 +17,34 @@
     "location": "southamerica-east1",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Clientta",
+        "supportEmail": "igorsthaynny@gmail.com"
+      }
+    }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "clientta-app",
+          "appId": "1:536628145685:android:8bb3c7fa122192108e681c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "clientta-app",
+          "configurations": {
+            "android": "1:536628145685:android:8bb3c7fa122192108e681c",
+            "ios": "1:536628145685:ios:dcd1bff87e6b344f8e681c"
+          }
+        }
+      }
+    }
   }
 }

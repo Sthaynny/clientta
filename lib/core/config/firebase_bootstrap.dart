@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 
-/// Inicialização do Firebase.
-///
-/// TODO: adicionar `firebase_options.dart` via FlutterFire CLI e passar
-/// `options: DefaultFirebaseOptions.currentPlatform` em [Firebase.initializeApp].
+import 'package:clientta/firebase_options.dart';
+
+/// Inicialização do Firebase (Auth, Firestore, Functions).
 Future<void> bootstrapFirebase() async {
   if (Firebase.apps.isNotEmpty) return;
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
