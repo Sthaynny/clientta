@@ -9,6 +9,7 @@ import 'package:clientta/features/appointments/data/appointment_repository_local
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository_remote.dart';
 import 'package:clientta/features/appointments/domain/sync/appointment_sync_merge.dart';
 import 'package:clientta/features/appointments/domain/sync/sync_state.dart';
+import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 
 class AppointmentSyncService extends ChangeNotifier {
@@ -16,11 +17,13 @@ class AppointmentSyncService extends ChangeNotifier {
     required DeviceJsonStore store,
     required AppointmentRepositoryLocal localRepository,
     required AppointmentRepositoryRemote remoteRepository,
+    UserRepository? userRepository,
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
   }) : _store = store,
        _localRepository = localRepository,
        _remoteRepository = remoteRepository,
+       _userRepository = userRepository,
        _auth = auth ?? FirebaseAuth.instance,
        _firestore = firestore ?? FirebaseFirestore.instance;
 
@@ -31,6 +34,7 @@ class AppointmentSyncService extends ChangeNotifier {
   final DeviceJsonStore _store;
   final AppointmentRepositoryLocal _localRepository;
   final AppointmentRepositoryRemote _remoteRepository;
+  final UserRepository? _userRepository;
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
 
@@ -111,6 +115,7 @@ class AppointmentSyncService extends ChangeNotifier {
 
       final now = DateTime.now();
       await _writeLastSyncedAt(now);
+      await _userRepository?.touchLastActivity(uid: user.uid);
 
       _setState(
         SyncState(

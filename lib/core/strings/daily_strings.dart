@@ -145,6 +145,8 @@ String get planCancelErrorString =>
     'Não foi possível cancelar a assinatura. Tente novamente.';
 String get planManageProString =>
     'Sua assinatura Pro está ativa. Use as ações abaixo para sincronizar ou cancelar.';
+String get planInactivityPolicyString =>
+    'Assinaturas Pro sem uso por 2 meses são canceladas automaticamente ao fim do período já pago. O uso inclui criar, editar ou sincronizar atendimentos.';
 String get planUpgradeHintString =>
     'Assine o Pro para agenda ilimitada e sincronização na nuvem.';
 String planFreeLimitAppointmentsMessage(int limit) =>

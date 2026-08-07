@@ -217,6 +217,11 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                           hasPro ? planManageProString : planUpgradeHintString,
                           color: HubColors.inkMuted,
                         ),
+                        DSSpacing.sm.y,
+                        DSBodyText(
+                          planInactivityPolicyString,
+                          color: HubColors.inkMuted,
+                        ),
                       ],
                     ),
                   ),

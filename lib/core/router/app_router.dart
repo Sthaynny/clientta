@@ -17,6 +17,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
       viewmodel: AppointmentFormViewModel(
         repository: dependency(),
         billingRepository: dependency(),
+        userRepository: dependency(),
         syncService: dependency(),
         initial: entry,
       ),

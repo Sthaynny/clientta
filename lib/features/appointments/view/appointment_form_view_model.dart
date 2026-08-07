@@ -9,6 +9,7 @@ import 'package:clientta/features/appointments/domain/models/appointment_status.
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/domain/models/service_type.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
+import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 
 enum SeriesEditScope { single, entireSeries }
@@ -17,10 +18,12 @@ class AppointmentFormViewModel {
   AppointmentFormViewModel({
     required AppointmentRepository repository,
     required BillingRepository billingRepository,
+    UserRepository? userRepository,
     ServiceAppointment? initial,
     AppointmentSyncService? syncService,
   }) : _repository = repository,
        _billingRepository = billingRepository,
+       _userRepository = userRepository,
        _initial = initial,
        _syncService = syncService {
     save = CommandBase(_save);
@@ -28,6 +31,7 @@ class AppointmentFormViewModel {
 
   final AppointmentRepository _repository;
   final BillingRepository _billingRepository;
+  final UserRepository? _userRepository;
   final ServiceAppointment? _initial;
   final AppointmentSyncService? _syncService;
 
@@ -148,6 +152,7 @@ class AppointmentFormViewModel {
       );
       await _repository.saveAll(entries);
       _syncService?.scheduleSync();
+      await _userRepository?.touchLastActivity();
       return Result.ok();
     }
 
@@ -164,6 +169,7 @@ class AppointmentFormViewModel {
     );
     await _repository.save(entry);
     _syncService?.scheduleSync();
+    await _userRepository?.touchLastActivity();
     return Result.ok();
   }
 
@@ -201,11 +207,13 @@ class AppointmentFormViewModel {
       );
       await _repository.saveAll(batch);
       _syncService?.scheduleSync();
+      await _userRepository?.touchLastActivity();
       return Result.ok();
     }
 
     await _repository.save(updated);
     _syncService?.scheduleSync();
+    await _userRepository?.touchLastActivity();
     return Result.ok();
   }
 }

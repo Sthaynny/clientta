@@ -6,4 +6,7 @@ abstract class UserRepository {
     required String uid,
     required String? email,
   });
+
+  /// Updates `lastActivityAt` for subscription inactivity policy. Never writes `subscription`.
+  Future<Result<void>> touchLastActivity({String? uid});
 }

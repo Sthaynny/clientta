@@ -55,6 +55,7 @@ void setup() {
       store: dependency(),
       localRepository: dependency(),
       remoteRepository: dependency(),
+      userRepository: dependency(),
     ),
   );
 
