@@ -1,4 +1,5 @@
 String get homeTodayString => 'Seu dia de atendimentos';
+String get loadingContentString => 'Carregando conteúdo';
 String homeDayStatAppointments(int count) =>
     count == 1 ? '1 agendamento hoje' : '$count agendamentos hoje';
 String get appointmentsTodayString => 'Agendamentos de hoje';
