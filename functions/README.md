@@ -1,32 +1,16 @@
-# Cloud Functions — Clientta Billing
+# Cloud Functions — Clientta
 
-Stripe Billing via Cloud Functions (padrão [agendamentos](https://github.com/sthaynny/agendamentos)).
+Backend Firebase do Clientta (billing Stripe e políticas de assinatura).
 
-## Fluxo
+**Setup completo:** [docs/billing/readme.md](../docs/billing/readme.md)  
+**Arquitetura da feature:** [docs/features/assinatura_stripe.md](../docs/features/assinatura_stripe.md)
 
-1. App chama `getPlanPricing` → catálogo Pro
-2. `createSubscription` → Stripe Checkout Session (ou sandbox em test mode)
-3. Webhook `stripeBillingWebhook` atualiza `users/{uid}.subscription`
-4. App chama `syncSubscriptionStatus` ao retornar do Checkout
-
-## Secrets
-
-```bash
-firebase functions:secrets:set STRIPE_SECRET_KEY
-firebase functions:secrets:set STRIPE_WEBHOOK_SECRET
-```
-
-Copie `functions/.secret.local.example` para `functions/.secret.local` no emulador.
-
-## Deploy
+## Comandos rápidos
 
 ```bash
 cd functions && npm install
+npm test
 firebase deploy --only functions,firestore:rules
 ```
 
-## Webhook (Stripe Dashboard)
-
-Eventos: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`
-
-URL: `https://southamerica-east1-<PROJECT_ID>.cloudfunctions.net/stripeBillingWebhook`
+Secrets: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — ver guia de billing.

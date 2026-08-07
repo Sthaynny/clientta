@@ -104,13 +104,16 @@ async function resolveUserIdFromStripeSubscription(stripeSubscription) {
 
 async function updateUserSubscription(uid, patch) {
   const ref = getFirestore().collection('users').doc(uid);
-  await ref.set(
-    {
-      subscription: patch,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    },
-    { merge: true },
-  );
+  const payload = {
+    subscription: patch,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+
+  if (patch.status === 'active' || patch.status === 'trialing') {
+    payload.lastActivityAt = admin.firestore.FieldValue.serverTimestamp();
+  }
+
+  await ref.set(payload, { merge: true });
 }
 
 async function ensureStripeCustomer(stripe, uid, email) {
