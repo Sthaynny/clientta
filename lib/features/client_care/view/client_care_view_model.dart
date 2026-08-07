@@ -1,5 +1,6 @@
 import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:clientta/features/client_care/domain/care_timeline_builder.dart';
 import 'package:clientta/features/client_care/domain/models/care_timeline_entry.dart';
@@ -12,9 +13,11 @@ class ClientCareViewModel {
     required EncounterNoteRepository encounterRepository,
     required AppointmentRepository appointmentRepository,
     required ClientCareArgs args,
+    AppointmentSyncService? syncService,
   }) : _encounterRepository = encounterRepository,
        _appointmentRepository = appointmentRepository,
-       _args = args {
+       _args = args,
+       _syncService = syncService {
     load = CommandBase(_load);
     addNote = CommandAction<void, String>(_addNote);
   }
@@ -22,6 +25,7 @@ class ClientCareViewModel {
   final EncounterNoteRepository _encounterRepository;
   final AppointmentRepository _appointmentRepository;
   final ClientCareArgs _args;
+  final AppointmentSyncService? _syncService;
 
   late final CommandBase<void> load;
   late final CommandAction<void, String> addNote;
@@ -64,6 +68,7 @@ class ClientCareViewModel {
         createdAt: DateTime.now(),
       );
       await _encounterRepository.save(note);
+      _syncService?.scheduleSync();
       await load.execute();
       return Result.ok();
     } catch (e) {

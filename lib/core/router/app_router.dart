@@ -35,6 +35,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
       viewmodel: ClientCareViewModel(
         encounterRepository: dependency(),
         appointmentRepository: dependency(),
+        syncService: dependency(),
         args: args,
       ),
     );

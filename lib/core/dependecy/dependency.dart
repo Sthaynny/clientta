@@ -14,7 +14,9 @@ import 'package:clientta/features/appointments/domain/repositories/appointment_r
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository_remote.dart';
 import 'package:clientta/features/appointments/view/appointments_view_model.dart';
 import 'package:clientta/features/client_care/data/encounter_note_repository_local.dart';
+import 'package:clientta/features/client_care/data/encounter_note_repository_remote_firestore.dart';
 import 'package:clientta/features/client_care/domain/repositories/encounter_note_repository.dart';
+import 'package:clientta/features/client_care/domain/repositories/encounter_note_repository_remote.dart';
 import 'package:clientta/features/billing/data/datasources/firebase_billing_datasource.dart';
 import 'package:clientta/features/billing/data/repositories/billing_repository_impl.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
@@ -57,12 +59,18 @@ void setup() {
       store: dependency(),
       localRepository: dependency(),
       remoteRepository: dependency(),
+      encounterNoteLocalRepository: dependency(),
+      encounterNoteRemoteRepository: dependency(),
       userRepository: dependency(),
     ),
   );
 
   dependency.registerLazySingleton<EncounterNoteRepositoryLocal>(
     () => EncounterNoteRepositoryLocal(dependency()),
+  );
+
+  dependency.registerLazySingleton<EncounterNoteRepositoryRemote>(
+    EncounterNoteRepositoryRemoteFirestore.new,
   );
 
   dependency.registerLazySingleton<EncounterNoteRepository>(
