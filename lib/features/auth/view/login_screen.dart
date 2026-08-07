@@ -171,6 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             DSSpacing.lg.y,
             _buildGoogleSignInButton(),
+            DSSpacing.lg.y,
+            const HubLegalLinks(),
           ],
         ),
       ),

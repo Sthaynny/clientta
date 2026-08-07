@@ -14,6 +14,7 @@ export 'hub_home_quick_actions.dart';
 export 'hub_loading_skeletons.dart';
 export 'hub_shimmer.dart';
 export 'hub_home_section.dart';
+export 'hub_legal_footer.dart';
 export 'hub_reminder_lead_chips.dart';
 export 'hub_route_refresh_mixin.dart';
 export 'hub_offline_banner.dart';

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
+import 'package:clientta/features/billing/shared/utils/billing_checkout_pending.dart';
 import 'package:clientta/features/shared/hub/hub_loading_skeletons.dart';
 import 'package:clientta/core/router/app_navigator.dart';
 import 'package:clientta/core/router/app_router.dart';
@@ -16,14 +20,37 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool _ready = false;
   bool _onboardingSeen = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _bootstrap();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        BillingCheckoutPending.instance.isActive) {
+      unawaited(
+        dependency<BillingRepository>().syncSubscriptionStatus().then(
+          (subscription) {
+            if (subscription.allowsOperationalAccess) {
+              BillingCheckoutPending.instance.clear();
+            }
+          },
+        ).catchError((_) {}),
+      );
+    }
   }
 
   Future<void> _bootstrap() async {

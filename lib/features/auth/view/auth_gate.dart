@@ -99,7 +99,13 @@ class _AuthenticatedBootstrapState extends State<_AuthenticatedBootstrap> {
 
     switch (result) {
       case Ok():
-        await dependency<BillingRepository>().syncEntitlements();
+        final billing = dependency<BillingRepository>();
+        await billing.syncEntitlements();
+        try {
+          await billing.syncSubscriptionStatus();
+        } catch (_) {
+          // Stripe pode ainda não ter confirmado; login não deve falhar.
+        }
         if (!mounted) return;
         setState(() => _ready = true);
       case Error():

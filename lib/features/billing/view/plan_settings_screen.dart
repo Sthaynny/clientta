@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/storage/app_profile_settings.dart';
@@ -15,6 +17,7 @@ import 'package:clientta/features/appointments/domain/repositories/appointment_r
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/plan_pro_catalog.dart';
+import 'package:clientta/features/billing/shared/utils/billing_checkout_pending.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,13 +29,17 @@ class PlanSettingsScreen extends StatefulWidget {
   State<PlanSettingsScreen> createState() => _PlanSettingsScreenState();
 }
 
-class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
+class _PlanSettingsScreenState extends State<PlanSettingsScreen>
+    with WidgetsBindingObserver {
   bool _loading = true;
   bool _actionLoading = false;
+  bool _checkoutPolling = false;
+  bool _checkoutSuccessShown = false;
   Map<String, dynamic> _pricing = {};
   UserSubscription _subscription = UserSubscription.inactive;
   AppointmentReminderSettings _reminderSettings =
       const AppointmentReminderSettings();
+  StreamSubscription<UserSubscription>? _subscriptionWatch;
 
   BillingRepository get _billing => dependency<BillingRepository>();
   AppointmentReminderCoordinator get _reminders =>
@@ -45,7 +52,88 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _subscriptionWatch = _billing.watchSubscription().listen((subscription) {
+      if (!mounted) return;
+      final becamePro =
+          subscription.allowsOperationalAccess &&
+          !_subscription.allowsOperationalAccess;
+      setState(() => _subscription = subscription);
+      if (becamePro &&
+          BillingCheckoutPending.instance.isActive &&
+          !_checkoutSuccessShown) {
+        _onCheckoutActivated();
+      }
+    });
     _loadInitial();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _subscriptionWatch?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        BillingCheckoutPending.instance.isActive) {
+      unawaited(_syncAfterCheckoutReturn());
+    }
+  }
+
+  void _onCheckoutActivated() {
+    BillingCheckoutPending.instance.clear();
+    _checkoutPolling = false;
+    _checkoutSuccessShown = true;
+    context.showSnackBarSuccess(planSubscribeSuccessString);
+  }
+
+  Future<void> _syncAfterCheckoutReturn() async {
+    try {
+      final subscription = await _billing.syncSubscriptionStatus();
+      if (!mounted) return;
+      setState(() => _subscription = subscription);
+      if (subscription.allowsOperationalAccess && !_checkoutSuccessShown) {
+        _onCheckoutActivated();
+      }
+    } catch (_) {
+      // Webhook ou polling podem confirmar depois.
+    }
+  }
+
+  Future<void> _pollSubscriptionAfterCheckout() async {
+    if (_checkoutPolling) return;
+    _checkoutPolling = true;
+    _checkoutSuccessShown = false;
+
+    const maxAttempts = 15;
+    const interval = Duration(seconds: 2);
+
+    for (var attempt = 0; attempt < maxAttempts; attempt++) {
+      if (!mounted || !_checkoutPolling) return;
+      await Future<void>.delayed(interval);
+      if (!mounted || !_checkoutPolling) return;
+
+      try {
+        final subscription = await _billing.syncSubscriptionStatus();
+        if (!mounted) return;
+        setState(() => _subscription = subscription);
+        if (subscription.allowsOperationalAccess) {
+          if (!_checkoutSuccessShown) {
+            _onCheckoutActivated();
+          }
+          return;
+        }
+      } catch (_) {
+        // Continua até o webhook ou próxima tentativa.
+      }
+    }
+
+    if (mounted) {
+      _checkoutPolling = false;
+    }
   }
 
   Future<void> _loadInitial() async {
@@ -213,7 +301,12 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
         if (checkout.checkoutUrl.isNotEmpty) {
           final uri = Uri.parse(checkout.checkoutUrl);
           if (await canLaunchUrl(uri)) {
+            BillingCheckoutPending.instance.mark();
             await launchUrl(uri, mode: LaunchMode.externalApplication);
+            if (!mounted) return;
+            context.showSnackBarSuccess(planSubscribePendingString);
+            unawaited(_pollSubscriptionAfterCheckout());
+            return;
           }
         }
 
@@ -484,6 +577,8 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                     ],
                   ),
                 ),
+                DSSpacing.md.y,
+                const HubLegalLinks(),
                 DSSpacing.xl.y,
               ],
             ),

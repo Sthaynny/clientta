@@ -344,6 +344,14 @@ String get planBackupImportErrorString =>
     'Não deu para restaurar. Confira o arquivo e tente de novo.';
 String get planBackupImportInvalidString =>
     'Não reconhecemos o arquivo. Use uma cópia salva pelo Clientta.';
+String get legalSectionString => 'Legal';
+String get privacyPolicyString => 'Política de Privacidade';
+String get subscriptionPolicyString => 'Política de Assinatura Pro';
+String get registerPrivacyNoticePrefixString =>
+    'Ao criar conta, você declara ter lido e concordado com a ';
+String get registerPrivacyNoticeSuffixString => '.';
+String get legalUrlOpenErrorString =>
+    'Não foi possível abrir o link. Verifique sua conexão.';
 
 const weekdayLabels = [
   'Segunda-feira',

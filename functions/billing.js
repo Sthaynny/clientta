@@ -371,11 +371,35 @@ const syncSubscriptionStatus = onCall(
     const userData = await getUserDoc(uid);
     const subscription = userData.subscription || {};
     const stripeSubscriptionId = subscription.stripeSubscriptionId;
+    const stripeCheckoutSessionId = subscription.stripeCheckoutSessionId;
 
     if (!stripeSubscriptionId) {
       if (isFreeAccessSubscription(subscription)) {
         return { subscription: subscription };
       }
+
+      if (
+        stripeCheckoutSessionId &&
+        !isSimulatedStripeResourceId(stripeCheckoutSessionId)
+      ) {
+        const stripe = getStripe();
+        const session = await stripe.checkout.sessions.retrieve(
+          stripeCheckoutSessionId,
+        );
+        if (session.subscription) {
+          const stripeSubscription = await stripe.subscriptions.retrieve(
+            session.subscription,
+          );
+          await applyStripeSubscriptionToUser(
+            uid,
+            stripeSubscription,
+            subscription.plan || 'pro',
+          );
+          const updated = await getUserDoc(uid);
+          return { subscription: updated.subscription || {} };
+        }
+      }
+
       return { subscription: subscription };
     }
 

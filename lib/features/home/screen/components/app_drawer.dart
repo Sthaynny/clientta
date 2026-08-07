@@ -10,6 +10,7 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/auth/domain/repositories/auth_repository.dart';
 import 'package:clientta/features/shared/components/app_icon.dart';
+import 'package:clientta/features/shared/hub/hub_legal_footer.dart';
 import 'package:clientta/features/shared/hub/hub_nav_tile.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -108,6 +109,32 @@ class AppDrawer extends StatelessWidget {
                     route: AppRouters.planSettings,
                     isSelected: currentRoute == AppRouters.planSettings.path,
                   ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                DSSpacing.sm.value,
+                DSSpacing.sm.value,
+                DSSpacing.sm.value,
+                DSSpacing.xs.value,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: DSSpacing.sm.value,
+                      vertical: DSSpacing.xxs.value,
+                    ),
+                    child: DSCaptionText(
+                      legalSectionString,
+                      color: HubColors.inkMuted,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const HubLegalLinks(alignment: WrapAlignment.start),
                 ],
               ),
             ),

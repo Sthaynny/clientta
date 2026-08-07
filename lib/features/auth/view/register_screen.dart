@@ -172,6 +172,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             DSSpacing.lg.y,
             _buildGoogleSignInButton(),
+            DSSpacing.lg.y,
+            const HubLegalConsentNotice(),
           ],
         ),
       ),
