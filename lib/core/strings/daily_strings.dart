@@ -67,6 +67,10 @@ String get clientCareNoteLabelString => 'Nova anotação';
 String get clientCareAddNoteString => 'Registrar encontro';
 String get clientCareFromAppointmentString => 'Agendamento';
 String get clientCareActionString => 'Ver atendimento';
+String get clientCallActionString => 'Ligar';
+String get clientWhatsAppActionString => 'WhatsApp';
+String get clientContactLaunchFailedString =>
+    'Não foi possível abrir o aplicativo de contato.';
 String get encounterNoteSavedString => 'Encontro registrado.';
 
 String formatEncounterTimestamp(DateTime dateTime) {

@@ -1,6 +1,7 @@
 export 'hub_app_bar.dart';
 export 'hub_appointment_card.dart';
 export 'hub_auth_scaffold.dart';
+export 'hub_client_contact_bar.dart';
 export 'hub_confirm_dialog.dart';
 export 'hub_date_form_field.dart';
 export 'hub_day_header.dart';
