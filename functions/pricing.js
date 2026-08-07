@@ -5,6 +5,7 @@ const PLAN_CATALOG = {
     id: 'pro',
     name: 'Clientta Pro',
     monthlyPriceCents: PRO_MONTHLY_PRICE_CENTS,
+    lookupKey: 'clientta_pro_monthly',
     enabled: true,
   },
 };
@@ -14,16 +15,23 @@ function formatBrlMonthly(cents) {
   return `R$ ${value}/mês`;
 }
 
-function getPlanPricingResponse() {
+function getPlanPricingResponse(stripePriceId = '') {
   const pro = PLAN_CATALOG.pro;
+  const response = {
+    id: pro.id,
+    name: pro.name,
+    price: formatBrlMonthly(pro.monthlyPriceCents),
+    monthlyPriceCents: pro.monthlyPriceCents,
+    enabled: pro.enabled,
+    lookupKey: pro.lookupKey,
+  };
+
+  if (stripePriceId) {
+    response.stripePriceId = stripePriceId;
+  }
+
   return {
-    pro: {
-      id: pro.id,
-      name: pro.name,
-      price: formatBrlMonthly(pro.monthlyPriceCents),
-      monthlyPriceCents: pro.monthlyPriceCents,
-      enabled: pro.enabled,
-    },
+    pro: response,
   };
 }
 
@@ -39,4 +47,5 @@ module.exports = {
   PLAN_CATALOG,
   getPlanPricingResponse,
   resolvePlanPriceCents,
+  formatBrlMonthly,
 };

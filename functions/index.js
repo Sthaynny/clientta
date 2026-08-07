@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const billing = require('./billing');
+const billingEntitlements = require('./billing_entitlements');
 const billingInactivity = require('./billing_inactivity');
 
 if (!admin.apps.length) {
@@ -11,6 +12,7 @@ exports.createSubscription = billing.createSubscription;
 exports.syncSubscriptionStatus = billing.syncSubscriptionStatus;
 exports.completeSandboxSubscription = billing.completeSandboxSubscription;
 exports.cancelSubscription = billing.cancelSubscription;
+exports.syncEntitlements = billingEntitlements.syncEntitlements;
 exports.stripeBillingWebhook = billing.stripeBillingWebhook;
 exports.cancelInactiveSubscriptions = billingInactivity.cancelInactiveSubscriptions;
 exports.trackUserActivityOnAppointmentWrite =

@@ -27,11 +27,13 @@ void main() {
         'status': 'active',
         'plan': 'pro',
         'accessEndsAt': '2026-09-07T00:00:00.000Z',
+        'entitlementSource': 'free_access',
       });
 
       expect(subscription.status, SubscriptionStatus.active);
       expect(subscription.plan, SubscriptionPlan.pro);
       expect(subscription.accessEndsAt, isNotNull);
+      expect(subscription.isComplimentaryAccess, isTrue);
     });
   });
 }

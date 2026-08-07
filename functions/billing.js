@@ -6,6 +6,7 @@ const {
   stripeWebhookSecret,
   getStripe,
   isStripeTestMode,
+  getStripeProPriceId,
 } = require('./stripe_client');
 const {
   checkoutSessionIdempotencyKey,
@@ -17,6 +18,14 @@ const {
   resolvePlanPriceCents,
   PLAN_CATALOG,
 } = require('./pricing');
+const {
+  resolveEntitlementsForEmail,
+  buildPersonalizedPlanPricing,
+  buildFreeAccessSubscriptionPatch,
+  hasActiveStripeSubscription,
+  isFreeAccessSubscription,
+  applyPercentDiscount,
+} = require('./billing_entitlements');
 
 const BILLING_SECRETS = [stripeSecretKey, stripeWebhookSecret];
 
@@ -34,8 +43,9 @@ function assertAuthenticated(request) {
 function mapStripeStatusToBilling(stripeStatus) {
   switch (stripeStatus) {
     case 'active':
-    case 'trialing':
       return 'active';
+    case 'trialing':
+      return 'trialing';
     case 'past_due':
     case 'unpaid':
     case 'paused':
@@ -145,7 +155,10 @@ function buildSubscriptionPatch({
   stripeCustomerId,
   stripeSubscriptionId,
   stripeCheckoutSessionId,
+  stripePriceId,
   currentPeriodEnd,
+  cancelAtPeriodEnd,
+  entitlementSource,
 }) {
   return {
     plan: plan || 'pro',
@@ -153,14 +166,58 @@ function buildSubscriptionPatch({
     stripeCustomerId: stripeCustomerId || null,
     stripeSubscriptionId: stripeSubscriptionId || null,
     stripeCheckoutSessionId: stripeCheckoutSessionId || null,
+    stripePriceId: stripePriceId || null,
     accessEndsAt: currentPeriodEnd
       ? currentPeriodEnd.toISOString()
       : null,
+    cancelAtPeriodEnd: Boolean(cancelAtPeriodEnd),
+    entitlementSource: entitlementSource || null,
     updatedAt: new Date().toISOString(),
   };
 }
 
+function resolveStripePriceIdFromSubscription(stripeSubscription) {
+  const firstItem = stripeSubscription.items?.data?.[0];
+  if (!firstItem?.price) return null;
+  return typeof firstItem.price === 'string'
+    ? firstItem.price
+    : firstItem.price.id;
+}
+
+function buildCheckoutLineItem({
+  monthlyPriceCents,
+  stripePriceId,
+  planMeta,
+}) {
+  if (stripePriceId) {
+    return {
+      price: stripePriceId,
+      quantity: 1,
+    };
+  }
+
+  return {
+    price_data: {
+      currency: 'brl',
+      unit_amount: monthlyPriceCents,
+      recurring: { interval: 'month' },
+      product_data: { name: planMeta.name },
+    },
+    quantity: 1,
+  };
+}
+
 async function applyStripeSubscriptionToUser(uid, stripeSubscription, plan = 'pro') {
+  const userData = await getUserDoc(uid);
+  const currentSubscription = userData.subscription || {};
+
+  if (
+    isFreeAccessSubscription(currentSubscription) &&
+    !hasActiveStripeSubscription(currentSubscription, isSimulatedStripeResourceId)
+  ) {
+    return;
+  }
+
   const status = mapStripeStatusToBilling(stripeSubscription.status);
   const currentPeriodEnd = unixSecondsToDate(
     stripeSubscription.current_period_end,
@@ -176,13 +233,31 @@ async function applyStripeSubscriptionToUser(uid, stripeSubscription, plan = 'pr
           ? stripeSubscription.customer
           : stripeSubscription.customer?.id,
       stripeSubscriptionId: stripeSubscription.id,
+      stripePriceId: resolveStripePriceIdFromSubscription(stripeSubscription),
       currentPeriodEnd,
+      cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+      entitlementSource: 'stripe',
     }),
   );
 }
 
-const getPlanPricing = onCall(CALLABLE_OPTIONS, async () => {
-  return getPlanPricingResponse();
+const getPlanPricing = onCall(CALLABLE_OPTIONS, async (request) => {
+  const stripePriceId = getStripeProPriceId();
+  const email = String(request.auth?.token?.email || '').trim().toLowerCase();
+  if (!email) {
+    return getPlanPricingResponse(stripePriceId);
+  }
+
+  const { billingEntitlement } = await resolveEntitlementsForEmail(email);
+  const pro = buildPersonalizedPlanPricing('pro', billingEntitlement);
+  if (stripePriceId) {
+    pro.stripePriceId = stripePriceId;
+  }
+
+  return {
+    pro,
+    billingEntitlement,
+  };
 });
 
 const createSubscription = onCall(
@@ -199,6 +274,19 @@ const createSubscription = onCall(
 
     const userData = await getUserDoc(uid);
     const currentSubscription = userData.subscription || {};
+    const email = String(request.auth.token.email || '').trim().toLowerCase();
+    const { freeAccess, discount } = await resolveEntitlementsForEmail(email, plan);
+
+    if (freeAccess) {
+      const patch = buildFreeAccessSubscriptionPatch(currentSubscription);
+      await updateUserSubscription(uid, patch);
+      return {
+        checkoutUrl: '',
+        isSandboxCheckout: false,
+        isFreeAccess: true,
+        plan,
+      };
+    }
 
     if (isStripeTestMode()) {
       const sandboxSessionId = `sandbox_cs_${uid}_${Date.now()}`;
@@ -219,10 +307,14 @@ const createSubscription = onCall(
     }
 
     const stripe = getStripe();
-    const email = String(request.auth.token.email || '').trim().toLowerCase();
     const customerId = await ensureStripeCustomer(stripe, uid, email);
-    const monthlyPriceCents = resolvePlanPriceCents(plan);
+    const configuredPriceId = getStripeProPriceId();
+    const baseMonthlyPriceCents = resolvePlanPriceCents(plan);
+    const monthlyPriceCents = discount
+      ? applyPercentDiscount(baseMonthlyPriceCents, discount.percentOff)
+      : baseMonthlyPriceCents;
     const planMeta = PLAN_CATALOG[plan];
+    const useCatalogPrice = configuredPriceId && monthlyPriceCents === baseMonthlyPriceCents;
 
     const session = await stripe.checkout.sessions.create(
       {
@@ -231,15 +323,11 @@ const createSubscription = onCall(
         client_reference_id: uid,
         metadata: { userId: uid, plan },
         line_items: [
-          {
-            price_data: {
-              currency: 'brl',
-              unit_amount: monthlyPriceCents,
-              recurring: { interval: 'month' },
-              product_data: { name: planMeta.name },
-            },
-            quantity: 1,
-          },
+          buildCheckoutLineItem({
+            monthlyPriceCents,
+            stripePriceId: useCatalogPrice ? configuredPriceId : '',
+            planMeta,
+          }),
         ],
         subscription_data: {
           metadata: { userId: uid, plan },
@@ -262,6 +350,7 @@ const createSubscription = onCall(
         status: 'inactive',
         stripeCustomerId: customerId,
         stripeCheckoutSessionId: session.id,
+        stripePriceId: useCatalogPrice ? configuredPriceId : null,
       }),
     });
 
@@ -282,6 +371,9 @@ const syncSubscriptionStatus = onCall(
     const stripeSubscriptionId = subscription.stripeSubscriptionId;
 
     if (!stripeSubscriptionId) {
+      if (isFreeAccessSubscription(subscription)) {
+        return { subscription: subscription };
+      }
       return { subscription: subscription };
     }
 
@@ -339,6 +431,13 @@ const cancelSubscription = onCall(
     const userData = await getUserDoc(uid);
     const subscription = userData.subscription || {};
     const stripeSubscriptionId = subscription.stripeSubscriptionId;
+
+    if (isFreeAccessSubscription(subscription)) {
+      throw new HttpsError(
+        'failed-precondition',
+        'Acesso cortesia não pode ser cancelado pelo app.',
+      );
+    }
 
     if (!stripeSubscriptionId) {
       throw new HttpsError('failed-precondition', 'Nenhuma assinatura ativa.');
@@ -431,6 +530,7 @@ const stripeBillingWebhook = onRequest(
           }
           break;
         }
+        case 'customer.subscription.created':
         case 'customer.subscription.updated':
         case 'customer.subscription.deleted': {
           const stripeSubscription = event.data.object;
@@ -507,4 +607,7 @@ module.exports = {
   completeSandboxSubscription,
   cancelSubscription,
   stripeBillingWebhook,
+  getUserDoc,
+  updateUserSubscription,
+  isSimulatedStripeResourceId,
 };

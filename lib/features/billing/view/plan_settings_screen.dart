@@ -4,6 +4,7 @@ import 'package:clientta/core/dependecy/dependency.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
+import 'package:clientta/features/billing/domain/entities/plan_pricing_catalog.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
@@ -50,6 +51,11 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   }
 
   String _statusLabel(UserSubscription subscription) {
+    if (subscription.isComplimentaryAccess &&
+        subscription.allowsOperationalAccess) {
+      return planStatusProComplimentaryString;
+    }
+
     if (subscription.allowsOperationalAccess &&
         subscription.plan == SubscriptionPlan.pro) {
       return planStatusProActiveString;
@@ -83,6 +89,14 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
           planId: 'pro',
           returnUrl: buildBillingReturnUrl(),
         );
+
+        if (checkout.isFreeAccess) {
+          final subscription = await _billing.getSubscription();
+          if (!mounted) return;
+          setState(() => _subscription = subscription);
+          context.showSnackBarSuccess(planSubscribeSuccessString);
+          return;
+        }
 
         if (checkout.isSandboxCheckout) {
           final subscription = await _billing.completeSandboxSubscription();
@@ -166,10 +180,15 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   Widget build(BuildContext context) {
     final pro = _pricing['pro'] as Map<String, dynamic>?;
     final price = pro?['price'] as String? ?? 'R\$ 29,90/mês';
+    final basePrice = pro?['baseMonthlyPriceCents'] as int?;
+    final percentOff = pro?['percentOff'] as int?;
+    final hasDiscount = percentOff != null && percentOff > 0;
     final hasPro = _subscription.allowsOperationalAccess;
+    final isComplimentary = _subscription.isComplimentaryAccess;
     final canCancel =
         _subscription.plan == SubscriptionPlan.pro &&
-        _subscription.status != SubscriptionStatus.canceled;
+        _subscription.status != SubscriptionStatus.canceled &&
+        !isComplimentary;
 
     return Scaffold(
       appBar: HubAppBar(
@@ -199,7 +218,11 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                         ),
                         DSSpacing.md.y,
                         DSBodyText(
-                          hasPro ? planManageProString : planUpgradeHintString,
+                          hasPro
+                              ? (isComplimentary
+                                  ? planComplimentaryAccessString
+                                  : planManageProString)
+                              : planUpgradeHintString,
                           color: HubColors.inkMuted,
                         ),
                         DSSpacing.sm.y,
@@ -226,10 +249,24 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                           color: HubColors.inkMuted,
                         ),
                         DSSpacing.md.y,
+                        if (hasDiscount && !hasPro) ...[
+                          DSBodyText(
+                            planDiscountAppliedString(percentOff),
+                            color: HubColors.seed,
+                          ),
+                          DSSpacing.xs.y,
+                        ],
                         DSHeadlineSmallText(
                           price,
                           color: HubColors.seed,
                         ),
+                        if (hasDiscount && basePrice != null && !hasPro) ...[
+                          DSSpacing.xs.y,
+                          DSBodyText(
+                            '$planBasePriceLabelString: ${PlanPricingCatalog.formatBrlMonthly(basePrice)}',
+                            color: HubColors.inkMuted,
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -240,7 +277,8 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                       isLoading: _actionLoading,
                       onPressed: _subscribe,
                     ),
-                  if (hasPro || _subscription.plan == SubscriptionPlan.pro) ...[
+                  if ((hasPro || _subscription.plan == SubscriptionPlan.pro) &&
+                      !isComplimentary) ...[
                     HubPrimaryButton(
                       label: planSyncStatusButtonString,
                       isLoading: _actionLoading,

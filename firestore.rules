@@ -10,12 +10,24 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
+    function subscriptionUnchanged() {
+      return request.resource.data.get('subscription', null)
+        == resource.data.get('subscription', null);
+    }
+
+    function billingEntitlementUnchanged() {
+      return request.resource.data.get('billingEntitlement', null)
+        == resource.data.get('billingEntitlement', null);
+    }
+
     match /users/{userId} {
       allow read: if isOwner(userId);
       allow create: if isOwner(userId)
-        && !('subscription' in request.resource.data);
+        && !('subscription' in request.resource.data)
+        && !('billingEntitlement' in request.resource.data);
       allow update: if isOwner(userId)
-        && request.resource.data.subscription == resource.data.subscription;
+        && subscriptionUnchanged()
+        && billingEntitlementUnchanged();
 
       match /appointments/{appointmentId} {
         allow read, write: if isOwner(userId);
@@ -27,6 +39,14 @@ service cloud.firestore {
     }
 
     match /billing_events/{eventId} {
+      allow read, write: if false;
+    }
+
+    match /billing_free_access/{email} {
+      allow read, write: if false;
+    }
+
+    match /billing_discounts/{email} {
       allow read, write: if false;
     }
   }

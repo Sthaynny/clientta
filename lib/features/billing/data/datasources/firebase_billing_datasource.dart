@@ -3,6 +3,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:clientta/features/billing/domain/entities/billing_entitlement.dart';
 import 'package:clientta/features/billing/domain/entities/subscription_checkout.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 
@@ -63,6 +64,30 @@ class FirebaseBillingDatasource {
   Future<Map<String, dynamic>> getPlanPricing() async {
     final response = await _callFunction('getPlanPricing', {});
     return Map<String, dynamic>.from(response);
+  }
+
+  Future<BillingEntitlement> getBillingEntitlement() async {
+    final uid = _uid;
+    if (uid == null) return BillingEntitlement.none;
+
+    final snapshot = await _firestore.collection('users').doc(uid).get();
+    final entitlementRaw = snapshot.data()?['billingEntitlement'];
+    if (entitlementRaw is! Map) return BillingEntitlement.none;
+
+    return BillingEntitlement.fromMap(
+      Map<String, dynamic>.from(entitlementRaw),
+    );
+  }
+
+  Future<BillingEntitlement> syncEntitlements() async {
+    final response = await _callFunction('syncEntitlements', {});
+    final entitlementRaw = response['billingEntitlement'];
+    if (entitlementRaw is Map) {
+      return BillingEntitlement.fromMap(
+        Map<String, dynamic>.from(entitlementRaw),
+      );
+    }
+    return BillingEntitlement.none;
   }
 
   Future<UserSubscription> getSubscription() async {

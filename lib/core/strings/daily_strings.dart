@@ -212,6 +212,7 @@ String get planPricingErrorString =>
     'Não foi possível carregar o preço do plano. Tente novamente.';
 String get planStatusFreeString => 'Plano gratuito';
 String get planStatusProActiveString => 'Clientta Pro ativo';
+String get planStatusProComplimentaryString => 'Clientta Pro (acesso cortesia)';
 String get planStatusProPendingString => 'Assinatura em processamento';
 String get planStatusProPastDueString => 'Pagamento pendente';
 String get planStatusProCanceledString => 'Assinatura cancelada';
@@ -234,6 +235,12 @@ String get planInactivityPolicyString =>
     'Assinaturas Pro sem uso por 2 meses são canceladas automaticamente ao fim do período já pago. O uso inclui criar, editar ou sincronizar atendimentos.';
 String get planUpgradeHintString =>
     'Assine o Pro para agenda ilimitada e sincronização na nuvem.';
+String get planComplimentaryAccessString =>
+    'Seu e-mail tem acesso Pro liberado sem assinatura paga.';
+String planDiscountAppliedString(int percentOff) =>
+    'Desconto de $percentOff% aplicado ao seu e-mail.';
+String get planDiscountPriceLabelString => 'Seu preço com desconto';
+String get planBasePriceLabelString => 'Preço padrão';
 String planFreeLimitAppointmentsMessage(int limit) =>
     'O plano gratuito permite até $limit atendimentos ativos. Assine o Pro para continuar.';
 String planFreeLimitSeriesMessage(int limit) =>

@@ -27,8 +27,16 @@ firebase functions:secrets:set STRIPE_WEBHOOK_SECRET
 |--------|----------|
 | `STRIPE_SECRET_KEY` | `sk_test_...` ou `sk_live_...` |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` do endpoint webhook |
+| `STRIPE_PRO_PRICE_ID` | `price_...` do produto Pro (opcional; ver script abaixo) |
 
-Opcional: `STRIPE_PRO_PRICE_ID` se não retornado dinamicamente por `getPlanPricing`.
+Opcional: `STRIPE_PRO_PRICE_ID` — se configurado, Checkout usa o preço catalogado no Stripe em vez de `price_data` dinâmico. Criar com:
+
+```bash
+cd functions && bash scripts/setup_stripe_catalog.sh test
+# ou live: bash scripts/setup_stripe_catalog.sh live
+```
+
+Para desenvolvimento local, copie `functions/.secret.local.example` → `functions/.secret.local`.
 
 ### Codemagic / CI
 
@@ -47,8 +55,8 @@ firebase deploy --only functions
 ## 4. Webhook Stripe
 
 1. Dashboard → Developers → Webhooks → Add endpoint.
-2. URL: `https://<region>-<project>.cloudfunctions.net/stripeBillingWebhook`
-3. Eventos: `checkout.session.completed`, `customer.subscription.*`, `invoice.payment_failed`
+2. URL: `https://southamerica-east1-clientta-app.cloudfunctions.net/stripeBillingWebhook`
+3. Eventos: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`
 4. Copiar **Signing secret** → `STRIPE_WEBHOOK_SECRET`.
 
 Para desenvolvimento local:
@@ -115,6 +123,10 @@ Job `cancelInactiveSubscriptions` (diário, 03:00 BRT) cancela assinaturas Pro s
 
 ## 9. Checklist de produção
 
+- [ ] Firebase Blaze habilitado no projeto `clientta-app` (obrigatório para Functions)
+- [ ] `firebase deploy --only functions,firestore:rules`
+- [ ] Produto/preço Pro no Stripe (`scripts/setup_stripe_catalog.sh`)
+- [ ] Webhook apontando para `clientta-app` (não reutilizar URL de outros projetos)
 - [ ] Trocar `sk_test` por `sk_live` nos secrets
 - [ ] Webhook live com secret distinto
 - [ ] Regras Firestore revisadas
