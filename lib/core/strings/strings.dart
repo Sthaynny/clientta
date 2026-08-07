@@ -15,7 +15,16 @@ String get emailString => 'Email';
 String get passwordString => 'Senha';
 String get forgotPasswordString => 'Esqueceu a senha?';
 String get credenciaisInvalidasString =>
-    'Credenciais inválidas! Tente Novamente.';
+    'E-mail ou senha incorretos. Verifique e tente novamente.';
+String get errorEmailRequiredString => 'Informe seu e-mail.';
+String get errorPasswordRequiredString => 'Informe sua senha.';
+String get errorEmailInvalidString => 'E-mail inválido. Verifique o formato.';
+String get errorEmailInUseString =>
+    'Este e-mail já está cadastrado. Tente entrar ou use outro e-mail.';
+String get errorWeakPasswordString =>
+    'Senha muito curta. Use pelo menos 6 caracteres.';
+String get errorUserDisabledString =>
+    'Esta conta foi desativada. Entre em contato com o suporte.';
 String get errorForgoutPasswordString => 'Erro ao redefinir a senha!';
 String get createNewsString => "Criar Noticia";
 String get editNewsString => "Editar Noticia";

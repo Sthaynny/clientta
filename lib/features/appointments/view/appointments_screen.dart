@@ -22,6 +22,7 @@ class AppointmentsScreen extends StatefulWidget {
 class _AppointmentsScreenState extends State<AppointmentsScreen>
     with RouteAware, HubRouteRefreshMixin {
   AppointmentsViewModel get viewmodel => widget.viewmodel;
+  String? _serviceTypeFilter;
 
   @override
   void initState() {
@@ -39,27 +40,125 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
   }
 
   Future<void> _confirmDelete(ServiceAppointment entry) async {
-    final confirmed = await showDialog<bool>(
+    final seriesId = entry.seriesId;
+    if (seriesId != null && seriesId.isNotEmpty) {
+      final choice = await showHubChoiceDialog(
+        context: context,
+        title: deleteSeriesTitleString,
+        message: deleteSeriesMessageString,
+        firstLabel: deleteSeriesOneLabelString,
+        secondLabel: deleteSeriesAllLabelString,
+        secondDestructive: true,
+      );
+      if (!mounted || choice == HubChoiceResult.cancelled) return;
+
+      await viewmodel.deleteEntry.execute(
+        DeleteAppointmentRequest(
+          id: entry.id,
+          seriesId: seriesId,
+          deleteEntireSeries: choice == HubChoiceResult.second,
+        ),
+      );
+      return;
+    }
+
+    final confirmed = await showHubConfirmDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(deleteAppointmentTitleString),
-            content: Text(deleteAppointmentMessageString),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(cancelString),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(deleteString),
-              ),
-            ],
-          ),
+      title: deleteAppointmentTitleString,
+      message: deleteAppointmentMessageString,
+      confirmLabel: deleteString,
     );
     if (confirmed == true && mounted) {
-      await viewmodel.deleteEntry.execute(entry.id);
+      await viewmodel.deleteEntry.execute(
+        DeleteAppointmentRequest(id: entry.id),
+      );
     }
+  }
+
+  Widget _buildFilterBar() {
+    final types = viewmodel.availableServiceTypes();
+    if (types.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: DSSpacing.md.value),
+      child: DropdownButtonFormField<String?>(
+        key: ValueKey(_serviceTypeFilter),
+        initialValue: _serviceTypeFilter,
+        decoration: InputDecoration(
+          labelText: filterServiceTypeLabelString,
+        ),
+        items: [
+          DropdownMenuItem<String?>(
+            value: null,
+            child: Text(filterAllServiceTypesString),
+          ),
+          ...types.map(
+            (type) => DropdownMenuItem<String?>(
+              value: type,
+              child: Text(type),
+            ),
+          ),
+        ],
+        onChanged: (value) => setState(() => _serviceTypeFilter = value),
+      ),
+    );
+  }
+
+  Widget _buildGroupedList() {
+    final groups = viewmodel.groupedEntries(_serviceTypeFilter);
+    final totalCount = viewmodel.filteredEntries(_serviceTypeFilter).length;
+
+    return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.all(DSSpacing.md.value),
+      itemCount: groups.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              HubSectionHeader(
+                title: myAgendaString,
+                count: totalCount,
+              ),
+              _buildFilterBar(),
+            ],
+          );
+        }
+
+        final group = groups[index - 1];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HubSectionHeader(
+              title: group.title,
+              count: group.entries.length,
+            ),
+            if (group.subtitle != null)
+              Padding(
+                padding: EdgeInsets.only(bottom: DSSpacing.sm.value),
+                child: DSCaptionText(
+                  group.subtitle!,
+                  color: HubColors.inkMuted,
+                ),
+              ),
+            ...group.entries.map(
+              (entry) => HubAppointmentCard(
+                clientName: entry.clientName,
+                serviceType: entry.serviceType,
+                startTime: entry.startTime,
+                endTime: entry.endTime,
+                status: entry.status,
+                onTap: () => _openAppointmentForm(entry: entry),
+                onEdit: () => _openAppointmentForm(entry: entry),
+                onDelete: () => _confirmDelete(entry),
+              ),
+            ),
+            DSSpacing.sm.y,
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -92,6 +191,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           }
 
           Future<void> onRefresh() async => viewmodel.load.execute();
+          final hasFilteredEntries =
+              viewmodel.filteredEntries(_serviceTypeFilter).isNotEmpty;
 
           if (viewmodel.entries.isEmpty) {
             return RefreshIndicator(
@@ -113,36 +214,35 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             );
           }
 
+          if (!hasFilteredEntries) {
+            return RefreshIndicator(
+              color: HubColors.seed,
+              onRefresh: onRefresh,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.all(DSSpacing.md.value),
+                children: [
+                  HubSectionHeader(
+                    title: myAgendaString,
+                    count: 0,
+                  ),
+                  _buildFilterBar(),
+                  DSSpacing.lg.y,
+                  HubEmptyState(
+                    embedded: true,
+                    icon: Icons.filter_list_off_outlined,
+                    title: filterEmptyTitleString,
+                    message: filterEmptyMessageString,
+                  ),
+                ],
+              ),
+            );
+          }
+
           return RefreshIndicator(
             color: HubColors.seed,
             onRefresh: onRefresh,
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.all(DSSpacing.md.value),
-              itemCount: viewmodel.entries.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: DSSpacing.sm.value),
-                    child: HubSectionHeader(
-                      title: myAgendaString,
-                      count: viewmodel.entries.length,
-                    ),
-                  );
-                }
-                final entry = viewmodel.entries[index - 1];
-                return HubAppointmentCard(
-                  clientName: entry.clientName,
-                  serviceType: entry.serviceType,
-                  startTime: entry.startTime,
-                  endTime: entry.endTime,
-                  status: entry.status,
-                  onTap: () => _openAppointmentForm(entry: entry),
-                  onEdit: () => _openAppointmentForm(entry: entry),
-                  onDelete: () => _confirmDelete(entry),
-                );
-              },
-            ),
+            child: _buildGroupedList(),
           );
         },
       ),

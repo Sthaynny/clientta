@@ -26,28 +26,36 @@ class HubEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final padding = embedded ? DSSpacing.lg.value : DSSpacing.xl.value;
-    final content = Padding(
-      padding: EdgeInsets.all(padding),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            embedded ? MainAxisAlignment.start : MainAxisAlignment.center,
-        children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: HubColors.successTint,
-                shape: BoxShape.circle,
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(DSSpacing.lg.value),
-                child: Icon(icon, size: 40, color: HubColors.seed),
+    final content = Semantics(
+      container: true,
+      label: '$title. $message',
+      child: Padding(
+        padding: EdgeInsets.all(padding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              embedded ? MainAxisAlignment.start : MainAxisAlignment.center,
+          children: [
+            ExcludeSemantics(
+              child: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: HubColors.successTint,
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(DSSpacing.lg.value),
+                  child: Icon(icon, size: 40, color: HubColors.seed),
+                ),
               ),
             ),
             DSSpacing.lg.y,
-            DSHeadlineSmallText(
-              title,
-              textAlign: TextAlign.center,
-              color: HubColors.ink,
+            Semantics(
+              header: true,
+              child: DSHeadlineSmallText(
+                title,
+                textAlign: TextAlign.center,
+                color: HubColors.ink,
+              ),
             ),
             DSSpacing.sm.y,
             DSCaptionText(
@@ -65,6 +73,7 @@ class HubEmptyState extends StatelessWidget {
             ],
           ],
         ),
+      ),
     );
 
     if (embedded) return content;

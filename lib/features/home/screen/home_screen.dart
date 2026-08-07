@@ -30,13 +30,63 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     viewmodel.load.execute();
+    viewmodel.markComplete.addListener(_onMarkComplete);
+    viewmodel.updateNotes.addListener(_onUpdateNotes);
+    viewmodel.cancelAppointment.addListener(_onCancelAppointment);
+  }
+
+  @override
+  void dispose() {
+    viewmodel.markComplete.removeListener(_onMarkComplete);
+    viewmodel.updateNotes.removeListener(_onUpdateNotes);
+    viewmodel.cancelAppointment.removeListener(_onCancelAppointment);
+    super.dispose();
   }
 
   @override
   void onHubRouteVisible() => viewmodel.load.execute();
 
+  void _onMarkComplete() {
+    if (!mounted) return;
+    if (viewmodel.markComplete.completed) {
+      context.showSnackBarSuccess(markCompleteSuccessString);
+      viewmodel.markComplete.clearResult();
+    } else if (viewmodel.markComplete.error) {
+      context.showSnackBarError(errorSaveString);
+      viewmodel.markComplete.clearResult();
+    }
+  }
+
+  void _onUpdateNotes() {
+    if (!mounted) return;
+    if (viewmodel.updateNotes.completed) {
+      context.showSnackBarSuccess(quickNotesSavedString);
+      viewmodel.updateNotes.clearResult();
+    } else if (viewmodel.updateNotes.error) {
+      context.showSnackBarError(errorSaveString);
+      viewmodel.updateNotes.clearResult();
+    }
+  }
+
+  void _onCancelAppointment() {
+    if (!mounted) return;
+    if (viewmodel.cancelAppointment.completed) {
+      context.showSnackBarSuccess(cancelAppointmentSuccessString);
+      viewmodel.cancelAppointment.clearResult();
+    } else if (viewmodel.cancelAppointment.error) {
+      context.showSnackBarError(errorSaveString);
+      viewmodel.cancelAppointment.clearResult();
+    }
+  }
+
   Future<void> _openAppointmentForm({ServiceAppointment? entry}) async {
     await context.go(AppRouters.appointmentForm, arguments: entry);
+    if (!mounted) return;
+    viewmodel.load.execute();
+  }
+
+  Future<void> _openRegisterAppointment() async {
+    await context.go(AppRouters.appointmentForm);
     if (!mounted) return;
     viewmodel.load.execute();
   }
@@ -47,21 +97,19 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text(quickNotesDialogTitleString),
-            content: TextField(
+            title: Semantics(header: true, child: Text(quickNotesDialogTitleString)),
+            content: HubTextFormField(
               controller: controller,
-              decoration: InputDecoration(
-                hintText: quickNotesDialogHintString,
-              ),
+              label: quickNotesDialogHintString,
               maxLines: 3,
-              autofocus: true,
             ),
+            actionsAlignment: MainAxisAlignment.end,
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 child: Text(cancelString),
               ),
-              TextButton(
+              FilledButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: Text(saveString),
               ),
@@ -72,6 +120,19 @@ class _HomeScreenState extends State<HomeScreen>
       await viewmodel.updateNotes.execute(
         QuickNotesInput(appointment: entry, notes: controller.text),
       );
+    }
+  }
+
+  Future<void> _confirmCancel(ServiceAppointment entry) async {
+    final confirmed = await showHubConfirmDialog(
+      context: context,
+      title: cancelAppointmentTitleString,
+      message: cancelAppointmentMessageString,
+      confirmLabel: cancelAppointmentActionString,
+      destructive: true,
+    );
+    if (confirmed == true && mounted) {
+      await viewmodel.cancelAppointment.execute(entry);
     }
   }
 
@@ -97,7 +158,10 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       drawer: const AppDrawer(),
       body: ListenableBuilder(
-        listenable: viewmodel.load,
+        listenable: Listenable.merge([
+          viewmodel.load,
+          if (viewmodel.syncService != null) viewmodel.syncService!,
+        ]),
         builder: (context, _) {
           if (viewmodel.load.running && viewmodel.todayAppointments.isEmpty) {
             return const AppLoadingWidget();
@@ -115,6 +179,33 @@ class _HomeScreenState extends State<HomeScreen>
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.all(DSSpacing.md.value),
               children: [
+                if (viewmodel.syncBannerState != HomeSyncBannerState.hidden) ...[
+                  HubOfflineBanner(
+                    message: switch (viewmodel.syncBannerState) {
+                      HomeSyncBannerState.syncing => syncingBannerMessageString,
+                      HomeSyncBannerState.syncPending =>
+                        syncPendingBannerMessageString,
+                      _ => offlineBannerMessageString,
+                    },
+                    variant:
+                        viewmodel.syncBannerState ==
+                                HomeSyncBannerState.offline
+                            ? HubOfflineBannerVariant.offline
+                            : HubOfflineBannerVariant.syncPending,
+                  ),
+                  DSSpacing.md.y,
+                ],
+                if (viewmodel.showSyncIndicator &&
+                    viewmodel.lastSyncedAt != null) ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: DSCaptionText(
+                      formatLastSyncLabel(viewmodel.lastSyncedAt!),
+                      color: HubColors.inkMuted,
+                    ),
+                  ),
+                  DSSpacing.sm.y,
+                ],
                 HubDayHeader(
                   weekdayLabel: weekdayLabels[now.weekday - 1],
                   dateLabel: formatHubDayHeader(now),
@@ -123,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen>
                 DSSpacing.md.y,
                 HubHomeQuickActions(
                   addAppointmentLabel: quickAddAppointmentString,
-                  onAddAppointment: () => _openAppointmentForm(),
+                  onAddAppointment: _openRegisterAppointment,
                 ),
                 DSSpacing.lg.y,
                 HubHomeSection(
@@ -143,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen>
                           title: emptyAppointmentsHomeTitle,
                           message: emptyAppointmentsHomeMessage,
                           actionLabel: addAppointmentString,
-                          onAction: () => _openAppointmentForm(),
+                          onAction: _openRegisterAppointment,
                         )
                       : Column(
                           children:
@@ -164,16 +255,22 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _appointmentTile(ServiceAppointment entry) {
     return HubAppointmentCard(
       clientName: entry.clientName,
+      clientPhone: entry.clientPhone,
       serviceType: entry.serviceType,
       startTime: entry.startTime,
       endTime: entry.endTime,
       status: entry.status,
+      notes: entry.notes,
       onTap: () => _openAppointmentForm(entry: entry),
       onMarkComplete:
           entry.status == AppointmentStatus.agendado.value
               ? () => viewmodel.markComplete.execute(entry)
               : null,
       onAddNotes: () => _showQuickNotes(entry),
+      onCancel:
+          entry.status == AppointmentStatus.agendado.value
+              ? () => _confirmCancel(entry)
+              : null,
     );
   }
 }

@@ -14,6 +14,13 @@ void main() {
     expect(restored.toMap(), tMapServiceAppointment);
   });
 
+  test('ServiceAppointment fromMap parseia updatedAt', () {
+    final map = Map<String, dynamic>.from(tMapServiceAppointment)
+      ..['updatedAt'] = '2026-03-10T12:30:00.000';
+    final restored = ServiceAppointment.fromMap(map);
+    expect(restored.updatedAt, DateTime.parse('2026-03-10T12:30:00.000'));
+  });
+
   test('ServiceAppointment copyWith atualiza status', () {
     final updated = tInstanceServiceAppointment.copyWith(
       status: AppointmentStatus.concluido.value,

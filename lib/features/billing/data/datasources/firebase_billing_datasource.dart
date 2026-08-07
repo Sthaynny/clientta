@@ -1,16 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:clientta/features/billing/domain/entities/subscription_checkout.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 
 class FirebaseBillingDatasource {
-  FirebaseBillingDatasource({FirebaseFunctions? functions})
-    : _functions =
-          functions ??
-          FirebaseFunctions.instanceFor(region: 'southamerica-east1');
+  FirebaseBillingDatasource({
+    FirebaseFunctions? functions,
+    FirebaseFirestore? firestore,
+    FirebaseAuth? auth,
+  }) : _functions =
+           functions ??
+           FirebaseFunctions.instanceFor(region: 'southamerica-east1'),
+       _firestore = firestore ?? FirebaseFirestore.instance,
+       _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseFunctions _functions;
+  final FirebaseFirestore _firestore;
+  final FirebaseAuth _auth;
 
   Future<Map<String, dynamic>> _callFunction(
     String name,
@@ -49,9 +58,42 @@ class FirebaseBillingDatasource {
     return Exception(error.message ?? 'Falha na cobrança.');
   }
 
+  String? get _uid => _auth.currentUser?.uid;
+
   Future<Map<String, dynamic>> getPlanPricing() async {
     final response = await _callFunction('getPlanPricing', {});
     return Map<String, dynamic>.from(response);
+  }
+
+  Future<UserSubscription> getSubscription() async {
+    final uid = _uid;
+    if (uid == null) return UserSubscription.inactive;
+
+    final snapshot = await _firestore.collection('users').doc(uid).get();
+    final data = snapshot.data();
+    if (data == null) return UserSubscription.inactive;
+
+    final subscriptionRaw = data['subscription'];
+    if (subscriptionRaw is! Map) return UserSubscription.inactive;
+
+    return UserSubscription.fromMap(
+      Map<String, dynamic>.from(subscriptionRaw),
+    );
+  }
+
+  Stream<UserSubscription> watchSubscription() {
+    final uid = _uid;
+    if (uid == null) {
+      return Stream.value(UserSubscription.inactive);
+    }
+
+    return _firestore.collection('users').doc(uid).snapshots().map((snapshot) {
+      final subscriptionRaw = snapshot.data()?['subscription'];
+      if (subscriptionRaw is! Map) return UserSubscription.inactive;
+      return UserSubscription.fromMap(
+        Map<String, dynamic>.from(subscriptionRaw),
+      );
+    });
   }
 
   Future<SubscriptionCheckout> createSubscription({
@@ -87,7 +129,14 @@ class FirebaseBillingDatasource {
     return UserSubscription.inactive;
   }
 
-  Future<void> cancelSubscription() async {
-    await _callFunction('cancelSubscription', {});
+  Future<UserSubscription> cancelSubscription() async {
+    final response = await _callFunction('cancelSubscription', {});
+    final subscriptionRaw = response['subscription'];
+    if (subscriptionRaw is Map) {
+      return UserSubscription.fromMap(
+        Map<String, dynamic>.from(subscriptionRaw),
+      );
+    }
+    return getSubscription();
   }
 }

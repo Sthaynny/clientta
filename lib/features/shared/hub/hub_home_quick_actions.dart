@@ -17,23 +17,26 @@ class HubHomeQuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return HubSurface(
       onTap: onAddAppointment,
+      semanticsLabel: addAppointmentLabel,
       padding: EdgeInsets.symmetric(
         horizontal: DSSpacing.md.value,
         vertical: DSSpacing.md.value,
       ),
       child: Row(
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: HubColors.scheduleMuted,
-              borderRadius: BorderRadius.circular(DSSpacing.xs.value),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(DSSpacing.xs.value),
-              child: const Icon(
-                Icons.event_available_outlined,
-                size: 22,
-                color: HubColors.schedule,
+          ExcludeSemantics(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: HubColors.scheduleMuted,
+                borderRadius: BorderRadius.circular(DSSpacing.xs.value),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(DSSpacing.xs.value),
+                child: const Icon(
+                  Icons.event_available_outlined,
+                  size: 22,
+                  color: HubColors.schedule,
+                ),
               ),
             ),
           ),
@@ -46,6 +49,11 @@ class HubHomeQuickActions extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+          ),
+          const Icon(
+            Icons.chevron_right_rounded,
+            color: HubColors.inkMuted,
+            size: 22,
           ),
         ],
       ),

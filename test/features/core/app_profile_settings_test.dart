@@ -19,4 +19,16 @@ void main() {
     const settings = AppProfileSettings(universityName: '   ');
     expect(settings.toMap(), isEmpty);
   });
+
+  test('onboardingSeen round-trip no mapa de perfil', () {
+    const original = AppProfileSettings(onboardingSeen: true);
+    final map = original.toMap();
+    final restored = AppProfileSettings.fromMap(map);
+    expect(restored.onboardingSeen, isTrue);
+  });
+
+  test('onboardingSeen false não persiste chave', () {
+    const settings = AppProfileSettings(onboardingSeen: false);
+    expect(settings.toMap(), isEmpty);
+  });
 }

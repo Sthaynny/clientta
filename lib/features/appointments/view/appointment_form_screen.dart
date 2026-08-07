@@ -30,6 +30,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   late final TextEditingController clientNameController;
   late final TextEditingController clientPhoneController;
   late final TextEditingController notesController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -70,9 +71,39 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       context.back(true);
     }
     if (viewmodel.save.error) {
+      setState(() {});
       context.showSnackBarError(_saveErrorMessage());
       viewmodel.save.clearResult();
     }
+  }
+
+  Future<SeriesEditScope?> _resolveSeriesEditScope() async {
+    if (!viewmodel.isSeriesEdit) return SeriesEditScope.single;
+
+    final choice = await showHubChoiceDialog(
+      context: context,
+      title: editSeriesTitleString,
+      message: editSeriesMessageString,
+      firstLabel: editSeriesOneLabelString,
+      secondLabel: editSeriesAllLabelString,
+    );
+    return switch (choice) {
+      HubChoiceResult.first => SeriesEditScope.single,
+      HubChoiceResult.second => SeriesEditScope.entireSeries,
+      HubChoiceResult.cancelled => null,
+    };
+  }
+
+  Future<void> _submit() async {
+    final scope = await _resolveSeriesEditScope();
+    if (!mounted || scope == null) return;
+
+    viewmodel.pendingSeriesEditScope = scope;
+    if (!viewmodel.validateFields()) {
+      setState(() {});
+      return;
+    }
+    viewmodel.save.execute();
   }
 
   TimeOfDay _timeFromHhMm(String value) {
@@ -110,14 +141,21 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   Future<void> _pickStartTime() async {
     final picked = await _pickTime(_timeFromHhMm(viewmodel.startTime));
     if (picked != null) {
-      setState(() => viewmodel.startTime = _hhMmFromTime(picked));
+      setState(() {
+        viewmodel.startTime = _hhMmFromTime(picked);
+        viewmodel.clearFieldError('startTime');
+        viewmodel.clearFieldError('endTime');
+      });
     }
   }
 
   Future<void> _pickEndTime() async {
     final picked = await _pickTime(_timeFromHhMm(viewmodel.endTime));
     if (picked != null) {
-      setState(() => viewmodel.endTime = _hhMmFromTime(picked));
+      setState(() {
+        viewmodel.endTime = _hhMmFromTime(picked);
+        viewmodel.clearFieldError('endTime');
+      });
     }
   }
 
@@ -135,112 +173,190 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final errors = viewmodel.fieldErrors;
+
     return Scaffold(
       appBar: HubAppBar(
         canPop: true,
         showBrandMark: false,
         title: widget.isEdit ? editAppointmentString : addAppointmentString,
       ),
-      body: ListView(
-        padding: EdgeInsets.all(DSSpacing.md.value),
-        children: [
-          HubTextFormField(
-            controller: clientNameController,
-            label: clientNameString,
-            onChanged: (v) => viewmodel.clientName = v,
-          ),
-          DSSpacing.md.y,
-          HubTextFormField(
-            controller: clientPhoneController,
-            label: clientPhoneString,
-            keyboardType: TextInputType.phone,
-            onChanged: (v) => viewmodel.clientPhone = v,
-          ),
-          DSSpacing.md.y,
-          DropdownButtonFormField<String>(
-            key: ValueKey(viewmodel.serviceType),
-            initialValue: viewmodel.serviceType,
-            decoration: InputDecoration(labelText: serviceTypeString),
-            items:
-                ServiceType.all
-                    .map(
-                      (type) => DropdownMenuItem(
-                        value: type,
-                        child: Text(type),
-                      ),
-                    )
-                    .toList(),
-            onChanged:
-                (v) => setState(
-                  () => viewmodel.serviceType = v ?? ServiceType.outros,
-                ),
-          ),
-          DSSpacing.md.y,
-          HubDateFormField(
-            label: appointmentDateString,
-            value: viewmodel.appointmentDate.toDateAt,
-            onTap: _pickDate,
-          ),
-          DSSpacing.md.y,
-          Row(
-            children: [
-              Expanded(
-                child: HubTimeFormField(
-                  label: startTimeString,
-                  value: viewmodel.startTime,
-                  onTap: _pickStartTime,
-                ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.all(DSSpacing.md.value),
+          children: [
+            HubTextFormField(
+              controller: clientNameController,
+              label: clientNameString,
+              errorText: errors.clientName,
+              onChanged: (value) {
+                viewmodel.clientName = value;
+                viewmodel.clearFieldError('clientName');
+                setState(() {});
+              },
+            ),
+            DSSpacing.md.y,
+            HubTextFormField(
+              controller: clientPhoneController,
+              label: clientPhoneString,
+              keyboardType: TextInputType.phone,
+              errorText: errors.clientPhone,
+              onChanged: (value) {
+                viewmodel.clientPhone = value;
+                viewmodel.clearFieldError('clientPhone');
+                setState(() {});
+              },
+            ),
+            DSSpacing.md.y,
+            DropdownButtonFormField<String>(
+              key: ValueKey(viewmodel.serviceType),
+              initialValue: viewmodel.serviceType,
+              decoration: InputDecoration(
+                labelText: serviceTypeString,
+                errorText: errors.serviceType,
               ),
-              DSSpacing.sm.x,
-              Expanded(
-                child: HubTimeFormField(
-                  label: endTimeString,
-                  value: viewmodel.endTime,
-                  onTap: _pickEndTime,
+              items:
+                  ServiceType.all
+                      .map(
+                        (type) => DropdownMenuItem(
+                          value: type,
+                          child: Text(type),
+                        ),
+                      )
+                      .toList(),
+              onChanged:
+                  (value) => setState(() {
+                    viewmodel.serviceType = value ?? ServiceType.outros;
+                    viewmodel.clearFieldError('serviceType');
+                  }),
+            ),
+            DSSpacing.md.y,
+            HubDateFormField(
+              label: appointmentDateString,
+              value: viewmodel.appointmentDate.toDateAt,
+              onTap: _pickDate,
+            ),
+            DSSpacing.md.y,
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      HubTimeFormField(
+                        label: startTimeString,
+                        value: viewmodel.startTime,
+                        onTap: _pickStartTime,
+                      ),
+                      if (errors.startTime != null)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: DSSpacing.xxs.value,
+                            left: DSSpacing.sm.value,
+                          ),
+                          child: Text(
+                            errors.startTime!,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
+                DSSpacing.sm.x,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      HubTimeFormField(
+                        label: endTimeString,
+                        value: viewmodel.endTime,
+                        onTap: _pickEndTime,
+                      ),
+                      if (errors.endTime != null)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: DSSpacing.xxs.value,
+                            left: DSSpacing.sm.value,
+                          ),
+                          child: Text(
+                            errors.endTime!,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            DSSpacing.md.y,
+            DropdownButtonFormField<String>(
+              key: ValueKey(viewmodel.status),
+              initialValue: viewmodel.status,
+              decoration: InputDecoration(labelText: appointmentStatusString),
+              items:
+                  AppointmentStatus.values
+                      .map(
+                        (status) => DropdownMenuItem(
+                          value: status.value,
+                          child: Text(status.label),
+                        ),
+                      )
+                      .toList(),
+              onChanged:
+                  (value) => setState(
+                    () =>
+                        viewmodel.status =
+                            value ?? AppointmentStatus.agendado.value,
+                  ),
+            ),
+            DSSpacing.md.y,
+            HubTextFormField(
+              controller: notesController,
+              label: notesOptionalString,
+              maxLines: 3,
+              onChanged: (value) => viewmodel.notes = value,
+            ),
+            if (viewmodel.showRecurringOptions) ...[
+              DSSpacing.md.y,
+              DSBodyText(
+                recurringSeriesLabelString,
+                fontWeight: FontWeight.w600,
+                color: HubColors.ink,
+              ),
+              DSSpacing.xs.y,
+              DSCaptionText(
+                recurringSeriesHintString,
+                color: HubColors.inkMuted,
+              ),
+              DSSpacing.sm.y,
+              HubWeekdayChips(
+                selectedWeekdays: viewmodel.selectedWeekdays,
+                onChanged:
+                    (weekdays) => setState(
+                      () => viewmodel.selectedWeekdays = weekdays,
+                    ),
               ),
             ],
-          ),
-          DSSpacing.md.y,
-          DropdownButtonFormField<String>(
-            key: ValueKey(viewmodel.status),
-            initialValue: viewmodel.status,
-            decoration: InputDecoration(labelText: appointmentStatusString),
-            items:
-                AppointmentStatus.values
-                    .map(
-                      (s) => DropdownMenuItem(
-                        value: s.value,
-                        child: Text(s.label),
-                      ),
-                    )
-                    .toList(),
-            onChanged:
-                (v) => setState(
-                  () =>
-                      viewmodel.status =
-                          v ?? AppointmentStatus.agendado.value,
-                ),
-          ),
-          DSSpacing.md.y,
-          HubTextFormField(
-            controller: notesController,
-            label: notesOptionalString,
-            maxLines: 3,
-            onChanged: (v) => viewmodel.notes = v,
-          ),
-          DSSpacing.xl.y,
-          ListenableBuilder(
-            listenable: viewmodel.save,
-            builder:
-                (_, __) => HubPrimaryButton(
-                  label: saveString,
-                  isLoading: viewmodel.save.running,
-                  onPressed: () => viewmodel.save.execute(),
-                ),
-          ),
-          DSSpacing.md.y,
-        ],
+            DSSpacing.xl.y,
+            ListenableBuilder(
+              listenable: viewmodel.save,
+              builder:
+                  (_, __) => HubPrimaryButton(
+                    label: saveString,
+                    isLoading: viewmodel.save.running,
+                    onPressed: _submit,
+                  ),
+            ),
+            DSSpacing.md.y,
+          ],
+        ),
       ),
     );
   }

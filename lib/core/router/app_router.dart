@@ -16,6 +16,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
     return AppointmentFormScreen(
       viewmodel: AppointmentFormViewModel(
         repository: dependency(),
+        billingRepository: dependency(),
+        syncService: dependency(),
         initial: entry,
       ),
       isEdit: entry != null,
@@ -37,5 +39,18 @@ enum AppRouters {
     agendas => '/agendas',
     appointmentForm => '/agendas/registrar',
     planSettings => '/plano',
+  };
+}
+
+/// Public auth routes (outside [MyApp] — gated by [AuthGate]).
+enum AuthRouters {
+  login,
+  register;
+
+  const AuthRouters();
+
+  String get path => switch (this) {
+    login => '/login',
+    register => '/cadastro',
   };
 }

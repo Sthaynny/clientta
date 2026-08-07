@@ -16,13 +16,10 @@ service cloud.firestore {
         && !('subscription' in request.resource.data);
       allow update: if isOwner(userId)
         && request.resource.data.subscription == resource.data.subscription;
-    }
 
-    match /appointments/{appointmentId} {
-      allow read, update, delete: if isSignedIn()
-        && resource.data.userId == request.auth.uid;
-      allow create: if isSignedIn()
-        && request.resource.data.userId == request.auth.uid;
+      match /appointments/{appointmentId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     match /billing_events/{eventId} {

@@ -13,6 +13,13 @@ class BillingRepositoryImpl implements BillingRepository {
       _datasource.getPlanPricing();
 
   @override
+  Future<UserSubscription> getSubscription() => _datasource.getSubscription();
+
+  @override
+  Stream<UserSubscription> watchSubscription() =>
+      _datasource.watchSubscription();
+
+  @override
   Future<SubscriptionCheckout> createSubscription({
     required String planId,
     required String returnUrl,
@@ -28,5 +35,6 @@ class BillingRepositoryImpl implements BillingRepository {
       _datasource.completeSandboxSubscription();
 
   @override
-  Future<void> cancelSubscription() => _datasource.cancelSubscription();
+  Future<UserSubscription> cancelSubscription() =>
+      _datasource.cancelSubscription();
 }

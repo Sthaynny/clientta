@@ -10,6 +10,7 @@ class ServiceAppointment {
     required this.status,
     this.notes,
     this.seriesId,
+    this.updatedAt,
   });
 
   final String id;
@@ -22,6 +23,7 @@ class ServiceAppointment {
   final String status;
   final String? notes;
   final String? seriesId;
+  final DateTime? updatedAt;
 
   factory ServiceAppointment.fromMap(Map<String, dynamic> map) {
     return ServiceAppointment(
@@ -35,6 +37,7 @@ class ServiceAppointment {
       status: map['status'] as String,
       notes: map['notes'] as String?,
       seriesId: map['seriesId'] as String?,
+      updatedAt: _parseDateTime(map['updatedAt']),
     );
   }
 
@@ -49,6 +52,7 @@ class ServiceAppointment {
     'status': status,
     if (notes != null) 'notes': notes,
     if (seriesId != null) 'seriesId': seriesId,
+    if (updatedAt != null) 'updatedAt': updatedAt!.toIso8601String(),
   };
 
   ServiceAppointment copyWith({
@@ -64,6 +68,8 @@ class ServiceAppointment {
     bool clearNotes = false,
     String? seriesId,
     bool clearSeriesId = false,
+    DateTime? updatedAt,
+    bool clearUpdatedAt = false,
   }) {
     return ServiceAppointment(
       id: id ?? this.id,
@@ -76,7 +82,15 @@ class ServiceAppointment {
       status: status ?? this.status,
       notes: clearNotes ? null : (notes ?? this.notes),
       seriesId: clearSeriesId ? null : (seriesId ?? this.seriesId),
+      updatedAt: clearUpdatedAt ? null : (updatedAt ?? this.updatedAt),
     );
+  }
+
+  static DateTime? _parseDateTime(dynamic value) {
+    if (value == null) return null;
+    if (value is DateTime) return value;
+    if (value is String) return DateTime.tryParse(value);
+    return null;
   }
 
   static String _dateKey(DateTime date) =>

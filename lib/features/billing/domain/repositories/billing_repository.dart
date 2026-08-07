@@ -4,6 +4,10 @@ import 'package:clientta/features/billing/domain/entities/user_subscription.dart
 abstract class BillingRepository {
   Future<Map<String, dynamic>> getPlanPricing();
 
+  Future<UserSubscription> getSubscription();
+
+  Stream<UserSubscription> watchSubscription();
+
   Future<SubscriptionCheckout> createSubscription({
     required String planId,
     required String returnUrl,
@@ -13,5 +17,5 @@ abstract class BillingRepository {
 
   Future<UserSubscription> completeSandboxSubscription();
 
-  Future<void> cancelSubscription();
+  Future<UserSubscription> cancelSubscription();
 }

@@ -4,7 +4,7 @@
 
 ## C-109 — Onboarding
 
-- **Status:** Não iniciado
+- **Status:** Concluído
 - **O que fazer:** 1–2 telas: valor offline + registrar primeiro atendimento.
 - **Objetivo:** Ativar usuário na primeira sessão.
 - **Impacto:** **Alto** — retenção.
@@ -14,7 +14,7 @@
 
 ## C-110 — Empty states CRM
 
-- **Status:** Não iniciado
+- **Status:** Concluído
 - **O que fazer:** Revisar copy de estados vazios (painel do dia, agenda) para público CRM.
 - **Objetivo:** Primeira impressão profissional.
 - **Impacto:** **Médio** — conversão de uso.
@@ -24,7 +24,7 @@
 
 ## C-111 — Paleta Clientta
 
-- **Status:** Não iniciado
+- **Status:** Concluído
 - **O que fazer:** Ajustar `HubColors` ao azul-verde profissional documentado em DESIGN.md.
 - **Objetivo:** Identidade visual CRM (não acadêmica).
 - **Impacto:** **Médio** — marca.

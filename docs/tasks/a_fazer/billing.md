@@ -6,7 +6,7 @@
 
 ## C-301 — Cloud Functions Stripe
 
-- **Status:** Não iniciado
+- **Status:** Concluído
 - **O que fazer:** Implementar callables `getPlanPricing`, `createSubscription`, `syncSubscriptionStatus`, `cancelSubscription`.
 - **Objetivo:** Cobrança sem SDK no app Flutter.
 - **Impacto:** **Alto** — receita.
@@ -16,7 +16,7 @@
 
 ## C-302 — Webhook Stripe
 
-- **Status:** Não iniciado
+- **Status:** Concluído
 - **O que fazer:** HTTP `stripeBillingWebhook` + secrets + atualização de `users/{uid}.subscription`.
 - **Objetivo:** Entitlement confiável após pagamento.
 - **Impacto:** **Alto** — receita.

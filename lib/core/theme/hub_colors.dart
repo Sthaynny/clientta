@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Paleta da marca Sextante — ver [DESIGN.md].
+/// Paleta Clientta — ver [DESIGN.md].
 abstract final class HubColors {
-  static const Color seed = Color(0xFF1A6B52);
-  static const Color seedDark = Color(0xFF0F4535);
+  static const Color seed = Color(0xFF1B6B5C);
+  static const Color seedDark = Color(0xFF0F4A3F);
   static const Color onPrimaryMuted = Color(0xFFB8D4CB);
   static const Color canvas = Color(0xFFF4F6F8);
   static const Color surface = Color(0xFFFFFFFF);
@@ -12,6 +12,11 @@ abstract final class HubColors {
   static const Color border = Color(0xFFE2E6EA);
   static const Color schedule = Color(0xFF2D6A8F);
   static const Color scheduleMuted = Color(0xFFE8F1F6);
+  static const Color success = Color(0xFF2E7D52);
   static const Color successTint = Color(0xFFE6F4EE);
+  static const Color warning = Color(0xFFC47A2A);
+  static const Color warningTint = Color(0xFFFFF4E8);
   static const Color error = Color(0xFFC62828);
+  static const Color errorTint = Color(0xFFFCE8E8);
+  static const Color focusRing = Color(0xFF1B6B5C);
 }

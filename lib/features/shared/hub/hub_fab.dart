@@ -14,14 +14,18 @@ class HubFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: onPressed,
-      icon: const Icon(Icons.add_rounded),
-      label: Text(label),
-      backgroundColor: HubColors.seed,
-      foregroundColor: Colors.white,
-      elevation: 2,
-      extendedPadding: EdgeInsets.symmetric(horizontal: DSSpacing.md.value),
+    return Semantics(
+      button: true,
+      label: label,
+      child: FloatingActionButton.extended(
+        onPressed: onPressed,
+        icon: const Icon(Icons.add_rounded),
+        label: Text(label),
+        backgroundColor: HubColors.seed,
+        foregroundColor: Colors.white,
+        elevation: 2,
+        extendedPadding: EdgeInsets.symmetric(horizontal: DSSpacing.md.value),
+      ),
     );
   }
 }

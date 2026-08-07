@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/theme/hub_theme.dart';
 import 'package:clientta/features/shared/components/app_icon.dart';
 
 class HubAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -34,28 +35,42 @@ class HubAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading:
           leading ??
           (canPop
-              ? IconButton(
-                icon: const Icon(Icons.arrow_back_rounded),
-                iconSize: 26,
-                onPressed: onBackButtonPressed ?? () => Navigator.maybePop(context),
+              ? Semantics(
+                button: true,
+                label: 'Voltar',
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  iconSize: 26,
+                  style: IconButton.styleFrom(
+                    minimumSize: const Size(
+                      HubTheme.minTouchTarget,
+                      HubTheme.minTouchTarget,
+                    ),
+                  ),
+                  onPressed:
+                      onBackButtonPressed ?? () => Navigator.maybePop(context),
+                ),
               )
               : null),
       title: Row(
         children: [
           if (showBrandMark && !canPop) ...[
-            AppIcon.hub(size: 40),
+            ExcludeSemantics(child: AppIcon.hub(size: 40)),
             DSSpacing.sm.x,
           ],
           Expanded(
-            child: Text(
-              title ?? '',
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                letterSpacing: -0.02,
+            child: Semantics(
+              header: true,
+              child: Text(
+                title ?? '',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.02,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

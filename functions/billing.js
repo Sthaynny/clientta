@@ -75,6 +75,33 @@ async function getUserDoc(uid) {
   return doc.exists ? doc.data() || {} : {};
 }
 
+async function resolveUserIdFromStripeSubscription(stripeSubscription) {
+  const metadataUserId = stripeSubscription.metadata?.userId;
+  if (metadataUserId) {
+    return metadataUserId;
+  }
+
+  const customerId =
+    typeof stripeSubscription.customer === 'string'
+      ? stripeSubscription.customer
+      : stripeSubscription.customer?.id;
+  if (!customerId) {
+    return null;
+  }
+
+  const snapshot = await getFirestore()
+    .collection('users')
+    .where('subscription.stripeCustomerId', '==', customerId)
+    .limit(1)
+    .get();
+
+  if (snapshot.empty) {
+    return null;
+  }
+
+  return snapshot.docs[0].id;
+}
+
 async function updateUserSubscription(uid, patch) {
   const ref = getFirestore().collection('users').doc(uid);
   await ref.set(
@@ -211,6 +238,9 @@ const createSubscription = onCall(
             quantity: 1,
           },
         ],
+        subscription_data: {
+          metadata: { userId: uid, plan },
+        },
         success_url: appendBillingResult(returnUrl, 'success'),
         cancel_url: appendBillingResult(returnUrl, 'cancel'),
       },
@@ -331,17 +361,17 @@ const cancelSubscription = onCall(
       },
     );
 
-    const accessEndsAt = unixSecondsToDate(updated.current_period_end);
-    const patch = buildSubscriptionPatch({
-      plan: subscription.plan || 'pro',
-      status: 'canceled',
-      stripeCustomerId: subscription.stripeCustomerId,
-      stripeSubscriptionId,
-      currentPeriodEnd: accessEndsAt,
-    });
-    await updateUserSubscription(uid, patch);
+    await applyStripeSubscriptionToUser(
+      uid,
+      updated,
+      subscription.plan || 'pro',
+    );
 
-    return { subscription: patch, canceledAtPeriodEnd: true };
+    const refreshed = await getUserDoc(uid);
+    return {
+      subscription: refreshed.subscription || {},
+      canceledAtPeriodEnd: true,
+    };
   },
 );
 
@@ -401,7 +431,9 @@ const stripeBillingWebhook = onRequest(
         case 'customer.subscription.updated':
         case 'customer.subscription.deleted': {
           const stripeSubscription = event.data.object;
-          const uid = stripeSubscription.metadata?.userId;
+          const uid = await resolveUserIdFromStripeSubscription(
+            stripeSubscription,
+          );
           if (!uid) break;
           await applyStripeSubscriptionToUser(
             uid,
@@ -416,7 +448,9 @@ const stripeBillingWebhook = onRequest(
           const stripeSubscription = await stripe.subscriptions.retrieve(
             invoice.subscription,
           );
-          const uid = stripeSubscription.metadata?.userId;
+          const uid = await resolveUserIdFromStripeSubscription(
+            stripeSubscription,
+          );
           if (!uid) break;
           await applyStripeSubscriptionToUser(
             uid,
@@ -431,7 +465,9 @@ const stripeBillingWebhook = onRequest(
           const stripeSubscription = await stripe.subscriptions.retrieve(
             invoice.subscription,
           );
-          const uid = stripeSubscription.metadata?.userId;
+          const uid = await resolveUserIdFromStripeSubscription(
+            stripeSubscription,
+          );
           if (!uid) break;
           await updateUserSubscription(uid, {
             plan: stripeSubscription.metadata?.plan || 'pro',

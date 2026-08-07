@@ -1,11 +1,13 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/strings/strings.dart';
-import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
-import 'package:clientta/features/shared/hub/hub_primary_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/auth/domain/repositories/auth_repository.dart';
+import 'package:clientta/features/shared/hub/hub.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,9 +17,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _loading = false;
+
+  AuthRepository get _authRepository => dependency<AuthRepository>();
 
   @override
   void dispose() {
@@ -26,69 +31,93 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _signIn() async {
-    setState(() => _loading = true);
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
-    } on FirebaseAuthException {
-      if (!mounted) return;
-      context.showSnackBarError(credenciaisInvalidasString);
-    } catch (_) {
-      if (!mounted) return;
-      context.showSnackBarError(errorDefaultString);
-    } finally {
-      if (mounted) setState(() => _loading = false);
+  String _errorMessage(Exception error) {
+    final text = error.toString();
+    const prefix = 'Exception: ';
+    if (text.startsWith(prefix)) {
+      return text.substring(prefix.length);
     }
+    return text;
+  }
+
+  String? _validateEmail(String? value) {
+    final email = value?.trim() ?? '';
+    if (email.isEmpty) return errorEmailRequiredString;
+    if (!email.contains('@')) return errorEmailInvalidString;
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) return errorPasswordRequiredString;
+    return null;
+  }
+
+  Future<void> _signIn() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _loading = true);
+    final result = await _authRepository.signInWithEmail(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
+    if (!mounted) return;
+
+    switch (result) {
+      case Ok():
+        break;
+      case Error(:final error):
+        context.showSnackBarError(_errorMessage(error));
+    }
+
+    if (mounted) setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(DSSpacing.lg.value),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              DSSpacing.xl.y,
-              Text(
-                loginWelcomeString,
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  color: HubColors.ink,
-                ),
-              ),
-              DSSpacing.sm.y,
-              DSBodyText(
-                loginSubtitleString,
-                color: HubColors.inkMuted,
-              ),
-              DSSpacing.xl.y,
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: emailString),
-                keyboardType: TextInputType.emailAddress,
-                autofillHints: const [AutofillHints.email],
-              ),
-              DSSpacing.md.y,
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: passwordString),
-                obscureText: true,
-                autofillHints: const [AutofillHints.password],
-              ),
-              DSSpacing.xl.y,
-              HubPrimaryButton(
-                label: loginString,
-                isLoading: _loading,
-                onPressed: _signIn,
-              ),
-            ],
-          ),
+    return HubAuthScaffold(
+      title: loginWelcomeString,
+      subtitle: loginSubtitleString,
+      footer: Center(
+        child: TextButton(
+          onPressed:
+              _loading
+                  ? null
+                  : () => Navigator.of(context).pushReplacementNamed(
+                    AuthRouters.register.path,
+                  ),
+          child: Text(createAccountString),
+        ),
+      ),
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HubTextFormField(
+              controller: _emailController,
+              label: emailString,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.email],
+              validator: _validateEmail,
+            ),
+            DSSpacing.md.y,
+            HubTextFormField(
+              controller: _passwordController,
+              label: passwordString,
+              obscureText: true,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.password],
+              validator: _validatePassword,
+            ),
+            DSSpacing.xl.y,
+            HubPrimaryButton(
+              label: loginString,
+              isLoading: _loading,
+              onPressed: _loading ? null : _signIn,
+            ),
+          ],
         ),
       ),
     );

@@ -35,7 +35,10 @@ class AppointmentRepositoryLocal implements AppointmentRepository {
     }
 
     for (final entry in entries) {
-      final map = entry.toMap();
+      final stamped = entry.updatedAt == null
+          ? entry.copyWith(updatedAt: DateTime.now())
+          : entry;
+      final map = stamped.toMap();
       final index = list.indexWhere((e) => e['id'] == entry.id);
       if (index >= 0) {
         list[index] = map;

@@ -11,6 +11,7 @@ class HubSurface extends StatelessWidget {
     this.onTap,
     this.tint,
     this.showBorder = true,
+    this.semanticsLabel,
   });
 
   final Widget child;
@@ -19,6 +20,7 @@ class HubSurface extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? tint;
   final bool showBorder;
+  final String? semanticsLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +35,20 @@ class HubSurface extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: radius,
-        side: showBorder
-            ? const BorderSide(color: HubColors.border)
-            : BorderSide.none,
+        side:
+            showBorder
+                ? const BorderSide(color: HubColors.border)
+                : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
-      child: onTap != null
-          ? InkWell(
-              onTap: onTap,
-              borderRadius: radius,
-              child: content,
-            )
-          : content,
+      child:
+          onTap != null
+              ? InkWell(
+                onTap: onTap,
+                borderRadius: radius,
+                child: content,
+              )
+              : content,
     );
 
     surface = DecoratedBox(
@@ -61,9 +65,17 @@ class HubSurface extends StatelessWidget {
       child: surface,
     );
 
-    return Padding(
+    final padded = Padding(
       padding: margin ?? EdgeInsets.zero,
       child: surface,
+    );
+
+    if (onTap == null) return padded;
+
+    return Semantics(
+      button: true,
+      label: semanticsLabel,
+      child: padded,
     );
   }
 }
