@@ -98,13 +98,10 @@ class _ClientsScreenState extends State<ClientsScreen>
                       : viewmodel.visibleProfiles.length,
                 ),
                 DSSpacing.sm.y,
-                TextField(
+                HubSearchField(
                   controller: _searchController,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    labelText: clientsSearchHintString,
-                    prefixIcon: const Icon(Icons.search_rounded),
-                  ),
+                  label: clientsSearchHintString,
+                  onChanged: (_) => setState(() {}),
                 ),
                 DSSpacing.md.y,
                 if (viewmodel.profiles.isEmpty)
