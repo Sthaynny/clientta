@@ -160,11 +160,14 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             ...group.entries.map(
               (entry) => HubAppointmentCard(
                 clientName: entry.clientName,
+                clientPhone: entry.clientPhone,
                 serviceType: entry.serviceType,
                 startTime: entry.startTime,
                 endTime: entry.endTime,
                 status: entry.status,
+                notes: entry.notes,
                 onTap: () => _openClientCare(entry),
+                onAddNotes: () => _openClientCare(entry),
                 onViewCare: () => _openClientCare(entry),
                 onEdit: () => _openAppointmentForm(entry: entry),
                 onDelete: () => _confirmDelete(entry),
