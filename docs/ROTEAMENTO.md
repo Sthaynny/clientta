@@ -24,7 +24,7 @@ context.go(AppRouters.appointmentForm, arguments: appointment);
 context.go(AppRouters.subscriptionPlan);
 ```
 
-ViewModels de formulário recebem `ServiceAppointment?` via `arguments` da rota (padrão legado Sextante).
+ViewModels de formulário recebem `ServiceAppointment?` via `arguments` da rota.
 
 Para alterar um caminho, edite o getter `path` no enum `AppRouters`.
 

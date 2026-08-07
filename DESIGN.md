@@ -4,7 +4,7 @@
 
 Profissional **em movimento** — corretor de seguros no estacionamento, atendente de crédito entre ligações, consultor autônomo no cliente. Luz ambiente variável, **pouco tempo**, precisa de clareza imediata: **quem**, **quando**, **o que foi discutido** e **próximo passo**.
 
-Contraste com o Sextante (estudante na biblioteca): aqui o tom é **profissional e confiável**, não acadêmico.
+Tom **profissional e confiável** — clareza operacional, não acadêmico.
 
 ## Color strategy
 

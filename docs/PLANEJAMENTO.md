@@ -1,6 +1,6 @@
 # Planejamento — Clientta
 
-Documento de roteiro para evolução do **Clientta** após a migração de produto desde o **Sextante**.  
+Documento de roteiro para evolução do **Clientta**.  
 Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---
@@ -9,8 +9,8 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md)
 
 | Área | Situação |
 |------|----------|
-| **Produto** | Documentação Clientta; código em transição do domínio universitário |
-| **Arquitetura** | Flutter MVVM + GetIt + `DeviceJsonStore` (legado Sextante) |
+| **Produto** | Documentação Clientta; domínio CRM de atendimentos |
+| **Arquitetura** | Flutter MVVM + GetIt + `DeviceJsonStore` |
 | **UI** | Tema `HubTheme` + componentes `Hub*` |
 | **Auth / sync** | Planejado — Firebase Auth + Firestore |
 | **Billing** | Planejado — Stripe via Cloud Functions |
@@ -40,7 +40,7 @@ Objetivo: app utilizável no dia a dia sem sync nem cobrança.
 | 1.3 | **Minha Agenda** — lista agrupada | Filtro por `serviceType` |
 | 1.4 | **Formulário** `/agendas/registrar` | Cliente, telefone, tipo, data, horários, notas, `seriesId` |
 | 1.5 | Firebase **Auth** (e-mail/senha ou Google) | Gate mínimo para futuro sync |
-| 1.6 | Remover / migrar features Sextante | classes, activities, perfil universidade |
+| 1.6 | Remover features legadas (domínio universitário) | classes, activities, perfil universidade |
 | 1.7 | `flutter analyze` + testes de domínio | ViewModels de appointments |
 
 **Critério de conclusão:** fluxo completo offline (criar → listar → concluir → anotar) com login opcional ou obrigatório conforme decisão de produto.
@@ -99,7 +99,7 @@ Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
 | Item | Ação |
 |------|------|
 | Pacote `university_hub` | Renomear a `clientta` e atualizar imports |
-| Features legadas Sextante | Remover após migração de appointments |
+| Features legadas (classes, activities) | Remover após migração de appointments |
 | `DropdownButtonFormField` deprecado | `initialValue` + `ValueKey` |
 | Secrets Stripe / Firebase | Apenas em Cloud Functions e CI, nunca no app |
 
@@ -112,7 +112,7 @@ Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
 | 2026-08 | Produto redefinido como **Clientta** (CRM de atendimentos) |
 | 2026-08 | Firebase Auth + Firestore **no escopo** (sync Pro) |
 | 2026-08 | Billing **Stripe** via Cloud Functions (sem SDK Flutter) |
-| 2026-03 | Legado Sextante: offline-only, sem nuvem |
+| 2026-03 | Baseline offline-only, sem nuvem |
 
 ---
 

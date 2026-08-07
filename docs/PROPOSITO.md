@@ -69,5 +69,4 @@ Guia técnico: [guia_clientta.md](guia_clientta.md).
 
 ## Evolução
 
-Roteiro de fases: [PLANEJAMENTO.md](PLANEJAMENTO.md).  
-Origem do produto: adaptação do codebase **Sextante** (`proposta.md`).
+Roteiro de fases: [PLANEJAMENTO.md](PLANEJAMENTO.md).

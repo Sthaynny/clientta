@@ -1,6 +1,6 @@
 # Finalizadas — Engenharia
 
-Baseline técnico herdado do Sextante, válido para Clientta.
+Baseline técnico do Clientta (offline-first, MVVM + GetIt).
 
 ---
 

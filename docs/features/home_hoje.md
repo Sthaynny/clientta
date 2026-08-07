@@ -34,7 +34,7 @@ Tela inicial (`/`) com **atendimentos do dia corrente**, ordenados por `startTim
 
 ## Status no app
 
-**Planejado** — migração desde `features/home` (Sextante). Rota `/`.
+**Planejado** — painel do dia em `features/home`. Rota `/`.
 
 ## Dependências técnicas
 

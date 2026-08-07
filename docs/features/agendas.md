@@ -74,7 +74,7 @@ Atendimentos com o mesmo `seriesId` formam uma série (ex.: follow-up semanal). 
 
 ## Status no app
 
-**Planejado** — substitui `classes`, `activities` e grade Sextante.
+**Planejado** — substitui `classes`, `activities` e grade horária legados.
 
 ## Dependências técnicas
 

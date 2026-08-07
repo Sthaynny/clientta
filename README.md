@@ -25,6 +25,6 @@ O <strong>Clientta</strong> é um <strong>CRM de atendimentos</strong> para quem
 - **Firebase** — Auth + Firestore (sync de agendamentos)
 - **Stripe** — assinatura Pro via Cloud Functions (sem SDK no app)
 
-## Migração
+## Namespace
 
-Este repositório evolui do produto **Sextante** (organizador universitário offline). A documentação e o roadmap refletem **Clientta**; o código pode ainda usar o pacote `university_hub` até a migração de namespaces.
+O código pode ainda usar o pacote Dart `university_hub` até a migração completa para `clientta`.

@@ -63,7 +63,7 @@ Arquivo local: `crm_appointments.json`.
 - Textos de UI em `lib/core/strings/` (`strings.dart`, `daily_strings.dart`), não hardcoded em widgets.
 - Repositórios encapsulam I/O; ViewModels orquestram, não acessam arquivo direto.
 - Preferir `copyWith` e modelos imutáveis (`final` nos campos).
-- Não reintroduzir domínio Sextante (ClassEntry, ActivityEntry) em novas features.
+- Não reintroduzir domínio universitário legado (`ClassEntry`, `ActivityEntry`) em novas features.
 
 ## APIs e analyzer
 

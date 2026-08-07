@@ -2,7 +2,7 @@
 
 ---
 
-## C-106 — Remover features Sextante
+## C-106 — Remover features legadas
 
 - **Status:** Não iniciado
 - **O que fazer:** Remover `classes`, `activities`, perfil universidade e rotas legadas.

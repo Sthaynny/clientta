@@ -22,11 +22,11 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 
 ---
 
-## 1. Baseline (legado Sextante + docs)
+## 1. Baseline (docs + arquitetura)
 
 | ID | Área | O que fazer | Objetivo | Impacto | Status | Relacionado |
 |----|------|-------------|----------|---------|--------|-------------|
-| C-001 | produto | Documentação **Clientta** (substituir Sextante) | Alinhar time e roadmap ao novo produto | Alto — direção | Concluído | [PROPOSITO.md](PROPOSITO.md) |
+| C-001 | produto | Documentação **Clientta** | Alinhar time e roadmap ao produto | Alto — direção | Concluído | [PROPOSITO.md](PROPOSITO.md) |
 | C-002 | engenharia | `DeviceJsonStore` offline-first | Base de persistência local | Alto — proposta | Concluído | [guia_clientta.md](guia_clientta.md) |
 | C-003 | engenharia | Arquitetura **MVVM + GetIt** | Evolução previsível | Médio — manutenção | Concluído | [guia_clientta.md](guia_clientta.md) |
 | C-004 | design | Tema **HubTheme** + componentes `Hub*` | UI consistente | Médio — confiança | Concluído | [../DESIGN.md](../DESIGN.md) |
@@ -42,7 +42,7 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 | C-103 | produto | **Minha Agenda** (`/agendas`) | Histórico e filtros | Alto — retenção | Não iniciado | [agendas.md](features/agendas.md) |
 | C-104 | produto | **Formulário** (`/agendas/registrar`) | Cadastro com notas e séries | Alto — conversão | Não iniciado | [agendas.md](features/agendas.md) |
 | C-105 | engenharia | **Firebase Auth** (login/cadastro) | Identidade para sync e billing | Alto — infra | Não iniciado | [guia_clientta.md](guia_clientta.md) |
-| C-106 | engenharia | Remover features **Sextante** (classes, activities) | Código alinhado ao CRM | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
+| C-106 | engenharia | Remover features legadas (classes, activities) | Código alinhado ao CRM | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 | C-107 | produto | Ordenar painel do dia por `startTime` | Leitura natural da agenda | Médio — UX | Não iniciado | [home_hoje.md](features/home_hoje.md) |
 | C-108 | produto | Diálogo de confirmação ao excluir | Evitar perda de dados | Médio — confiança | Não iniciado | [agendas.md](features/agendas.md) |
 | C-109 | produto | **Onboarding** leve (offline + primeiro atendimento) | Ativar na primeira sessão | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |

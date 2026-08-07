@@ -46,7 +46,7 @@ Arquivo: `crm_appointments.json` em `getApplicationDocumentsDirectory()`.
 
 Store: `lib/core/storage/device_json_store.dart`.
 
-Migração: instalações legadas Sextante podem migrar de `university_hub_daily.json` — documentar script de migração na Fase 1.
+Migração: instalações com `university_hub_daily.json` podem migrar para `crm_appointments.json` — documentar script na Fase 1.
 
 ## Firebase
 
