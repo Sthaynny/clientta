@@ -42,6 +42,7 @@ void main() {
         expectHomeOrLoginShell();
         expect(find.text(onboardingSkipString), findsNothing);
       },
+      // Skip em desktop/web: Firebase só em Android/iOS.
       skip: !integrationTestPlatformSupported,
     );
   });

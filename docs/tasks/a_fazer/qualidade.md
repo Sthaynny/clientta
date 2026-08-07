@@ -43,4 +43,10 @@
 - **Objetivo:** Regressão de navegação.
 - **Impacto:** **Médio** — manutenção.
 - **Feature:** [PLANEJAMENTO.md](../../PLANEJAMENTO.md)
-- **Nota:** Scaffold em `integration_test/app_test.dart` — smoke AuthGate → home ou login. Onboarding marcado via `AppProfileRepository`. Rodar em Android/iOS (`flutter test integration_test -d <device>`). Fluxo completo login → registrar → painel fica para iteração futura (auth real).
+
+### Entregue
+
+- Smoke em `integration_test/app_test.dart` + helpers em `integration_test/test_helpers.dart`.
+- AuthGate → home (`homeTodayString`) ou login (`loginWelcomeString`); onboarding pré-marcado via `AppProfileRepository`.
+
+- **Nota:** Rodar em Android/iOS (`flutter test integration_test -d <device>`). Fluxo completo login → registrar → painel fica para iteração futura (auth real).
