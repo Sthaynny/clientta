@@ -4,7 +4,7 @@
 
 ## C-401 — Flutter analyze
 
-- **Status:** Em andamento
+- **Status:** Concluído
 - **O que fazer:** Manter `flutter analyze` sem erros no branch principal.
 - **Objetivo:** Evitar regressões em release.
 - **Impacto:** **Alto** — manutenção.
