@@ -87,7 +87,6 @@ void setup() {
   dependency.registerFactory(
     () => HomeViewModel(
       appointmentRepository: dependency(),
-      encounterNoteRepository: dependency(),
       networkStatus: dependency(),
       syncService: dependency(),
       hasProSync: () => dependency<AppointmentSyncService>().canSync(),
