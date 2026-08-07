@@ -1,4 +1,4 @@
-package br.com.sthaynny.university_hub
+package br.com.sthaynny.clientta
 
 import io.flutter.embedding.android.FlutterActivity
 

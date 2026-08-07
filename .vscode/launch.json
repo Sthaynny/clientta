@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "university_hub",
+            "name": "clientta",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "debug"  
+            "flutterMode": "debug"
         },
         {
-            "name": "university_hub (profile mode)",
+            "name": "clientta (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "university_hub (release mode)",
+            "name": "clientta (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
