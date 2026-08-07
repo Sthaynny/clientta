@@ -2,6 +2,8 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
+import 'package:clientta/features/shared/components/app_icon.dart';
+import 'package:clientta/features/shared/hub/hub_surface.dart';
 import 'package:clientta/features/shared/hub/hub_primary_button.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -71,68 +73,94 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       backgroundColor: HubColors.canvas,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Semantics(
-                button: true,
-                label: onboardingSkipString,
-                child: TextButton(
-                  onPressed: widget.onSkip,
-                  style: TextButton.styleFrom(
-                    foregroundColor: HubColors.inkMuted,
-                    minimumSize: const Size(48, 48),
-                  ),
-                  child: Text(onboardingSkipString),
-                ),
+      body: Column(
+        children: [
+          DecoratedBox(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [HubColors.seedDark, HubColors.seed],
               ),
             ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: const ClampingScrollPhysics(),
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                children: [
-                  _OnboardingPage(
-                    icon: Icons.cloud_off_outlined,
-                    title: onboardingOfflineTitle,
-                    message: onboardingOfflineMessage,
-                  ),
-                  _OnboardingPage(
-                    icon: Icons.event_note_outlined,
-                    title: onboardingFirstAppointmentTitle,
-                    message: onboardingFirstAppointmentMessage,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(DSSpacing.lg.value),
+            child: const SizedBox(height: 4, width: double.infinity),
+          ),
+          Expanded(
+            child: SafeArea(
+              top: false,
               child: Column(
                 children: [
-                  _PageIndicators(
-                    count: _pageCount,
-                    current: _currentPage,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      DSSpacing.lg.value,
+                      DSSpacing.md.value,
+                      DSSpacing.lg.value,
+                      0,
+                    ),
+                    child: Row(
+                      children: [
+                        AppIcon.onLight(size: 36),
+                        const Spacer(),
+                        Semantics(
+                          button: true,
+                          label: onboardingSkipString,
+                          child: TextButton(
+                            onPressed: widget.onSkip,
+                            style: TextButton.styleFrom(
+                              foregroundColor: HubColors.inkMuted,
+                              minimumSize: const Size(48, 48),
+                            ),
+                            child: Text(onboardingSkipString),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  DSSpacing.md.y,
-                  HubPrimaryButton(
-                    label: primaryLabel,
-                    onPressed: _onPrimaryAction,
-                    trailingIcon: Icon(
-                      _currentPage == 0
-                          ? Icons.arrow_forward_rounded
-                          : Icons.add_rounded,
-                      size: 20,
-                      color: Colors.white,
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const ClampingScrollPhysics(),
+                      onPageChanged: (index) => setState(() => _currentPage = index),
+                      children: [
+                        _OnboardingPage(
+                          icon: Icons.cloud_off_outlined,
+                          title: onboardingOfflineTitle,
+                          message: onboardingOfflineMessage,
+                        ),
+                        _OnboardingPage(
+                          icon: Icons.event_note_outlined,
+                          title: onboardingFirstAppointmentTitle,
+                          message: onboardingFirstAppointmentMessage,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(DSSpacing.lg.value),
+                    child: Column(
+                      children: [
+                        _PageIndicators(
+                          count: _pageCount,
+                          current: _currentPage,
+                        ),
+                        DSSpacing.md.y,
+                        HubPrimaryButton(
+                          label: primaryLabel,
+                          onPressed: _onPrimaryAction,
+                          trailingIcon: Icon(
+                            _currentPage == 0
+                                ? Icons.arrow_forward_rounded
+                                : Icons.add_rounded,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -152,34 +180,37 @@ class _OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: DSSpacing.xl.value),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          DecoratedBox(
-            decoration: const BoxDecoration(
-              color: HubColors.successTint,
-              shape: BoxShape.circle,
+      padding: EdgeInsets.symmetric(horizontal: DSSpacing.lg.value),
+      child: HubSurface(
+        padding: EdgeInsets.all(DSSpacing.xl.value),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                color: HubColors.successTint,
+                shape: BoxShape.circle,
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(DSSpacing.xl.value),
+                child: Icon(icon, size: 56, color: HubColors.seed),
+              ),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(DSSpacing.xl.value),
-              child: Icon(icon, size: 56, color: HubColors.seed),
+            DSSpacing.xl.y,
+            DSHeadlineLargeText(
+              title,
+              textAlign: TextAlign.center,
+              color: HubColors.ink,
             ),
-          ),
-          DSSpacing.xl.y,
-          DSHeadlineLargeText(
-            title,
-            textAlign: TextAlign.center,
-            color: HubColors.ink,
-          ),
-          DSSpacing.md.y,
-          DSBodyText(
-            message,
-            textAlign: TextAlign.center,
-            height: 1.5,
-            color: HubColors.inkMuted,
-          ),
-        ],
+            DSSpacing.md.y,
+            DSBodyText(
+              message,
+              textAlign: TextAlign.center,
+              height: 1.5,
+              color: HubColors.inkMuted,
+            ),
+          ],
+        ),
       ),
     );
   }
