@@ -71,7 +71,7 @@ Assinaturas Pro **ativas** sem uso por **2 meses** são canceladas automaticamen
 | Checkout | `url_launcher` abre `checkoutUrl` retornada por `createSubscription` |
 | Entitlement | Stream ou one-shot read de `users/{uid}.subscription` |
 | Tela | `/configuracoes/plano` — status, CTA assinar, cancelar, sync status |
-| Free gates | Sync e limites checam `subscription.status == active` |
+| Free gates | Sync, limites de agenda e lembretes checam entitlement ativo |
 
 ## Sandbox
 

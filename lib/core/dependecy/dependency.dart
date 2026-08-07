@@ -7,7 +7,10 @@ import 'package:clientta/features/auth/data/auth_repository_firebase.dart';
 import 'package:clientta/features/auth/data/user_repository_remote.dart';
 import 'package:clientta/features/auth/domain/repositories/auth_repository.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
+import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
 import 'package:clientta/features/appointments/data/appointment_repository_local.dart';
+import 'package:clientta/features/appointments/data/local_appointment_reminder_scheduler.dart';
+import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_scheduler.dart';
 import 'package:clientta/features/appointments/data/service_type_catalog_local.dart';
 import 'package:clientta/features/appointments/data/appointment_repository_remote_firestore.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
@@ -71,6 +74,17 @@ void setup() {
     ),
   );
 
+  dependency.registerLazySingleton<AppointmentReminderScheduler>(
+    createLocalAppointmentReminderScheduler,
+  );
+  dependency.registerLazySingleton<AppointmentReminderCoordinator>(
+    () => AppointmentReminderCoordinator(
+      scheduler: dependency(),
+      billingRepository: dependency(),
+      appProfileRepository: dependency(),
+    ),
+  );
+
   dependency.registerLazySingleton<EncounterNoteRepositoryLocal>(
     () => EncounterNoteRepositoryLocal(dependency()),
   );
@@ -95,6 +109,7 @@ void setup() {
       appointmentRepository: dependency(),
       networkStatus: dependency(),
       syncService: dependency(),
+      reminderCoordinator: dependency(),
       hasProSync: () => dependency<AppointmentSyncService>().canSync(),
     ),
   );

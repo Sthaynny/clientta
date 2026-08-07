@@ -201,7 +201,7 @@ String get authDividerOrString => 'ou';
 String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';
 String get planProDescriptionString =>
-    'Agenda ilimitada, sincronização na nuvem e suporte prioritário.';
+    'Agenda ilimitada, sincronização na nuvem, lembretes antes do atendimento e suporte prioritário.';
 String get planSubscribeButtonString => 'Assinar plano Pro';
 String get planSubscribeSuccessString => 'Assinatura ativada com sucesso!';
 String get planSubscribePendingString =>
@@ -252,6 +252,14 @@ String planFreeUsageAppointmentsLabel(int current, int max) =>
 String planFreeUsageSeriesLabel(int current, int max) =>
     '$current de $max séries recorrentes ativas';
 String get planFreeUsageUpgradeActionString => 'Ver plano Pro';
+String get appointmentReminderTitleString => 'Atendimento em breve';
+String appointmentReminderBody({
+  required String clientName,
+  required String serviceType,
+  required String startTime,
+}) => '$clientName · $serviceType às $startTime';
+String get planReminderProRequiredString =>
+    'Lembretes antes do atendimento estão disponíveis no plano Pro.';
 
 const weekdayLabels = [
   'Segunda-feira',

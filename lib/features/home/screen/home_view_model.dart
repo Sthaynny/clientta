@@ -1,6 +1,7 @@
 import 'package:clientta/core/network/network_status_port.dart';
 import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/appointments/data/appointment_reminder_coordinator.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
@@ -14,10 +15,12 @@ class HomeViewModel {
     required AppointmentRepository appointmentRepository,
     NetworkStatusPort? networkStatus,
     AppointmentSyncService? syncService,
+    AppointmentReminderCoordinator? reminderCoordinator,
     Future<bool> Function()? hasProSync,
   }) : _appointmentRepository = appointmentRepository,
        _networkStatus = networkStatus ?? const _AlwaysOnlineNetworkStatus(),
        _syncService = syncService,
+       _reminderCoordinator = reminderCoordinator,
        _hasProSync = hasProSync ?? (() async => false) {
     load = CommandBase(_load);
     markComplete = CommandAction<void, ServiceAppointment>(_markComplete);
@@ -27,6 +30,7 @@ class HomeViewModel {
   final AppointmentRepository _appointmentRepository;
   final NetworkStatusPort _networkStatus;
   final AppointmentSyncService? _syncService;
+  final AppointmentReminderCoordinator? _reminderCoordinator;
   final Future<bool> Function() _hasProSync;
 
   late final CommandBase<void> load;
@@ -68,6 +72,8 @@ class HomeViewModel {
       final now = DateTime.now();
       final appointments = await _appointmentRepository.getAll();
       todayAppointments = filterTodayAppointments(appointments, reference: now);
+
+      await _reminderCoordinator?.syncForAppointments(appointments);
 
       await _refreshSyncBanner();
 

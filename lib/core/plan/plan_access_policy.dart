@@ -14,6 +14,10 @@ abstract final class PlanAccessPolicy {
     return hasProAccess(subscription);
   }
 
+  static bool canScheduleLocalReminders(UserSubscription subscription) {
+    return hasProAccess(subscription);
+  }
+
   static bool canAccessCloudSync(UserSubscription subscription) {
     return hasProAccess(subscription);
   }

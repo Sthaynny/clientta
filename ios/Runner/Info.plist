@@ -66,5 +66,7 @@
 	<!-- Permission options for the `camera` group -->
     <key>NSCameraUsageDescription</key>
     <string>camera</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>O Clientta avisa quando um atendimento agendado está se aproximando.</string>
 </dict>
 </plist>

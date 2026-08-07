@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:clientta/core/config/firebase_bootstrap.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/core/notifications/local_notifications_bootstrap.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/features/auth/view/auth_gate.dart';
 
@@ -17,6 +18,7 @@ void main() {
         secundaryColor: HubColors.schedule,
       );
       await bootstrapFirebase();
+      await LocalNotificationsBootstrap.ensureReady();
       setup();
       runApp(const AuthGate());
     },

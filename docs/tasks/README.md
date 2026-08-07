@@ -31,6 +31,7 @@ Cada entrada usa **ID** (ex. C-101), resumo, objetivo, impacto e link à feature
 | Área | Arquivo |
 |------|---------|
 | Qualidade | [qualidade.md](a_fazer/qualidade.md) |
+| Lembretes locais (Pro) | [lembretes_locais.md](a_fazer/lembretes_locais.md) |
 
 ## Documentação relacionada
 

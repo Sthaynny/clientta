@@ -13,6 +13,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Atendimento — histórico centralizado | [atendimento.md](atendimento.md) | Ambos | Implementado |
 | Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Implementado |
 | Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Implementado |
+| Lembretes locais | [lembretes_locais.md](lembretes_locais.md) | Pro | Em preparação |
 
 ## Comparativo Free vs Pro
 
@@ -25,7 +26,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Séries recorrentes | Até **3** séries ativas | Ilimitado |
 | Sync Firestore multi-dispositivo | — | Sim |
 | Export JSON backup | — | Sim (futuro) |
-| Lembretes locais | — | Sim (futuro) |
+| Lembretes locais | — | Sim (15 min antes; configurável) |
 | Suporte | Comunidade | Prioritário (futuro) |
 
 Limites Free são enforcement no app via `PlanAccessPolicy`.
