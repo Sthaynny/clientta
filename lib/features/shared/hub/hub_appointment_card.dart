@@ -129,7 +129,7 @@ class HubAppointmentCard extends StatelessWidget {
       container: true,
       label: _semanticLabel,
       child: HubSurface(
-        margin: EdgeInsets.only(bottom: DSSpacing.sm.value),
+        margin: EdgeInsets.only(bottom: DSSpacing.md.value),
         onTap: onTap,
         semanticButton: false,
         padding: EdgeInsets.all(DSSpacing.md.value),
@@ -203,16 +203,69 @@ class _ActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (var i = 0; i < actions.length; i++) ...[
-          if (i > 0) DSSpacing.xs.x,
-          Expanded(child: _ActionButton(action: actions[i], enabled: enabled)),
+    if (actions.length == 1) {
+      return _ActionButton(
+        action: actions.first,
+        enabled: enabled,
+        layout: _ActionButtonLayout.fullWidth,
+      );
+    }
+
+    if (actions.length == 2) {
+      return Row(
+        children: [
+          Expanded(
+            child: _ActionButton(
+              action: actions[0],
+              enabled: enabled,
+              layout: _ActionButtonLayout.compact,
+            ),
+          ),
+          DSSpacing.xs.x,
+          Expanded(
+            child: _ActionButton(
+              action: actions[1],
+              enabled: enabled,
+              layout: _ActionButtonLayout.compact,
+            ),
+          ),
         ],
+      );
+    }
+
+    final primary = actions.first;
+    final secondary = actions.sublist(1);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _ActionButton(
+          action: primary,
+          enabled: enabled,
+          layout: _ActionButtonLayout.fullWidth,
+          prominent: true,
+        ),
+        DSSpacing.xs.y,
+        Row(
+          children: [
+            for (var i = 0; i < secondary.length; i++) ...[
+              if (i > 0) DSSpacing.xs.x,
+              Expanded(
+                child: _ActionButton(
+                  action: secondary[i],
+                  enabled: enabled,
+                  layout: _ActionButtonLayout.compact,
+                ),
+              ),
+            ],
+          ],
+        ),
       ],
     );
   }
 }
+
+enum _ActionButtonLayout { compact, fullWidth }
 
 class _CardAction {
   const _CardAction({
@@ -229,16 +282,26 @@ class _CardAction {
 }
 
 class _ActionButton extends StatelessWidget {
-  const _ActionButton({required this.action, required this.enabled});
+  const _ActionButton({
+    required this.action,
+    required this.enabled,
+    this.layout = _ActionButtonLayout.compact,
+    this.prominent = false,
+  });
 
   final _CardAction action;
   final bool enabled;
+  final _ActionButtonLayout layout;
+  final bool prominent;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final actionBg = theme.scaffoldBackgroundColor;
-    final labelColor = theme.colorScheme.onSurfaceVariant;
+    final actionBg =
+        prominent ? action.color.withValues(alpha: 0.1) : theme.scaffoldBackgroundColor;
+    final labelColor =
+        prominent ? action.color : theme.colorScheme.onSurfaceVariant;
+    final isFullWidth = layout == _ActionButtonLayout.fullWidth;
 
     return Semantics(
       button: true,
@@ -259,24 +322,43 @@ class _ActionButton extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: DSSpacing.xs.value,
-                  horizontal: DSSpacing.xxs.value,
+                  horizontal: isFullWidth ? DSSpacing.sm.value : DSSpacing.xxs.value,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(action.icon, size: 18, color: action.color),
-                    DSSpacing.xxs.y,
-                    DSCaptionSmallText(
-                      action.label,
-                      color: labelColor,
-                      fontWeight: FontWeight.w600,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+                child:
+                    isFullWidth
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(action.icon, size: 20, color: action.color),
+                            DSSpacing.xs.x,
+                            Flexible(
+                              child: DSCaptionText(
+                                action.label,
+                                color: labelColor,
+                                fontWeight: FontWeight.w600,
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        )
+                        : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(action.icon, size: 18, color: action.color),
+                            DSSpacing.xxs.y,
+                            DSCaptionSmallText(
+                              action.label,
+                              color: labelColor,
+                              fontWeight: FontWeight.w600,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
               ),
             ),
           ),
