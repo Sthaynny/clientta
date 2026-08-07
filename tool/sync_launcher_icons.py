@@ -10,7 +10,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "docs/stores/store-assets/icon/icon_512.png"
 APP_ICON = ROOT / "assets/images/app-icon.png"
-HUB_GREEN = (0x1A, 0x6B, 0x52, 255)
+HUB_GREEN = (0x1B, 0x6B, 0x5C, 255)  # HubColors.seed — DESIGN.md
 
 ANDROID_DENSITIES = {
     "mipmap-mdpi": 48,
