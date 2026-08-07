@@ -136,7 +136,14 @@ String formatEncounterTimestamp(DateTime dateTime) {
 
 String get errorClientNameRequiredString => 'Informe o nome do cliente.';
 String get errorClientPhoneRequiredString => 'Informe o telefone do cliente.';
-String get errorServiceTypeRequiredString => 'Selecione o tipo de serviço.';
+String get errorServiceTypeRequiredString => 'Informe o tipo de serviço.';
+String get serviceTypeHintString =>
+    'Digite ou selecione um serviço já cadastrado';
+String get clientPhoneMatchTitleString => 'Cliente já cadastrado';
+String clientPhoneMatchMessageString(String clientName) =>
+    'Este telefone já está na base como "$clientName". Deseja vincular ao primeiro atendimento ou registrar como cliente novo?';
+String get clientPhoneMatchMergeLabelString => 'Vincular ao existente';
+String get clientPhoneMatchCreateNewLabelString => 'Criar novo cliente';
 String get errorAppointmentStartTimeInvalidString =>
     'Horário de início inválido. Use HH:mm (ex.: 09:00).';
 String get errorAppointmentEndTimeInvalidString =>

@@ -20,24 +20,24 @@
 
 ---
 
-## C-106 — Remover features legadas
+## C-106 — Remover código obsoleto
 
-- **O que fazer:** Remover `classes`, `activities`, perfil universidade e rotas legadas.
+- **O que fazer:** Remover features, rotas e widgets não utilizados.
 - **Objetivo:** Codebase alinhado ao domínio CRM.
 - **Impacto:** **Alto** — manutenção.
 
 ### Entregue
 
 - Removidos widgets/enums órfãos (`CourseHub`, `NewsAppBar`, `CategoryTile`, etc.).
-- Pastas `classes` e `activities` já ausentes; rotas CRM apenas em `app_router.dart`.
-- Migração de dados legada preservada em `DeviceJsonStore` (`university_hub_daily.json` → `clientta_data.json`).
+- Rotas CRM apenas em `app_router.dart`.
+- Renomeação automática de arquivo de dados legado preservada em `DeviceJsonStore`.
 
 ---
 
-## C-403 — Migrar pacote a clientta
+## C-403 — Namespace clientta
 
-- **O que fazer:** Renomear `university_hub` → `clientta` e atualizar imports.
-- **Objetivo:** Namespace coerente com o produto.
+- **O que fazer:** Garantir namespace `clientta` no pacote Dart e imports.
+- **Objetivo:** Coerência com o produto.
 - **Impacto:** **Médio** — manutenção.
 
 ### Entregue

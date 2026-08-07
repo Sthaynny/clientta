@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
+import 'package:clientta/features/appointments/domain/service_type_catalog.dart';
 import '../../mock/model_mock.dart';
 
 void main() {
@@ -65,6 +66,46 @@ void main() {
       expect(resolved, 'Maria Silva');
     });
 
+    test('findFirstClientNameByPhone retorna o nome do primeiro atendimento', () {
+      final appointments = [
+        tInstanceServiceAppointment.copyWith(
+          id: 'older',
+          clientName: 'Maria Antiga',
+          clientPhone: '(11) 99999-0000',
+          appointmentDate: DateTime(2026, 3, 1),
+        ),
+        tInstanceServiceAppointment.copyWith(
+          id: 'newer',
+          clientName: 'Maria Silva',
+          clientPhone: '11999990000',
+          appointmentDate: DateTime(2026, 3, 10),
+        ),
+      ];
+
+      final resolved = findFirstClientNameByPhone(
+        appointments: appointments,
+        clientPhone: '(11) 99999-0000',
+      );
+
+      expect(resolved, 'Maria Antiga');
+    });
+
+    test('findExistingClientMatch ignora telefone incompleto', () {
+      final appointments = [
+        tInstanceServiceAppointment.copyWith(
+          clientPhone: '(11) 99999-0000',
+        ),
+      ];
+
+      expect(
+        findExistingClientMatch(
+          appointments: appointments,
+          clientPhone: '(11) 9999',
+        ),
+        isNull,
+      );
+    });
+
     test('findAppointmentAtSlot localiza agendamento existente', () {
       final existing = tInstanceServiceAppointment.copyWith(
         clientPhone: '(83) 98130-4214',
@@ -80,6 +121,34 @@ void main() {
       );
 
       expect(match, existing);
+    });
+  });
+
+  group('service type catalog', () {
+    test('mergeServiceTypes une padrões, salvos e agenda sem duplicar', () {
+      final merged = mergeServiceTypes(
+        saved: ['Seguro Residencial', 'Empréstimo Consignado'],
+        fromAppointments: ['Seguro Auto', 'Seguro Residencial'],
+      );
+
+      expect(merged, contains('Empréstimo Consignado'));
+      expect(merged, contains('Seguro Residencial'));
+      expect(merged, contains('Seguro Auto'));
+      expect(
+        merged.where((type) => type.toLowerCase() == 'empréstimo consignado'),
+        hasLength(1),
+      );
+    });
+
+    test('isKnownServiceType compara sem diferenciar maiúsculas', () {
+      expect(
+        isKnownServiceType('seguro auto', const ['Seguro Auto']),
+        isTrue,
+      );
+      expect(
+        isKnownServiceType('Novo Serviço', const ['Seguro Auto']),
+        isFalse,
+      );
     });
   });
 }

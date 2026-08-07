@@ -3,22 +3,27 @@ import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
+import 'package:clientta/features/appointments/data/service_type_catalog_local.dart';
+import 'package:clientta/features/client_care/domain/client_phone_key.dart';
 import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/appointment_form_validation.dart';
 import 'package:clientta/features/appointments/domain/appointment_series_generator.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
-import 'package:clientta/features/appointments/domain/models/service_type.dart';
+import 'package:clientta/features/appointments/domain/service_type_catalog.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 
 enum SeriesEditScope { single, entireSeries }
 
+enum ClientPhoneMatchChoice { mergeExisting, createNew }
+
 class AppointmentFormViewModel {
   AppointmentFormViewModel({
     required AppointmentRepository repository,
     required BillingRepository billingRepository,
+    required ServiceTypeCatalogLocal serviceTypeCatalog,
     UserRepository? userRepository,
     ServiceAppointment? initial,
     String? prefillClientName,
@@ -28,6 +33,7 @@ class AppointmentFormViewModel {
     AppointmentSyncService? syncService,
   }) : _repository = repository,
        _billingRepository = billingRepository,
+       _serviceTypeCatalog = serviceTypeCatalog,
        _userRepository = userRepository,
        _initial = initial,
        _prefillClientName = prefillClientName,
@@ -40,6 +46,7 @@ class AppointmentFormViewModel {
 
   final AppointmentRepository _repository;
   final BillingRepository _billingRepository;
+  final ServiceTypeCatalogLocal _serviceTypeCatalog;
   final UserRepository? _userRepository;
   final ServiceAppointment? _initial;
   final String? _prefillClientName;
@@ -52,7 +59,7 @@ class AppointmentFormViewModel {
 
   String clientName = '';
   String clientPhone = '';
-  String serviceType = ServiceType.emprestimoConsignado;
+  String serviceType = '';
   DateTime appointmentDate = DateTime.now();
   String startTime = '09:00';
   String endTime = '10:00';
@@ -60,6 +67,8 @@ class AppointmentFormViewModel {
   String notes = '';
   SeriesEditScope? pendingSeriesEditScope;
   AppointmentFormFieldErrors fieldErrors = const AppointmentFormFieldErrors();
+  List<String> serviceTypeOptions = [];
+  String? _resolvedClientPhoneKey;
 
   bool get isEdit => _initial != null;
   bool get lockClientFields => _lockClientFields && !isEdit;
@@ -119,7 +128,7 @@ class AppointmentFormViewModel {
     if (prefillName != null) {
       clientName = prefillName;
       clientPhone = _prefillClientPhone ?? '';
-      serviceType = _prefillServiceType ?? ServiceType.emprestimoConsignado;
+      serviceType = _prefillServiceType ?? '';
     }
   }
 
@@ -147,17 +156,45 @@ class AppointmentFormViewModel {
 
   List<ServiceAppointment> _knownAppointments = [];
 
-  /// Preenche o nome do cliente quando o telefone já existe na agenda.
-  String? resolveClientNameFromPhone(String phone) {
-    if (clientName.trim().isNotEmpty || isEdit) return null;
-    return findClientNameByPhone(
+  ExistingClientMatch? existingClientMatchForPhone(String phone) {
+    if (isEdit || lockClientFields) return null;
+    return findExistingClientMatch(
       appointments: _knownAppointments,
       clientPhone: phone,
     );
   }
 
+  bool hasResolvedClientPhone(String phone) {
+    final key = normalizeClientPhone(phone);
+    return key.isNotEmpty && key == _resolvedClientPhoneKey;
+  }
+
+  void applyClientPhoneMatchChoice({
+    required ClientPhoneMatchChoice choice,
+    required ExistingClientMatch match,
+  }) {
+    _resolvedClientPhoneKey = match.phoneKey;
+    if (choice == ClientPhoneMatchChoice.mergeExisting) {
+      clientName = match.existingName;
+      clearFieldError('clientName');
+    }
+  }
+
+  void resetClientPhoneResolution() {
+    _resolvedClientPhoneKey = null;
+  }
+
   Future<void> refreshKnownAppointments() async {
     _knownAppointments = await _repository.getAll();
+    await refreshServiceTypeOptions();
+  }
+
+  Future<void> refreshServiceTypeOptions() async {
+    final saved = await _serviceTypeCatalog.readSaved();
+    serviceTypeOptions = mergeServiceTypes(
+      saved: saved,
+      fromAppointments: _knownAppointments.map((entry) => entry.serviceType),
+    );
   }
 
   Future<Result<void>> _save() async {
@@ -185,6 +222,7 @@ class AppointmentFormViewModel {
 
     final trimmedName = clientName.trim();
     final storedPhone = formatStoredClientPhone(clientPhone);
+    final trimmedServiceType = serviceType.trim();
 
     if (!PlanAccessPolicy.canAddAppointment(
       subscription: subscription,
@@ -207,7 +245,7 @@ class AppointmentFormViewModel {
       ),
       clientName: trimmedName,
       clientPhone: storedPhone,
-      serviceType: serviceType,
+      serviceType: trimmedServiceType,
       appointmentDate: appointmentDate,
       startTime: startTime.trim(),
       endTime: endTime.trim(),
@@ -215,6 +253,7 @@ class AppointmentFormViewModel {
       notes: notesValue,
     );
     await _repository.save(entry);
+    await _serviceTypeCatalog.addIfNew(trimmedServiceType);
     _syncService?.scheduleSync();
     await _userRepository?.touchLastActivity();
     return Result.ok();
@@ -223,11 +262,12 @@ class AppointmentFormViewModel {
   Future<Result<void>> _saveEdit(String? notesValue) async {
     final initial = _initial!;
     final storedPhone = formatStoredClientPhone(clientPhone);
+    final trimmedServiceType = serviceType.trim();
     final updated = buildSingleAppointment(
       id: initial.id,
       clientName: clientName.trim(),
       clientPhone: storedPhone,
-      serviceType: serviceType,
+      serviceType: trimmedServiceType,
       appointmentDate: appointmentDate,
       startTime: startTime.trim(),
       endTime: endTime.trim(),
@@ -246,7 +286,7 @@ class AppointmentFormViewModel {
         editedEntry: updated,
         clientName: clientName.trim(),
         clientPhone: storedPhone,
-        serviceType: serviceType,
+        serviceType: trimmedServiceType,
         startTime: startTime.trim(),
         endTime: endTime.trim(),
         status: status,
@@ -254,12 +294,14 @@ class AppointmentFormViewModel {
         entireSeries: true,
       );
       await _repository.saveAll(batch);
+      await _serviceTypeCatalog.addIfNew(trimmedServiceType);
       _syncService?.scheduleSync();
       await _userRepository?.touchLastActivity();
       return Result.ok();
     }
 
     await _repository.save(updated);
+    await _serviceTypeCatalog.addIfNew(trimmedServiceType);
     _syncService?.scheduleSync();
     await _userRepository?.touchLastActivity();
     return Result.ok();

@@ -78,7 +78,7 @@ Atendimentos com o mesmo `seriesId` formam uma série (ex.: follow-up semanal). 
 
 ## Status no app
 
-**Implementado** — substitui `classes`, `activities` e grade horária legados.
+**Implementado** — feature principal de agendamentos do Clientta.
 
 ## Dependências técnicas
 

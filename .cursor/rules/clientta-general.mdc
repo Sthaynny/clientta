@@ -1,5 +1,5 @@
 ---
-description: Arquitetura, estado, clean code e padrões do Clientta (pacote clientta / migração university_hub)
+description: Arquitetura, estado, clean code e padrões do Clientta
 alwaysApply: true
 ---
 
@@ -19,7 +19,7 @@ lib/core/                 # router, DI, theme, strings, utils compartilhados
 lib/features/shared/      # widgets/hub reutilizáveis entre features
 ```
 
-Novas features seguem o desenho de `appointments` (substitui `classes` / `activities` legado).
+Novas features seguem o desenho de `appointments`.
 
 ## Modelo principal
 
@@ -42,7 +42,7 @@ Agregado de UI: `ClientProfile` — lista de clientes em `/clientes` (derivado, 
 
 - `GetIt` em `lib/core/dependecy/dependency.dart`: singletons para store/repos; **factory** para ViewModels de lista/home.
 - ViewModels de formulário criados no `app_router.dart` com `arguments` da rota (`ServiceAppointment?`).
-- Imports: `package:clientta/...` (ou `package:university_hub/...` durante migração); nunca relativos entre features.
+- Imports: `package:clientta/...`; nunca relativos entre features.
 
 ## Rotas
 
@@ -67,7 +67,6 @@ Agregado de UI: `ClientProfile` — lista de clientes em `/clientes` (derivado, 
 - Textos de UI em `lib/core/strings/` (`strings.dart`, `daily_strings.dart`), não hardcoded em widgets.
 - Repositórios encapsulam I/O; ViewModels orquestram, não acessam arquivo direto.
 - Preferir `copyWith` e modelos imutáveis (`final` nos campos).
-- Não reintroduzir domínio universitário legado (`ClassEntry`, `ActivityEntry`) em novas features.
 
 ## APIs e analyzer
 
@@ -79,4 +78,3 @@ Agregado de UI: `ClientProfile` — lista de clientes em `/clientes` (derivado, 
 
 - Mocks/fixtures em `test/mock/` alinhados a `ServiceAppointment`.
 - Testes de domínio em `test/features/appointments/`.
-- Não referenciar features removidas (classes, activities).

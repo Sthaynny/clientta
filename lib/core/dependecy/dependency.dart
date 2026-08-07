@@ -8,6 +8,7 @@ import 'package:clientta/features/auth/data/user_repository_remote.dart';
 import 'package:clientta/features/auth/domain/repositories/auth_repository.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/appointments/data/appointment_repository_local.dart';
+import 'package:clientta/features/appointments/data/service_type_catalog_local.dart';
 import 'package:clientta/features/appointments/data/appointment_repository_remote_firestore.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
@@ -45,6 +46,10 @@ void setup() {
 
   dependency.registerLazySingleton<AppointmentRepositoryLocal>(
     () => AppointmentRepositoryLocal(dependency()),
+  );
+
+  dependency.registerLazySingleton<ServiceTypeCatalogLocal>(
+    () => ServiceTypeCatalogLocal(dependency()),
   );
 
   dependency.registerLazySingleton<AppointmentRepository>(

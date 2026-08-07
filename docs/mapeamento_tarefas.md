@@ -5,7 +5,7 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 
 **Visão operacional:** [tasks/README.md](tasks/README.md) — pastas [tasks/a_fazer/](tasks/a_fazer/) e [tasks/finalizadas/](tasks/finalizadas/) com os mesmos IDs (C-001…).
 
-**Produto:** **Clientta** — pacote Dart em migração de `university_hub` → `clientta`.  
+**Produto:** **Clientta** — pacote Dart `clientta`.  
 **Monetização:** assinatura **Pro** via Stripe (Cloud Functions); entitlement em Firestore.
 
 ## Como ler a tabela
@@ -42,7 +42,7 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 | C-103 | produto | **Minha Agenda** (`/agendas`) | Histórico e filtros | Alto — retenção | Não iniciado | [agendas.md](features/agendas.md) |
 | C-104 | produto | **Formulário** (`/agendas/registrar`) | Cadastro com notas e séries | Alto — conversão | Não iniciado | [agendas.md](features/agendas.md) |
 | C-105 | engenharia | **Firebase Auth** (login/cadastro) | Identidade para sync e billing | Alto — infra | Não iniciado | [guia_clientta.md](guia_clientta.md) |
-| C-106 | engenharia | Remover features legadas (classes, activities) | Código alinhado ao CRM | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
+| C-106 | engenharia | Remover código obsoleto | Codebase alinhado ao CRM | Alto — manutenção | Concluído | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 | C-107 | produto | Ordenar painel do dia por `startTime` | Leitura natural da agenda | Médio — UX | Não iniciado | [home_hoje.md](features/home_hoje.md) |
 | C-108 | produto | Diálogo de confirmação ao excluir | Evitar perda de dados | Médio — confiança | Concluído | [agendas.md](features/agendas.md) |
 | C-109 | produto | **Onboarding** leve (offline + primeiro atendimento) | Ativar na primeira sessão | Alto — retenção | Concluído | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
@@ -80,7 +80,7 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 |----|------|-------------|----------|---------|--------|-------------|
 | C-401 | qualidade | `flutter analyze` sem erros | Release confiável | Alto — manutenção | Em andamento | [PLANEJAMENTO.md](PLANEJAMENTO.md) |
 | C-402 | qualidade | Testes de domínio (appointments ViewModels) | Refatorar com segurança | Médio — manutenção | Não iniciado | [guia_clientta.md](guia_clientta.md) |
-| C-403 | engenharia | Migrar pacote a **`clientta`** | Namespace alinhado ao produto | Médio — manutenção | Não iniciado | [guia_clientta.md](guia_clientta.md) |
+| C-403 | engenharia | Namespace **`clientta`** no pacote Dart | Alinhamento com o produto | Médio — manutenção | Concluído | [guia_clientta.md](guia_clientta.md) |
 | C-404 | engenharia | CI Codemagic (analyze + test + bundle) | Pipeline confiável | Alto — distribuição | Em andamento | [guia_clientta.md](guia_clientta.md) |
 | C-405 | qualidade | Política de privacidade (Auth, Firestore, Stripe) | Conformidade loja | Alto — confiança | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §6 |
 | C-406 | qualidade | Testes de integração fluxo principal | Regressão de navegação | Médio — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) |
@@ -91,9 +91,9 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 
 | Status | Quantidade (IDs) |
 |--------|------------------|
-| Concluído | 9 (C-001–C-004, C-108–C-110, C-112–C-113) |
+| Concluído | 11 (C-001–C-004, C-106, C-108–C-110, C-112–C-113, C-403) |
 | Em andamento | 2 (C-401, C-404) |
-| Não iniciado | 21 |
+| Não iniciado | 19 |
 | Bloqueado | 0 |
 
 **Total de tarefas listadas:** 32

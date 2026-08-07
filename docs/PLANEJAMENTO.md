@@ -14,7 +14,7 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md)
 | **UI** | Tema `HubTheme` + componentes `Hub*` |
 | **Auth / sync** | Implementado — Firebase Auth + Firestore sync (Pro) |
 | **Billing** | Implementado — Stripe via Cloud Functions |
-| **Pacote Dart** | `clientta` (migração concluída) |
+| **Pacote Dart** | `clientta` |
 
 ---
 
@@ -42,7 +42,7 @@ Objetivo: app utilizável no dia a dia sem sync nem cobrança.
 | 1.4b | **Atendimento** `/atendimentos` | Histórico de negociação por cliente; registrar encontros sem agenda; ligar/WhatsApp |
 | 1.4c | **Meus Clientes** `/clientes` | Lista unificada com busca; abre histórico de atendimento |
 | 1.5 | Firebase **Auth** (e-mail/senha ou Google) | Gate mínimo para futuro sync |
-| 1.6 | Remover features legadas (domínio universitário) | classes, activities, perfil universidade |
+| 1.6 | Remover código obsoleto | Features e rotas não utilizadas |
 | 1.7 | `flutter analyze` + testes de domínio | ViewModels de appointments |
 
 **Critério de conclusão:** fluxo completo offline (criar → listar → concluir → anotar) com login opcional ou obrigatório conforme decisão de produto.
@@ -92,7 +92,6 @@ Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
 | 4.5 | Testes de integração e Patrol |
 | 4.6 | Política de privacidade (Auth, Firestore, Stripe) |
 | 4.7 | Listing Play Store / App Store |
-| 4.8 | Migração namespace `clientta` no pacote Dart |
 
 ---
 
@@ -100,8 +99,6 @@ Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
 
 | Item | Ação |
 |------|------|
-| Pacote `university_hub` | Renomear a `clientta` e atualizar imports |
-| Features legadas (classes, activities) | Remover após migração de appointments |
 | `DropdownButtonFormField` deprecado | `initialValue` + `ValueKey` |
 | Secrets Stripe / Firebase | Apenas em Cloud Functions e CI, nunca no app |
 

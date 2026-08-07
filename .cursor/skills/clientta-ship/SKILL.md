@@ -2,14 +2,14 @@
 name: clientta-ship
 description: >-
   Orquestra implementação de features do Clientta via subagentes especializados
-  (home, agendas, auth, sync, billing, stripe) e modernização de legado.
+  (home, agendas, auth, sync, billing, stripe).
   Use ao implementar funcionalidade, /clientta-ship, backlog C-xxx, ou pedir
   subagente de feature específica.
 ---
 
 # Clientta Ship
 
-Orquestrador do **Clientta**: delega a subagentes por feature ou ao modernizador de legado.
+Orquestrador do **Clientta**: delega a subagentes por feature.
 Sempre respeitar `.cursor/rules/clientta-general.mdc` e `clientta-ui.mdc`.
 
 ## Workflow
@@ -44,9 +44,6 @@ Progresso:
 | Sync Firestore (Pro) | [sincronizacao-nuvem.md](references/subagents/sincronizacao-nuvem.md) | `Clientta: sync` |
 | Tela Plano Pro (app) | [assinatura-stripe.md](references/subagents/assinatura-stripe.md) | `Clientta: assinatura-stripe` |
 | Cloud Functions Stripe | [billing-functions.md](references/subagents/billing-functions.md) | `Clientta: billing-functions` |
-| **Legado / migração** | [legacy-modernizer.md](references/subagents/legacy-modernizer.md) | `Clientta: legacy` |
-
-**Legado:** usar `legacy-modernizer` quando o pedido envolver `university_hub`, domínio Sextante, classes/activities, strings/docs antigas ou deprecations — mesmo que misturado com feature nova.
 
 ### 3. Delegar (Task)
 
@@ -80,13 +77,11 @@ Após o subagente de feature, rodar localmente (ou delegar):
 | Modo | Acionar | Comportamento |
 |------|---------|---------------|
 | Feature | "implementar agendas" / C-103 | Subagente da feature |
-| Legado | "migrar university_hub" / C-106 | `legacy-modernizer` |
 | Pipeline | `/clientta-ship` sem escopo | Discovery → próximo C-xxx de maior impacto na fase atual |
 
 ## Anti-padrões
 
 - Implementar sem ler doc da feature
-- Reintroduzir `ClassEntry`, `ActivityEntry` ou rotas Sextante
 - Stripe SDK no Flutter
 - Cliente escrever `users/{uid}.subscription`
 - Pular `flutter analyze` e `flutter test`

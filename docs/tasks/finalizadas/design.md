@@ -5,7 +5,7 @@
 ## C-004 — HubTheme e componentes Hub*
 
 - **O que fazer:** Identidade visual com `HubTheme`, `HubColors` e componentes `Hub*` nas telas.
-- **Objetivo:** UI consistente durante migração de produto.
+- **Objetivo:** UI consistente em todas as telas.
 - **Impacto:** **Médio** — confiança e marca.
 - **Feature:** [DESIGN.md](../../../DESIGN.md)
 
@@ -22,5 +22,5 @@
 ## C-111 — Paleta Clientta
 
 - **O que fazer:** Ajustar `HubColors` ao azul-verde profissional documentado em DESIGN.md.
-- **Objetivo:** Identidade visual CRM (não acadêmica).
+- **Objetivo:** Identidade visual CRM.
 - **Impacto:** **Médio** — marca.

@@ -66,5 +66,67 @@ String? findClientNameByPhone({
   return latest?.clientName.trim().isEmpty == true ? null : latest?.clientName;
 }
 
+/// Retorna o nome do primeiro atendimento registrado para o telefone informado.
+String? findFirstClientNameByPhone({
+  required List<ServiceAppointment> appointments,
+  required String clientPhone,
+}) {
+  final phoneKey = normalizeClientPhone(clientPhone);
+  if (phoneKey.isEmpty) return null;
+
+  ServiceAppointment? earliest;
+  for (final appointment in appointments) {
+    if (!phonesMatch(appointment.clientPhone, clientPhone)) continue;
+    if (earliest == null) {
+      earliest = appointment;
+      continue;
+    }
+
+    final dateCompare =
+        appointment.appointmentDate.compareTo(earliest.appointmentDate);
+    if (dateCompare < 0) {
+      earliest = appointment;
+      continue;
+    }
+    if (dateCompare == 0 &&
+        appointment.startTime.trim().compareTo(earliest.startTime.trim()) < 0) {
+      earliest = appointment;
+    }
+  }
+
+  final name = earliest?.clientName.trim();
+  if (name == null || name.isEmpty) return null;
+  return name;
+}
+
+class ExistingClientMatch {
+  const ExistingClientMatch({
+    required this.existingName,
+    required this.phoneKey,
+  });
+
+  final String existingName;
+  final String phoneKey;
+}
+
+ExistingClientMatch? findExistingClientMatch({
+  required List<ServiceAppointment> appointments,
+  required String clientPhone,
+}) {
+  final phoneKey = normalizeClientPhone(clientPhone);
+  if (phoneKey.length < 10) return null;
+
+  final existingName = findFirstClientNameByPhone(
+    appointments: appointments,
+    clientPhone: clientPhone,
+  );
+  if (existingName == null) return null;
+
+  return ExistingClientMatch(
+    existingName: existingName,
+    phoneKey: phoneKey,
+  );
+}
+
 String formatStoredClientPhone(String phone) =>
     formatBrPhone(extractDigits(phone.trim()));

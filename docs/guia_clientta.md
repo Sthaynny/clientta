@@ -1,6 +1,6 @@
 # Guia do projeto — Clientta
 
-**Clientta** é um CRM de atendimentos para agentes de crédito, seguros e profissionais autônomos. Pacote Dart em migração: legado **`university_hub`** → alvo **`clientta`**. `applicationId` Android alvo: **`br.com.sthaynny.clientta`**.
+**Clientta** é um CRM de atendimentos para agentes de crédito, seguros e profissionais autônomos. Pacote Dart: **`clientta`**. `applicationId` Android: **`br.com.sthaynny.clientta`**.
 
 ## Princípios
 
@@ -57,7 +57,7 @@ Chaves principais:
 
 Store: `lib/core/storage/device_json_store.dart`.
 
-Migração: instalações legadas com `university_hub_daily.json` são renomeadas automaticamente para `clientta_data.json`.
+Instalações antigas com arquivo de dados legado são renomeadas automaticamente para `clientta_data.json`.
 
 ## Firebase
 
@@ -90,7 +90,6 @@ Secrets no CI: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — apenas no ambien
 
 - Fixtures: `test/mock/` com `ServiceAppointment`.
 - Domínio: `test/features/appointments/`, `test/features/clients/`, `test/features/client_care/`.
-- Não referenciar features removidas (classes, activities).
 
 ## Documentação relacionada
 

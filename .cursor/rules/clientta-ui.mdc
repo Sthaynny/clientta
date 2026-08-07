@@ -60,7 +60,7 @@ Scaffold(
 2. `initState`: `hydrate()`, controllers, `save.addListener(_onSave)`.
 3. `Scaffold` + `HubAppBar(canPop: true, showBrandMark: false)`.
 4. Campos: nome, telefone, tipo de serviço, data, horários, notas multilinha.
-5. Série recorrente: chips de dias (padrão multi-dia legado).
+5. Série recorrente: chips de dias.
 6. Salvar: `viewmodel.save.execute()`; erros via `context.showSnackBarError`.
 
 ## Tela de plano Pro
@@ -79,7 +79,7 @@ Scaffold(
 
 ## Checklist antes de PR de UI
 
-- [ ] Strings em `daily_strings.dart` / `strings.dart` — sem copy de faculdade/aula
+- [ ] Strings em `daily_strings.dart` / `strings.dart` — copy alinhada ao CRM
 - [ ] Tema via `HubTheme` / `HubColors`
 - [ ] Estados vazio, loading e erro
 - [ ] Analyzer limpo em `lib/`

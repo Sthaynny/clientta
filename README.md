@@ -28,4 +28,4 @@ O <strong>Clientta</strong> é um <strong>CRM de atendimentos</strong> para quem
 
 ## Namespace
 
-O código pode ainda usar o pacote Dart `university_hub` até a migração completa para `clientta`.
+Pacote Dart: `clientta`.

@@ -7,8 +7,8 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/core/utils/extension/datetime.dart';
 import 'package:clientta/core/utils/result.dart';
+import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
-import 'package:clientta/features/appointments/domain/models/service_type.dart';
 import 'package:clientta/features/appointments/view/appointment_form_view_model.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 
@@ -30,6 +30,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   late final AppointmentFormViewModel viewmodel;
   late final TextEditingController clientNameController;
   late final TextEditingController clientPhoneController;
+  late final TextEditingController serviceTypeController;
   late final TextEditingController notesController;
   final _formKey = GlobalKey<FormState>();
   bool _saveSubmitted = false;
@@ -43,9 +44,16 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     clientPhoneController = TextEditingController(
       text: formatBrPhone(viewmodel.clientPhone),
     );
+    serviceTypeController = TextEditingController(text: viewmodel.serviceType);
     notesController = TextEditingController(text: viewmodel.notes);
     viewmodel.save.addListener(_onSave);
-    viewmodel.refreshKnownAppointments();
+    _loadReferenceData();
+  }
+
+  Future<void> _loadReferenceData() async {
+    await viewmodel.refreshKnownAppointments();
+    if (!mounted) return;
+    setState(() {});
   }
 
   @override
@@ -53,6 +61,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     viewmodel.save.removeListener(_onSave);
     clientNameController.dispose();
     clientPhoneController.dispose();
+    serviceTypeController.dispose();
     notesController.dispose();
     super.dispose();
   }
@@ -99,6 +108,41 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     };
   }
 
+  Future<ClientPhoneMatchChoice?> _resolveClientPhoneMatch(
+    ExistingClientMatch match,
+  ) async {
+    final choice = await showHubChoiceDialog(
+      context: context,
+      title: clientPhoneMatchTitleString,
+      message: clientPhoneMatchMessageString(match.existingName),
+      firstLabel: clientPhoneMatchMergeLabelString,
+      secondLabel: clientPhoneMatchCreateNewLabelString,
+    );
+    return switch (choice) {
+      HubChoiceResult.first => ClientPhoneMatchChoice.mergeExisting,
+      HubChoiceResult.second => ClientPhoneMatchChoice.createNew,
+      HubChoiceResult.cancelled => null,
+    };
+  }
+
+  Future<bool> _ensureClientPhoneResolved() async {
+    if (viewmodel.isEdit || viewmodel.lockClientFields) return true;
+
+    final match = viewmodel.existingClientMatchForPhone(viewmodel.clientPhone);
+    if (match == null) return true;
+    if (viewmodel.hasResolvedClientPhone(viewmodel.clientPhone)) return true;
+
+    final choice = await _resolveClientPhoneMatch(match);
+    if (!mounted || choice == null) return false;
+
+    viewmodel.applyClientPhoneMatchChoice(choice: choice, match: match);
+    if (choice == ClientPhoneMatchChoice.mergeExisting) {
+      clientNameController.text = match.existingName;
+    }
+    setState(() {});
+    return true;
+  }
+
   Future<void> _submit() async {
     if (_saveSubmitted || viewmodel.save.running) return;
 
@@ -106,6 +150,9 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     if (!mounted || scope == null) return;
 
     viewmodel.pendingSeriesEditScope = scope;
+    final resolvedClient = await _ensureClientPhoneResolved();
+    if (!mounted || !resolvedClient) return;
+
     if (!viewmodel.validateFields()) {
       setState(() {});
       return;
@@ -119,15 +166,22 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     }
   }
 
-  void _onClientPhoneChanged(String value) {
+  Future<void> _onClientPhoneChanged(String value) async {
     viewmodel.clientPhone = value;
     viewmodel.clearFieldError('clientPhone');
 
-    final resolvedName = viewmodel.resolveClientNameFromPhone(value);
-    if (resolvedName != null && clientNameController.text.trim().isEmpty) {
-      clientNameController.text = resolvedName;
-      viewmodel.clientName = resolvedName;
-      viewmodel.clearFieldError('clientName');
+    if (!viewmodel.isEdit && !viewmodel.lockClientFields) {
+      final match = viewmodel.existingClientMatchForPhone(value);
+      if (match == null) {
+        viewmodel.resetClientPhoneResolution();
+      } else if (!viewmodel.hasResolvedClientPhone(value)) {
+        final choice = await _resolveClientPhoneMatch(match);
+        if (!mounted || choice == null) return;
+        viewmodel.applyClientPhoneMatchChoice(choice: choice, match: match);
+        if (choice == ClientPhoneMatchChoice.mergeExisting) {
+          clientNameController.text = match.existingName;
+        }
+      }
     }
 
     setState(() {});
@@ -232,27 +286,17 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                   viewmodel.lockClientFields ? null : _onClientPhoneChanged,
             ),
             DSSpacing.md.y,
-            DropdownButtonFormField<String>(
-              key: ValueKey(viewmodel.serviceType),
-              initialValue: viewmodel.serviceType,
-              decoration: InputDecoration(
-                labelText: serviceTypeString,
-                errorText: errors.serviceType,
-              ),
-              items:
-                  ServiceType.all
-                      .map(
-                        (type) => DropdownMenuItem(
-                          value: type,
-                          child: Text(type),
-                        ),
-                      )
-                      .toList(),
-              onChanged:
-                  (value) => setState(() {
-                    viewmodel.serviceType = value ?? ServiceType.outros;
-                    viewmodel.clearFieldError('serviceType');
-                  }),
+            HubServiceTypeField(
+              controller: serviceTypeController,
+              options: viewmodel.serviceTypeOptions,
+              label: serviceTypeString,
+              hint: serviceTypeHintString,
+              errorText: errors.serviceType,
+              onChanged: (value) {
+                viewmodel.serviceType = value;
+                viewmodel.clearFieldError('serviceType');
+                setState(() {});
+              },
             ),
             DSSpacing.md.y,
             HubDateFormField(

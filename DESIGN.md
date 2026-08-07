@@ -4,11 +4,11 @@
 
 Profissional **em movimento** — corretor de seguros no estacionamento, atendente de crédito entre ligações, consultor autônomo no cliente. Luz ambiente variável, **pouco tempo**, precisa de clareza imediata: **quem**, **quando**, **o que foi discutido** e **próximo passo**.
 
-Tom **profissional e confiável** — clareza operacional, não acadêmico.
+Tom **profissional e confiável** — clareza operacional.
 
 ## Color strategy
 
-**Restrained** com acento **azul-verde profissional** (confiança financeira + ação) + neutros frios. O verde Hub do legado pode permanecer como `seed` ou migrar gradualmente ao azul-teal abaixo — manter consistência entre `HubColors` e `DSColors.inicialize`.
+**Restrained** com acento **azul-verde profissional** (confiança financeira + ação) + neutros frios — manter consistência entre `HubColors` e `DSColors.inicialize`.
 
 | Token | Role | Hex (proposta Clientta) |
 |-------|------|-------------------------|
@@ -50,14 +50,14 @@ Objetivo: vocabulário visual único entre campos DS e Material nativo.
 
 - **Texto:** `HubTextFormField` — nome do cliente, telefone, notas multilinha.
 - **Data:** `HubDateFormField` — data do atendimento.
-- **Horário:** campos de texto ou picker alinhado ao padrão de grade legada (`startTime` / `endTime` como string `HH:mm`).
+- **Horário:** campos de texto ou picker (`startTime` / `endTime` como string `HH:mm`).
 - **Tipo de serviço:** `DropdownButtonFormField` com `initialValue` + `ValueKey`.
 - **Salvar / CTA:** `HubPrimaryButton` (verde `seed`, loading via `isLoading`).
 - Espaçamento entre blocos: `DSSpacing.md`.
 
 ## Components (namespace `Hub*`)
 
-Barrel: `hub.dart` em `lib/features/shared/hub/`. Preferir `HubSurface`, `HubAppointmentCard` (ou adaptação de `HubClassCard`), `HubEmptyState`, `HubAppBar`, `HubOfflineBanner`, `HubNavTile`, `HubFab`, `HubPrimaryButton`, `HubTextFormField`, `HubDateFormField`.
+Barrel: `hub.dart` em `lib/features/shared/hub/`. Preferir `HubSurface`, `HubAppointmentCard`, `HubEmptyState`, `HubAppBar`, `HubOfflineBanner`, `HubNavTile`, `HubFab`, `HubPrimaryButton`, `HubTextFormField`, `HubDateFormField`.
 
 Cards de atendimento devem hierarquizar: **horário → nome do cliente → tipo de serviço → status**.
 
@@ -67,4 +67,4 @@ Cards de atendimento devem hierarquizar: **horário → nome do cliente → tipo
 
 ## Anti-patterns
 
-Bordas laterais coloridas decorativas, gradient text, glassmorphism, cards empilhados sem hierarquia de horário. Primário azul do DS em FAB/CTA quando o `seed` Clientta está definido. Copy de “faculdade”, “aula” ou “disciplina” na UI.
+Bordas laterais coloridas decorativas, gradient text, glassmorphism, cards empilhados sem hierarquia de horário. Primário azul do DS em FAB/CTA quando o `seed` Clientta está definido. Copy fora do domínio CRM na UI.
