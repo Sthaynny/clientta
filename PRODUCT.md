@@ -42,7 +42,7 @@ CRM de atendimentos para agentes de crédito, seguros e profissionais autônomos
 | Tier | Modelo | Inclui |
 |------|--------|--------|
 | **Free** | Gratuito na loja | Painel do dia, agenda local, cadastro de atendimentos com limites de volume, notas básicas |
-| **Pro** | Assinatura mensal (Stripe) | Sync Firestore ilimitado, séries recorrentes sem limite, lembretes locais, exportação JSON de backup, suporte prioritário (futuro) |
+| **Pro** | Assinatura mensal (Stripe) | Agenda sem limite, mesma conta em outro celular, avisos antes do horário, salvar dados em arquivo, suporte prioritário (futuro) |
 
 Detalhes de limites e gates: [docs/features/README.md](docs/features/README.md).  
 Billing: [docs/features/assinatura_stripe.md](docs/features/assinatura_stripe.md), [docs/billing/readme.md](docs/billing/readme.md).

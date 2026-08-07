@@ -25,9 +25,9 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Lista de clientes com busca | Sim | Sim |
 | Histórico de negociação por cliente | Sim | Sim |
 | Séries recorrentes | Até **3** séries ativas | Ilimitado |
-| Sync Firestore multi-dispositivo | — | Sim |
-| Export / import JSON backup | — | Sim |
-| Lembretes locais | — | Sim (15 min antes; configurável) |
+| Sync entre aparelhos | — | Sim |
+| Salvar ou restaurar cópia dos dados | — | Sim |
+| Aviso antes do horário | — | Sim (15 min antes; dá para mudar) |
 | Suporte | Comunidade | Prioritário (futuro) |
 
 Limites Free são enforcement no app via `PlanAccessPolicy`.

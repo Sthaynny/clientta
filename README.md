@@ -1,5 +1,5 @@
 <p align="center">
-O <strong>Clientta</strong> é um <strong>CRM de atendimentos</strong> para quem vende crédito, seguros e serviços no dia a dia: veja <strong>quem atender hoje</strong>, organize <strong>agendas</strong>, registre <strong>notas de negociação</strong> e mantenha histórico — <strong>offline no celular</strong>, com <strong>sincronização na nuvem</strong> e plano <strong>Pro</strong> via Stripe.
+O <strong>Clientta</strong> é um app para quem vende crédito, seguros e serviços no dia a dia: veja <strong>quem atender hoje</strong>, organize a <strong>agenda</strong>, registre <strong>o que combinou com cada cliente</strong> e consulte o histórico — <strong>funciona sem internet</strong> e, no plano <strong>Pro</strong>, usa a mesma conta em outro celular.
 </p>
 
 <p align="center"><em>Agenda, clientes e contexto — no bolso, mesmo sem internet.</em></p>
