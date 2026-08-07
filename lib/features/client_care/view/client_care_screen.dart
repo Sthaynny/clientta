@@ -7,7 +7,6 @@ import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_form_launch_args.dart';
-import 'package:clientta/features/client_care/domain/models/care_timeline_entry.dart';
 import 'package:clientta/features/client_care/view/client_care_view_model.dart';
 import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
@@ -135,7 +134,14 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                           message: clientCareEmptyMessageString,
                         )
                       else
-                        ...viewmodel.timeline.map(_timelineTile),
+                        ...viewmodel.timeline.map(
+                          (entry) => HubTimelineEntryCard(
+                            entry: entry,
+                            timestampLabel: formatEncounterTimestamp(
+                              entry.createdAt,
+                            ),
+                          ),
+                        ),
                       DSSpacing.xl.y,
                     ],
                   ),
@@ -149,43 +155,6 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _timelineTile(CareTimelineEntry entry) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: DSSpacing.sm.value),
-      child: HubSurface(
-        padding: EdgeInsets.all(DSSpacing.md.value),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: DSCaptionText(
-                    formatEncounterTimestamp(entry.createdAt),
-                    color: HubColors.inkMuted,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            if (entry.serviceType != null) ...[
-              DSSpacing.xxs.y,
-              DSCaptionSmallText(
-                entry.serviceType!,
-                color: HubColors.inkMuted,
-              ),
-            ],
-            DSSpacing.xs.y,
-            DSBodyText(
-              entry.body,
-              color: HubColors.ink,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -321,34 +290,40 @@ class _NoteComposer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 8,
       color: HubColors.surface,
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: EdgeInsets.all(DSSpacing.md.value),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DSCaptionText(
-                clientCareComposerHintString,
-                color: HubColors.inkMuted,
-              ),
-              DSSpacing.sm.y,
-              HubTextFormField(
-                controller: controller,
-                label: clientCareNoteLabelString,
-                maxLines: 4,
-                textInputAction: TextInputAction.newline,
-              ),
-              DSSpacing.sm.y,
-              HubPrimaryButton(
-                label: clientCareAddNoteString,
-                isLoading: isSaving,
-                onPressed: isSaving ? null : onSubmit,
-              ),
-            ],
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: HubColors.border),
+          ),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: EdgeInsets.all(DSSpacing.md.value),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DSCaptionText(
+                  clientCareComposerHintString,
+                  color: HubColors.inkMuted,
+                ),
+                DSSpacing.sm.y,
+                HubTextFormField(
+                  controller: controller,
+                  label: clientCareNoteLabelString,
+                  maxLines: 4,
+                  textInputAction: TextInputAction.newline,
+                ),
+                DSSpacing.sm.y,
+                HubPrimaryButton(
+                  label: clientCareAddNoteString,
+                  isLoading: isSaving,
+                  onPressed: isSaving ? null : onSubmit,
+                ),
+              ],
+            ),
           ),
         ),
       ),
