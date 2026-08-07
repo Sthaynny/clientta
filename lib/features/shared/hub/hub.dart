@@ -20,6 +20,7 @@ export 'hub_primary_button.dart';
 export 'hub_pro_benefits_grid.dart';
 export 'hub_pro_plan_hero.dart';
 export 'hub_section_header.dart';
+export 'hub_screen_intro.dart';
 export 'hub_search_field.dart';
 export 'hub_service_type_filter.dart';
 export 'hub_service_type_field.dart';

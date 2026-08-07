@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clientta/core/plan/plan_access_policy.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 
 class PlanProBenefitItem {
@@ -17,7 +18,9 @@ List<PlanProBenefitItem> buildPlanProBenefitCatalog() => [
   PlanProBenefitItem(
     icon: Icons.event_available_outlined,
     title: planProBenefitLimitsTitleString,
-    description: planProBenefitLimitsDescString,
+    description: planProBenefitLimitsDescString(
+      PlanAccessPolicy.freeMaxActiveAppointments,
+    ),
   ),
   PlanProBenefitItem(
     icon: Icons.devices_outlined,

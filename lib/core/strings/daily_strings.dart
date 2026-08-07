@@ -12,6 +12,10 @@ String get clientsEmptyMessageString =>
 String get clientsSearchEmptyTitleString => 'Nenhum cliente encontrado';
 String get clientsSearchEmptyMessageString =>
     'Tente outro nome ou telefone, ou limpe a busca.';
+String get clientsScreenIntroString =>
+    'Clientes dos seus atendimentos. Toque para ver histórico e anotar.';
+String get agendaScreenIntroString =>
+    'Todos os horários agendados. Use os filtros para focar em um tipo de serviço.';
 String clientProfileAppointmentsLabel(int count) =>
     count == 1 ? '1 agendamento' : '$count agendamentos';
 String clientProfileEncountersLabel(int count) =>
@@ -208,8 +212,8 @@ String get planProBenefitsSectionTitleString => 'O que está no Pro';
 String get planProActiveBenefitsHintString =>
     'Todos os recursos abaixo já estão liberados na sua conta.';
 String get planProBenefitLimitsTitleString => 'Mais atendimentos';
-String get planProBenefitLimitsDescString =>
-    'Agenda e repetições sem o limite do plano gratuito.';
+String planProBenefitLimitsDescString(int freeMax) =>
+    'Até $freeMax ativos no gratuito; ilimitado no Pro.';
 String get planProBenefitSyncTitleString => 'Outro celular';
 String get planProBenefitSyncDescString =>
     'Mesma agenda em outro aparelho com o mesmo login.';
