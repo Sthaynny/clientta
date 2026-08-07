@@ -54,6 +54,16 @@ Esses dados são inseridos voluntariamente por você e referem-se a **terceiros*
 
 O Clientta **não** coleta intencionalmente dados sensíveis previstos no art. 5º, II, da LGPD (origem racial, convicção religiosa, saúde, biometria etc.), salvo o que você voluntariamente incluir em campos de texto livre (como notas).
 
+### 2.4 Lembretes locais e backup de dados (plano Pro)
+
+No plano **Pro**, o App pode:
+
+- **Agendar notificações locais** no seu dispositivo para lembrar de atendimentos futuros. O conteúdo da notificação (nome do cliente, horário e tipo de serviço) é derivado dos dados já armazenados localmente; os alarmes são gerenciados pelo sistema operacional e **não** envolvem servidor de push de terceiros.
+- **Exportar** um arquivo JSON com agendamentos, notas de atendimento e preferências de perfil armazenados no aparelho, para que você salve ou compartilhe por meios à sua escolha (e-mail, nuvem pessoal, etc.).
+- **Importar** um arquivo JSON previamente exportado pelo Clientta, substituindo os dados locais do aparelho após sua confirmação explícita.
+
+Essas operações ocorrem no dispositivo. O Clientta **não** recebe automaticamente cópias dos arquivos de backup que você exporta ou importa; a responsabilidade pelo armazenamento e compartilhamento desses arquivos é sua.
+
 ---
 
 ## 3. Finalidade do tratamento
@@ -67,6 +77,8 @@ Os dados são tratados para as finalidades abaixo:
 | Armazenar e exibir seus agendamentos localmente | Dados de clientes e atendimentos |
 | Sincronizar agendamentos na nuvem (plano Pro) | Dados de atendimentos e perfil do usuário |
 | Processar assinatura Pro e liberar recursos pagos | E-mail, `uid`, dados de assinatura |
+| Enviar lembretes locais de atendimentos (plano Pro) | Nome do cliente, horário e tipo de serviço do agendamento |
+| Permitir exportação e importação manual de backup JSON (plano Pro) | Agendamentos, notas e perfil armazenados localmente |
 | Cumprir obrigações legais e responder a solicitações de titulares | Conforme necessário |
 | Melhorar segurança, estabilidade e suporte | Logs técnicos |
 

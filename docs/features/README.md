@@ -14,6 +14,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Implementado |
 | Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Implementado |
 | Lembretes locais | [lembretes_locais.md](lembretes_locais.md) | Pro | Implementado |
+| Export / import JSON backup | [export_backup.md](export_backup.md) | Pro | Implementado |
 
 ## Comparativo Free vs Pro
 
@@ -25,7 +26,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Histórico de negociação por cliente | Sim | Sim |
 | Séries recorrentes | Até **3** séries ativas | Ilimitado |
 | Sync Firestore multi-dispositivo | — | Sim |
-| Export JSON backup | — | Sim (futuro) |
+| Export / import JSON backup | — | Sim |
 | Lembretes locais | — | Sim (15 min antes; configurável) |
 | Suporte | Comunidade | Prioritário (futuro) |
 
