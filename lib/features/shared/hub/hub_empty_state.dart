@@ -68,6 +68,7 @@ class HubEmptyState extends StatelessWidget {
               textAlign: TextAlign.center,
               height: 1.45,
               color: HubColors.inkMuted,
+              overflow: TextOverflow.clip,
             ),
             if (actionLabel != null && onAction != null) ...[
               DSSpacing.lg.y,

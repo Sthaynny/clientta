@@ -308,6 +308,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                             planFreeStatusHintString,
                             color: HubColors.inkMuted,
                             height: 1.4,
+                            overflow: TextOverflow.clip,
                           ),
                         ),
                       ],
@@ -394,6 +395,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                         DSBodyText(
                           planBackupDescriptionString,
                           color: HubColors.inkMuted,
+                          overflow: TextOverflow.clip,
                         ),
                         DSSpacing.md.y,
                         HubPrimaryButton(
@@ -461,6 +463,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                               : planManageProString,
                           color: HubColors.inkMuted,
                           height: 1.4,
+                          overflow: TextOverflow.clip,
                         ),
                         DSSpacing.sm.y,
                       ] else ...[
@@ -468,6 +471,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                           planUpgradeHintString,
                           color: HubColors.inkMuted,
                           height: 1.4,
+                          overflow: TextOverflow.clip,
                         ),
                         DSSpacing.sm.y,
                       ],
@@ -475,6 +479,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                         planInactivityPolicyString,
                         color: HubColors.inkMuted,
                         height: 1.4,
+                        overflow: TextOverflow.clip,
                       ),
                     ],
                   ),

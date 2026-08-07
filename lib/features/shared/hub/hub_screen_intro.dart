@@ -42,6 +42,7 @@ class HubScreenIntro extends StatelessWidget {
               message,
               color: HubColors.inkMuted,
               height: 1.4,
+              overflow: TextOverflow.clip,
             ),
           ),
         ],
