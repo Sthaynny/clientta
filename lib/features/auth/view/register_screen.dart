@@ -5,7 +5,6 @@ import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/strings/strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
-import 'package:clientta/core/theme/hub_theme.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/auth/domain/repositories/auth_repository.dart';
@@ -91,20 +90,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildGoogleSignInButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: _loading ? null : _signInWithGoogle,
-        style: OutlinedButton.styleFrom(
-          minimumSize: const Size.fromHeight(HubTheme.minTouchTarget),
-          foregroundColor: HubColors.ink,
-          side: const BorderSide(color: HubColors.border),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(DSSpacing.sm.value),
-          ),
-        ),
-        child: Text(signInWithGoogleString),
-      ),
+    return HubOutlinedButton(
+      label: signInWithGoogleString,
+      icon: Icons.g_mobiledata_rounded,
+      onPressed: _loading ? null : _signInWithGoogle,
     );
   }
 
