@@ -89,6 +89,9 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                         clientName: args.clientName,
                         clientPhone: args.clientPhone,
                         serviceType: args.serviceType,
+                        onContactLaunchFailed: () => context.showSnackBarError(
+                          clientContactLaunchFailedString,
+                        ),
                       ),
                       DSSpacing.lg.y,
                       HubSectionHeader(
@@ -176,11 +179,13 @@ class _ClientHeader extends StatelessWidget {
     required this.clientName,
     required this.clientPhone,
     this.serviceType,
+    this.onContactLaunchFailed,
   });
 
   final String clientName;
   final String clientPhone;
   final String? serviceType;
+  final VoidCallback? onContactLaunchFailed;
 
   @override
   Widget build(BuildContext context) {
@@ -198,6 +203,11 @@ class _ClientHeader extends StatelessWidget {
             DSSpacing.xs.y,
             DSCaptionText(serviceType!, color: HubColors.schedule),
           ],
+          DSSpacing.md.y,
+          HubClientContactBar(
+            clientPhone: clientPhone,
+            onLaunchFailed: onContactLaunchFailed,
+          ),
         ],
       ),
     );
