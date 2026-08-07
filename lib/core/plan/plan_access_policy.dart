@@ -26,11 +26,13 @@ abstract final class PlanAccessPolicy {
     required UserSubscription subscription,
     required List<ServiceAppointment> existingAppointments,
     bool isEdit = false,
+    int additionalCount = 1,
   }) {
     if (hasProAccess(subscription)) return true;
     if (isEdit) return true;
+    if (additionalCount < 1) return true;
 
-    return countActiveAppointments(existingAppointments) <
+    return countActiveAppointments(existingAppointments) + additionalCount <=
         freeMaxActiveAppointments;
   }
 

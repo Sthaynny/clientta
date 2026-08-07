@@ -65,6 +65,7 @@ class AppointmentFormViewModel {
   String endTime = '10:00';
   String status = AppointmentStatus.agendado.value;
   String notes = '';
+  Set<int> selectedWeekdays = {};
   SeriesEditScope? pendingSeriesEditScope;
   AppointmentFormFieldErrors fieldErrors = const AppointmentFormFieldErrors();
   List<String> serviceTypeOptions = [];
@@ -223,6 +224,57 @@ class AppointmentFormViewModel {
     final trimmedName = clientName.trim();
     final storedPhone = formatStoredClientPhone(clientPhone);
     final trimmedServiceType = serviceType.trim();
+
+    if (selectedWeekdays.isNotEmpty) {
+      if (!PlanAccessPolicy.canCreateSeries(
+        subscription: subscription,
+        existingAppointments: existing,
+      )) {
+        return Result.error(
+          Exception(
+            planFreeLimitSeriesMessage(PlanAccessPolicy.freeMaxActiveSeries),
+          ),
+        );
+      }
+
+      final seriesId = 'series_${DateTime.now().millisecondsSinceEpoch}';
+      final seriesEntries = buildRecurringAppointments(
+        seriesId: seriesId,
+        anchorDate: appointmentDate,
+        weekdays: selectedWeekdays,
+        clientName: trimmedName,
+        clientPhone: storedPhone,
+        serviceType: trimmedServiceType,
+        startTime: startTime.trim(),
+        endTime: endTime.trim(),
+        status: status,
+        notes: notesValue,
+      );
+
+      if (seriesEntries.isEmpty) {
+        return Result.errorDefault(errorSaveString);
+      }
+
+      if (!PlanAccessPolicy.canAddAppointment(
+        subscription: subscription,
+        existingAppointments: existing,
+        additionalCount: seriesEntries.length,
+      )) {
+        return Result.error(
+          Exception(
+            planFreeLimitAppointmentsMessage(
+              PlanAccessPolicy.freeMaxActiveAppointments,
+            ),
+          ),
+        );
+      }
+
+      await _repository.saveAll(seriesEntries);
+      await _serviceTypeCatalog.addIfNew(trimmedServiceType);
+      _syncService?.scheduleSync();
+      await _userRepository?.touchLastActivity();
+      return Result.ok();
+    }
 
     if (!PlanAccessPolicy.canAddAppointment(
       subscription: subscription,

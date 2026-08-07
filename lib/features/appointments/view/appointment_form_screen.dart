@@ -362,6 +362,26 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               maxLines: 3,
               onChanged: (value) => viewmodel.notes = value,
             ),
+            if (!widget.isEdit && !viewmodel.lockClientFields) ...[
+              DSSpacing.md.y,
+              DSCaptionText(
+                recurringSeriesLabelString,
+                color: HubColors.inkMuted,
+                fontWeight: FontWeight.w600,
+              ),
+              DSSpacing.xxs.y,
+              DSCaptionText(
+                recurringSeriesHintString,
+                color: HubColors.inkMuted,
+              ),
+              DSSpacing.sm.y,
+              HubWeekdayChips(
+                selectedWeekdays: viewmodel.selectedWeekdays,
+                onChanged: (value) {
+                  setState(() => viewmodel.selectedWeekdays = value);
+                },
+              ),
+            ],
             DSSpacing.xl.y,
             ListenableBuilder(
               listenable: viewmodel.save,
