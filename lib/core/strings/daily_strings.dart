@@ -111,6 +111,7 @@ String get registerSubtitleString =>
 String get registerString => 'Criar conta';
 String get createAccountString => 'Ainda não tem conta? Cadastre-se';
 String get alreadyHaveAccountString => 'Já tem conta? Entrar';
+String get authDividerOrString => 'ou';
 
 String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';

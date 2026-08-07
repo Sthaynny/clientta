@@ -6,7 +6,7 @@
 
 ## C-105 — Firebase Auth
 
-- **Status:** Concluído (e-mail/senha). Google Sign-In pendente de OAuth client no `google-services.json`.
+- **Status:** Concluído (e-mail/senha + Google Sign-In no código). Pendência operacional: SHA-1/SHA-256 no Firebase Console.
 - **O que fazer:** Login e cadastro (e-mail/senha ou Google) com rotas `/login`, `/cadastro`.
 - **Objetivo:** Identidade (`uid`) para Firestore e Stripe.
 - **Impacto:** **Alto** — infraestrutura.
@@ -17,10 +17,15 @@
 - `AuthGate` com `authStateChanges()`, bootstrap de `users/{uid}` e transição animada.
 - Rotas públicas `/login`, `/cadastro` via `AuthShell`; app protegido em `MyApp`.
 - Repositórios `AuthRepository` / `UserRepository` (sem escrita de `subscription`).
-- Logout no drawer.
+- `signInWithGoogle()` via `google_sign_in` + `GoogleAuthProvider.credential`.
+- Botão "Entrar com Google" em login e cadastro; erros tratados (cancelado, indisponível).
+- Logout no drawer (inclui `GoogleSignIn.signOut()`).
 - Strings CRM em `daily_strings.dart` / `strings.dart`.
 - Testes: `test/features/auth/auth_repository_test.dart`.
 
-### Pendências
+### Pendências operacionais
 
-- Google Sign-In: adicionar SHA-1/SHA-256 no Firebase Console e reexecutar `flutterfire configure` (OAuth client vazio em `google-services.json`).
+- **Google Sign-In:** adicionar SHA-1 e SHA-256 do app Android no Firebase Console (Configurações do projeto → Seus apps → Android).
+- Reexecutar `flutterfire configure` para popular o OAuth client em `google-services.json` (atualmente vazio).
+- Habilitar provedor **Google** em Authentication → Sign-in method no Firebase Console.
+- iOS: conferir `REVERSED_CLIENT_ID` no `Info.plist` após `flutterfire configure`.
