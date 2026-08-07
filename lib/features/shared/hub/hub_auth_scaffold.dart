@@ -39,7 +39,7 @@ class HubAuthScaffold extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AppIcon.hub(size: 52),
+                        AppIcon.onLight(size: 52),
                         DSSpacing.lg.y,
                         Text(
                           title,

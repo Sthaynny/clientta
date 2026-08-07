@@ -12,7 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "docs/stores/store-assets/icon/icon_512.png"
 APP_ICON = ROOT / "assets/images/app-icon.png"
 APP_ICON_MARK = ROOT / "assets/images/app-icon-mark.png"
+APP_ICON_ON_LIGHT = ROOT / "assets/images/app-icon-on-light.png"
 HUB_GREEN = (0x1B, 0x6B, 0x5C, 255)  # HubColors.seed — DESIGN.md
+HUB_SCHEDULE = (0x2D, 0x6A, 0x8F, 255)  # HubColors.schedule
 SQUIRCLE_RADIUS_RATIO = 0.2237
 
 ANDROID_DENSITIES = {
@@ -104,6 +106,14 @@ def apply_squircle_mask(img: Image.Image) -> Image.Image:
     return out
 
 
+def _is_glyph_pixel(r: int, g: int, b: int, a: int) -> bool:
+    if a < 16:
+        return False
+    lum = 0.299 * r + 0.587 * g + 0.114 * b
+    is_blue_accent = b > r + 20 and b > g and b > 60
+    return lum >= 150 or is_blue_accent
+
+
 def extract_foreground_mark(img: Image.Image) -> Image.Image:
     """White/blue glyph only — for dark app bars and drawer headers."""
     rgba = img.convert("RGBA")
@@ -112,14 +122,27 @@ def extract_foreground_mark(img: Image.Image) -> Image.Image:
     for y in range(h):
         for x in range(w):
             r, g, b, a = data[x, y]
-            if a < 16:
+            if not _is_glyph_pixel(r, g, b, a):
+                data[x, y] = (0, 0, 0, 0)
+    return rgba
+
+
+def extract_foreground_mark_on_light(img: Image.Image) -> Image.Image:
+    """Seed-green glyph — for auth and other light surfaces."""
+    rgba = img.convert("RGBA")
+    data = rgba.load()
+    w, h = rgba.size
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = data[x, y]
+            if not _is_glyph_pixel(r, g, b, a):
                 data[x, y] = (0, 0, 0, 0)
                 continue
-            lum = 0.299 * r + 0.587 * g + 0.114 * b
             is_blue_accent = b > r + 20 and b > g and b > 60
-            is_glyph = lum >= 150
-            if not (is_glyph or is_blue_accent):
-                data[x, y] = (0, 0, 0, 0)
+            if is_blue_accent:
+                data[x, y] = (*HUB_SCHEDULE[:3], a)
+            else:
+                data[x, y] = (*HUB_GREEN[:3], a)
     return rgba
 
 
@@ -180,6 +203,9 @@ def main() -> None:
 
     resize_transparent(master, 512).save(APP_ICON, optimize=True)
     resize_transparent(extract_foreground_mark(master), 512).save(APP_ICON_MARK, optimize=True)
+    resize_transparent(extract_foreground_mark_on_light(master), 512).save(
+        APP_ICON_ON_LIGHT, optimize=True
+    )
 
     print(f"Synced from {MASTER}")
 

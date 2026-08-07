@@ -55,7 +55,7 @@ class HubAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           if (showBrandMark && !canPop) ...[
-            ExcludeSemantics(child: AppIcon.hub(size: 40)),
+            ExcludeSemantics(child: AppIcon.onDark(size: 40)),
             DSSpacing.sm.x,
           ],
           Expanded(
