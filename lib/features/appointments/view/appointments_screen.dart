@@ -114,6 +114,17 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     }
   }
 
+  Widget _buildScreenIntro() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: DSSpacing.md.value),
+      child: HubScreenIntro(
+        icon: Icons.event_note_outlined,
+        message: agendaScreenIntroString,
+        iconColor: HubColors.schedule,
+      ),
+    );
+  }
+
   Widget _buildFilterBar() {
     final types = viewmodel.availableServiceTypes();
     if (types.isEmpty) return const SizedBox.shrink();
@@ -144,6 +155,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildPlanUsageBanner(),
+              _buildScreenIntro(),
               HubSectionHeader(
                 title: myAgendaString,
                 count: totalCount,
@@ -228,25 +240,23 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             return RefreshIndicator(
               color: HubColors.seed,
               onRefresh: onRefresh,
-              child: SingleChildScrollView(
+              child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.65,
-                  child: Column(
-                    children: [
-                      _buildPlanUsageBanner(),
-                      Expanded(
-                        child: HubEmptyState(
-                          icon: Icons.event_note_outlined,
-                          title: emptyAgendaTitle,
-                          message: emptyAgendaMessage,
-                          actionLabel: addAppointmentString,
-                          onAction: () => _openAppointmentForm(),
-                        ),
-                      ),
-                    ],
+                padding: EdgeInsets.all(DSSpacing.md.value),
+                children: [
+                  _buildPlanUsageBanner(),
+                  _buildScreenIntro(),
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.42,
+                    child: HubEmptyState(
+                      icon: Icons.event_note_outlined,
+                      title: emptyAgendaTitle,
+                      message: emptyAgendaMessage,
+                      actionLabel: addAppointmentString,
+                      onAction: () => _openAppointmentForm(),
+                    ),
                   ),
-                ),
+                ],
               ),
             );
           }
@@ -260,6 +270,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 padding: EdgeInsets.all(DSSpacing.md.value),
                 children: [
                   _buildPlanUsageBanner(),
+                  _buildScreenIntro(),
                   HubSectionHeader(
                     title: myAgendaString,
                     count: 0,
