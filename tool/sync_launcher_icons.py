@@ -3,14 +3,17 @@
 
 from __future__ import annotations
 
+from collections import deque
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "docs/stores/store-assets/icon/icon_512.png"
 APP_ICON = ROOT / "assets/images/app-icon.png"
+APP_ICON_MARK = ROOT / "assets/images/app-icon-mark.png"
 HUB_GREEN = (0x1B, 0x6B, 0x5C, 255)  # HubColors.seed — DESIGN.md
+SQUIRCLE_RADIUS_RATIO = 0.2237
 
 ANDROID_DENSITIES = {
     "mipmap-mdpi": 48,
@@ -46,8 +49,82 @@ IOS_ICONS: list[tuple[str, int]] = [
 ]
 
 
-def load_master() -> Image.Image:
-    return Image.open(MASTER).convert("RGBA")
+def strip_outer_white(img: Image.Image) -> Image.Image:
+    """Remove white padding and fringe connected to the image edges."""
+    rgba = img.convert("RGBA")
+    w, h = rgba.size
+    data = rgba.load()
+    visited: set[tuple[int, int]] = set()
+    queue: deque[tuple[int, int]] = deque()
+
+    def is_removable_white(r: int, g: int, b: int, a: int) -> bool:
+        return a > 0 and r >= 250 and g >= 250 and b >= 250
+
+    for x in range(w):
+        for y in (0, h - 1):
+            queue.append((x, y))
+    for y in range(h):
+        for x in (0, w - 1):
+            queue.append((x, y))
+
+    while queue:
+        x, y = queue.popleft()
+        if (x, y) in visited:
+            continue
+        visited.add((x, y))
+        r, g, b, a = data[x, y]
+        if a == 0:
+            pass
+        elif is_removable_white(r, g, b, a):
+            data[x, y] = (r, g, b, 0)
+        else:
+            continue
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < w and 0 <= ny < h and (nx, ny) not in visited:
+                nr, ng, nb, na = data[nx, ny]
+                if na == 0 or is_removable_white(nr, ng, nb, na):
+                    queue.append((nx, ny))
+
+    return rgba
+
+
+def apply_squircle_mask(img: Image.Image) -> Image.Image:
+    rgba = img.convert("RGBA")
+    w, h = rgba.size
+    radius = int(min(w, h) * SQUIRCLE_RADIUS_RATIO)
+    mask = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        (0, 0, w - 1, h - 1),
+        radius=radius,
+        fill=255,
+    )
+    out = rgba.copy()
+    out.putalpha(mask)
+    return out
+
+
+def extract_foreground_mark(img: Image.Image) -> Image.Image:
+    """White/blue glyph only — for dark app bars and drawer headers."""
+    rgba = img.convert("RGBA")
+    data = rgba.load()
+    w, h = rgba.size
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = data[x, y]
+            if a < 16:
+                data[x, y] = (0, 0, 0, 0)
+                continue
+            lum = 0.299 * r + 0.587 * g + 0.114 * b
+            is_blue_accent = b > r + 20 and b > g and b > 60
+            is_glyph = lum >= 150
+            if not (is_glyph or is_blue_accent):
+                data[x, y] = (0, 0, 0, 0)
+    return rgba
+
+
+def prepare_master() -> Image.Image:
+    return apply_squircle_mask(strip_outer_white(Image.open(MASTER)))
 
 
 def solid(size: int, color: tuple[int, int, int, int]) -> Image.Image:
@@ -81,7 +158,9 @@ def monochrome_from(src: Image.Image, size: int) -> Image.Image:
 
 
 def main() -> None:
-    master = load_master()
+    master = prepare_master()
+    master.save(MASTER, optimize=True)
+
     res_android = ROOT / "android/app/src/main/res"
 
     for folder, px in ANDROID_DENSITIES.items():
@@ -99,8 +178,8 @@ def main() -> None:
         img = composite_on_green(master, px)
         img.save(ios_dir / name, optimize=True)
 
-    # In-app brand mark (transparent outside squircle).
     resize_transparent(master, 512).save(APP_ICON, optimize=True)
+    resize_transparent(extract_foreground_mark(master), 512).save(APP_ICON_MARK, optimize=True)
 
     print(f"Synced from {MASTER}")
 

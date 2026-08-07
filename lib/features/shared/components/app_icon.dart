@@ -7,7 +7,7 @@ class AppIcon extends StatelessWidget {
   }
 
   AppIcon.hub({super.key, this.size = 60}) {
-    _path = "assets/images/app-icon.png";
+    _path = 'assets/images/app-icon-mark.png';
   }
 
   /// Lado do ícone em pixels lógicos (não confundir com [Image.asset] `scale`).
