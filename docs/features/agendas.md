@@ -21,7 +21,7 @@ class ServiceAppointment {
 }
 ```
 
-Persistência local: `crm_appointments.json` via `ServiceAppointmentRepositoryLocal`.
+Persistência local: chave `appointments` em `clientta_data.json` via `AppointmentRepositoryLocal`.
 
 ## Plano
 
@@ -44,9 +44,10 @@ Persistência local: `crm_appointments.json` via `ServiceAppointmentRepositoryLo
 | Aspecto | Detalhe |
 |---------|---------|
 | Agrupamento | Por data ou por `seriesId` (séries recorrentes) |
-| Filtros | Tipo de serviço (dropdown ou chips) |
+| Filtros | Tipo de serviço (dropdown) |
 | Ordenação | Data decrescente; dentro do dia por `startTime` |
-| Ações | Ver atendimento (histórico), editar, excluir (com confirmação) |
+| Card | `HubAppointmentCard` — horário, nome, **telefone formatado**, tipo de serviço, status |
+| Ações no card | Barra horizontal: ver atendimento, editar, excluir |
 | Toque no card | Abre `/atendimentos` com histórico de negociação do cliente |
 | FAB | `HubFab` → `/agendas/registrar` |
 | Empty state | CTA primeiro atendimento |
@@ -56,13 +57,15 @@ Persistência local: `crm_appointments.json` via `ServiceAppointmentRepositoryLo
 | Campo | Componente |
 |-------|------------|
 | Nome do cliente | `HubTextFormField` |
-| Telefone | `HubTextFormField` (teclado numérico) |
+| Telefone | `HubTextFormField` (máscara BR via `input_masks.dart`) |
 | Tipo de serviço | `DropdownButtonFormField` + presets configuráveis |
 | Data | `HubDateFormField` |
 | Início / fim | Texto `HH:mm` ou time picker |
 | Notas | `HubTextFormField` multilinha expansível |
-| Série recorrente | Chips de dias da semana ou múltiplas datas (reuso do padrão multi-dia legado) |
+| Série recorrente | Chips de dias da semana (`HubWeekdayChips`, 4 semanas) |
 | Salvar | `HubPrimaryButton` → `viewmodel.save.execute()` |
+
+Prefill a partir de `/atendimentos`: `AppointmentFormLaunchArgs` com nome, telefone e tipo do cliente.
 
 Padrão MVVM: `hydrate()` em `initState`; `save.addListener`; sucesso → `context.back(true)`.
 
@@ -75,7 +78,7 @@ Atendimentos com o mesmo `seriesId` formam uma série (ex.: follow-up semanal). 
 
 ## Status no app
 
-**Planejado** — substitui `classes`, `activities` e grade horária legados.
+**Implementado** — substitui `classes`, `activities` e grade horária legados.
 
 ## Dependências técnicas
 

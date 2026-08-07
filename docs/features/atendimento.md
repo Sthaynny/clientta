@@ -35,6 +35,8 @@ Notas antigas em `ServiceAppointment.notes` continuam visíveis no histórico (b
 |---------|------|-----|
 | Histórico por cliente | Sim | Sim |
 | Registrar encontro sem agenda | Sim | Sim |
+| Ligar / WhatsApp no cabeçalho | Sim | Sim |
+| Agendar com prefill do cliente | Sim | Sim |
 | Notas legadas de agendamento | Sim | Sim |
 | Sync Firestore de `encounterNotes` | — | Sim |
 
@@ -43,30 +45,37 @@ Notas antigas em `ServiceAppointment.notes` continuam visíveis no histórico (b
 | Aspecto | Detalhe |
 |---------|---------|
 | Argumentos | `ClientCareArgs`: `clientName`, `clientPhone`, `serviceType?`, `appointmentId?` |
-| Cabeçalho | Nome, telefone e tipo de serviço do cliente |
+| Cabeçalho | Avatar com iniciais, nome, telefone formatado (`formatBrPhone`), badge do tipo de serviço |
+| Contato | `HubClientContactBar` — **Ligar** e **WhatsApp** (`client_contact_launcher.dart`) |
+| Agendar | CTA **Agendar na home** → `/agendas/registrar` com `AppointmentFormLaunchArgs.prefill` |
 | Histórico | Lista cronológica (mais recente primeiro) com data/hora |
 | Composer fixo | Campo multilinha + botão **Registrar encontro** |
+| Composer vazio | Registra início do atendimento de hoje (uma vez por dia por cliente) |
+| Composer com texto | Adiciona anotação livre ao histórico |
 | Empty state | Orienta a anotar sem precisar marcar horário |
 
 ## Navegação
 
 | Origem | Ação |
 |--------|------|
-| Home — card do dia | Toque no card ou ícone de nota → `/atendimentos` |
-| Minha Agenda | Toque no card ou ícone de atendimento → `/atendimentos` |
+| Home — card do dia | Toque no card ou **Ver atendimento** → `/atendimentos` |
+| Minha Agenda | Toque no card ou **Ver atendimento** → `/atendimentos` |
+| Meus Clientes | Toque no card → `/atendimentos` |
 | Minha Agenda | Ícone editar → `/agendas/registrar` (inalterado) |
 
 ## Fluxo do atendente
 
 1. Atender cliente (ligação, visita, WhatsApp) — **sem abrir formulário de agenda**.
-2. Abrir atendimento pelo card existente ou pelo histórico do cliente.
-3. Registrar encontro no composer inferior.
-4. Consultar todo o histórico de negociação em um único bloco.
+2. Abrir atendimento pelo card da home, agenda ou lista de clientes.
+3. Usar **Ligar** / **WhatsApp** no cabeçalho quando necessário.
+4. Registrar encontro no composer inferior (texto livre ou sessão do dia).
+5. Consultar todo o histórico de negociação em um único bloco.
 
 ## Dependências técnicas
 
 - `ClientCareViewModel` — `load`, `addNote`
 - `buildCareTimeline` — agrega `EncounterNote` + notas legadas de agendamentos
+- `hasEncounterSessionToday` — evita duplicar sessão do dia
 - `EncounterNoteRepository` — CRUD local offline-first
 - `EncounterNoteRepositoryRemote` — sync Pro em `users/{uid}/encounterNotes/{id}`
 - `AppointmentSyncService` — merge bidirecional de encounter notes junto com appointments
@@ -74,4 +83,4 @@ Notas antigas em `ServiceAppointment.notes` continuam visíveis no histórico (b
 
 ## Status no app
 
-**Implementado** — substitui o diálogo de “observação rápida” da home por tela dedicada.
+**Implementado** — substitui o diálogo de “observação rápida” da home por tela dedicada com contato e agendamento com prefill.

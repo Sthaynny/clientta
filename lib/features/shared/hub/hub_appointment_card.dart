@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
-import 'package:clientta/core/theme/hub_theme.dart';
 import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/shared/hub/hub_surface.dart';

@@ -1,0 +1,40 @@
+# Clientta
+
+> CRM de atendimentos para agentes de crédito, seguros e profissionais autônomos: painel do dia, agenda de clientes, notas de negociação e sincronização na nuvem — offline-first no celular, com plano Pro via Stripe.
+
+App Flutter (Android/iOS) com arquitetura MVVM + GetIt. Dados locais em `DeviceJsonStore` (JSON no dispositivo); sync Pro via Firebase Auth + Firestore. Billing Stripe exclusivamente por Cloud Functions — sem SDK Stripe no app. Pacote Dart: `clientta`.
+
+## Documentation
+
+- [README](README.md): visão geral, stack e índice de documentação
+- [docs/PROPOSITO.md](docs/PROPOSITO.md): visão do produto, dores do público e escopo
+- [docs/guia_clientta.md](docs/guia_clientta.md): como rodar, estrutura de features e arquitetura
+- [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.md): fases de entrega (MVP → billing) e estado atual
+- [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md): rotas do app (`AppRouters`)
+- [docs/tasks/README.md](docs/tasks/README.md): backlog, tarefas finalizadas e a fazer
+
+## Specifications
+
+- [PRODUCT.md](PRODUCT.md): plataforma, audiência, core jobs e tiers Free/Pro
+- [DESIGN.md](DESIGN.md): cena de uso, paleta de cores e componentes Hub
+- [docs/features/README.md](docs/features/README.md): catálogo de funcionalidades e comparativo Free vs Pro
+- [docs/features/home_hoje.md](docs/features/home_hoje.md): painel do dia (início)
+- [docs/features/agendas.md](docs/features/agendas.md): agenda e formulário de atendimentos
+- [docs/features/clientes.md](docs/features/clientes.md): lista e cadastro de clientes
+- [docs/features/atendimento.md](docs/features/atendimento.md): histórico centralizado de negociação
+- [docs/features/sincronizacao_nuvem.md](docs/features/sincronizacao_nuvem.md): sync Firestore multi-dispositivo (Pro)
+- [docs/features/assinatura_stripe.md](docs/features/assinatura_stripe.md): assinatura Pro, entitlement e callables
+
+## Configuration
+
+- [docs/billing/readme.md](docs/billing/readme.md): setup operacional Stripe (secrets, webhook, deploy)
+- [functions/README.md](functions/README.md): Cloud Functions — comandos rápidos e testes
+- [pubspec.yaml](pubspec.yaml): dependências Flutter e versão do app
+
+## Optional
+
+- [docs/mapeamento_tarefas.md](docs/mapeamento_tarefas.md): mapeamento entre tarefas e features
+- [docs/legal/politica-privacidade.md](docs/legal/politica-privacidade.md): política de privacidade (LGPD)
+- [docs/legal/politica-assinatura.md](docs/legal/politica-assinatura.md): política de assinatura Pro
+- [.cursor/rules/clientta-general.mdc](.cursor/rules/clientta-general.mdc): padrões de arquitetura, MVVM, DI e clean code para agentes
+- [.cursor/rules/clientta-ui.mdc](.cursor/rules/clientta-ui.mdc): convenções de UI e componentes Hub

@@ -18,6 +18,7 @@
 |--------|-----------|
 | **Início** | Atendimentos de hoje ordenados por horário; atalho para concluir e abrir histórico de atendimento |
 | **Minha Agenda** | Listagem agrupada por data ou série; filtro por tipo de serviço |
+| **Meus Clientes** | Lista unificada de clientes (agenda + encontros); busca; abre histórico de atendimento |
 | **Atendimento** | Histórico centralizado de negociação por cliente; registrar encontros sem agendar |
 | **Registrar atendimento** | Cliente, telefone, tipo, data, horários, notas, série recorrente |
 | **Sync na nuvem** | Firestore após login (tier Pro) |
@@ -43,7 +44,9 @@ Entidade principal: `ServiceAppointment`
 
 Entidade complementar: `EncounterNote` — anotações de encontros/negociações por cliente (`clientPhone`), com histórico na tela `/atendimentos`. Persistência local: chave `encounterNotes` em `clientta_data.json`.
 
-Persistência local de agendamentos: `clientta_data.json` (chave `appointments`) via `DeviceJsonStore`.
+Agregado de UI: `ClientProfile` — perfil derivado por cliente (telefone como chave), montado a partir de agendamentos e encontros para a tela `/clientes`. Não é persistido separadamente.
+
+Persistência local de agendamentos: chave `appointments` em `clientta_data.json` via `DeviceJsonStore`.
 
 ## Rotas
 
@@ -51,9 +54,10 @@ Persistência local de agendamentos: `clientta_data.json` (chave `appointments`)
 |------|---------|
 | Início (painel do dia) | `/` |
 | Minha Agenda | `/agendas` |
+| Meus Clientes | `/clientes` |
 | Atendimento (histórico do cliente) | `/atendimentos` |
 | Registrar atendimento | `/agendas/registrar` |
-| Plano / assinatura | `/configuracoes/plano` |
+| Plano / assinatura | `/plano` |
 
 Detalhes em [ROTEAMENTO.md](ROTEAMENTO.md).
 

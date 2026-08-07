@@ -17,6 +17,7 @@ Cada entrada usa **ID** (ex. C-101), resumo, objetivo, impacto e link à feature
 |----------------|---------|
 | Início — painel do dia | [home_hoje.md](finalizadas/home_hoje.md) |
 | Minha Agenda | [agendas.md](finalizadas/agendas.md) |
+| Meus Clientes e atendimento | [clientes.md](finalizadas/clientes.md) |
 | Sync na nuvem | [sincronizacao_nuvem.md](finalizadas/sincronizacao_nuvem.md) |
 | Billing (Stripe) | [billing.md](finalizadas/billing.md) |
 | Auth Firebase | [auth_firebase.md](finalizadas/auth_firebase.md) |

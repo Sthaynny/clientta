@@ -28,32 +28,43 @@ Variáveis e config:
 lib/features/
   home/              # Painel do dia (/)
   appointments/      # Agenda + formulário (/agendas, /agendas/registrar)
-  billing/           # Plano Pro (/configuracoes/plano)
+  clients/           # Meus Clientes (/clientes)
+  client_care/       # Atendimento por cliente (/atendimentos)
+  billing/           # Plano Pro (/plano)
   auth/              # Login Firebase
-  shared/hub/        # Componentes Hub*
+  shared/hub/        # Componentes Hub* (HubAppointmentCard, HubClientCard, …)
 lib/core/
   storage/           # DeviceJsonStore
   router/            # AppRouters
   dependecy/         # GetIt
   strings/           # strings.dart, daily_strings.dart
+  utils/             # input_masks.dart, client_contact_launcher.dart
 ```
 
 Cada feature: **model → repository (local + remote) → view model → screen**.
 
 ## Persistência local
 
-Arquivo: `crm_appointments.json` em `getApplicationDocumentsDirectory()`.
+Arquivo: `clientta_data.json` em `getApplicationDocumentsDirectory()`.
+
+Chaves principais:
+
+| Chave | Conteúdo |
+|-------|----------|
+| `appointments` | Lista de `ServiceAppointment` |
+| `encounterNotes` | Lista de `EncounterNote` |
+| `profile` | Configurações locais (`onboardingSeen`, etc.) |
 
 Store: `lib/core/storage/device_json_store.dart`.
 
-Migração: instalações com `university_hub_daily.json` podem migrar para `crm_appointments.json` — documentar script na Fase 1.
+Migração: instalações legadas com `university_hub_daily.json` são renomeadas automaticamente para `clientta_data.json`.
 
 ## Firebase
 
 | Serviço | Uso |
 |---------|-----|
 | **Auth** | Login do usuário (`uid`) |
-| **Firestore** | `users/{uid}`, `users/{uid}/appointments/{id}` |
+| **Firestore** | `users/{uid}`, `users/{uid}/appointments/{id}`, `users/{uid}/encounterNotes/{id}` |
 | **Functions** | Stripe callables + webhook |
 
 Regras: leitura/escrita de appointments apenas para `request.auth.uid == resource.data.userId` (ou path sob `users/{uid}`).
@@ -78,7 +89,7 @@ Secrets no CI: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — apenas no ambien
 ## Testes
 
 - Fixtures: `test/mock/` com `ServiceAppointment`.
-- Domínio: `test/features/appointments/`.
+- Domínio: `test/features/appointments/`, `test/features/clients/`, `test/features/client_care/`.
 - Não referenciar features removidas (classes, activities).
 
 ## Documentação relacionada

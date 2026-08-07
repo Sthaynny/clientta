@@ -55,7 +55,7 @@ users/{uid}
 
 ## Status no app
 
-**Planejado** — Fase 2 do [PLANEJAMENTO.md](../PLANEJAMENTO.md).
+**Implementado** — sync de appointments e encounter notes; gate Pro via `AppointmentSyncService`.
 
 ## Dependências técnicas
 

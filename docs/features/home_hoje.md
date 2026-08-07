@@ -2,7 +2,7 @@
 
 ## Resumo
 
-Tela inicial (`/`) com **atendimentos do dia corrente**, ordenados por `startTime`. É o painel operacional “quem atender agora” — atalhos para **marcar como concluído**, **adicionar notas** e abrir o formulário de novo atendimento.
+Tela inicial (`/`) com **atendimentos do dia corrente**, ordenados por `startTime`. É o painel operacional “quem atender agora” — atalhos para **marcar como concluído**, **cancelar** e abrir o **histórico de atendimento** do cliente.
 
 ## Plano
 
@@ -12,34 +12,35 @@ Tela inicial (`/`) com **atendimentos do dia corrente**, ordenados por `startTim
 
 - Lista completa dos atendimentos de hoje (`appointmentDate == hoje`).
 - Ordenação por horário de início.
-- Ações rápidas: concluir, editar notas, cancelar.
+- Ações rápidas: concluir, cancelar, ver atendimento.
 - Banner offline quando sem rede (`HubOfflineBanner`).
-- Drawer com navegação (Agenda, Plano Pro).
+- Drawer com navegação (Agenda, Clientes, Plano).
 
 ### Pro
 
 - Mesma experiência, sem limites de volume herdados da agenda.
-- Indicador de sync (última sincronização, pendências) quando Fase 2 ativa.
+- Indicador de sync (última sincronização, pendências).
 
 ## UX
 
 | Elemento | Comportamento |
 |----------|---------------|
 | Cabeçalho de data | `HubDayHeader` — “Hoje, 7 de agosto” |
-| Card de atendimento | Horário, nome, telefone, tipo de serviço, badge de status |
+| Card de atendimento | `HubAppointmentCard` — horário, nome, telefone, tipo de serviço, badge de status |
+| Barra de ações | Horizontal na base do card: concluir, cancelar, ver atendimento |
 | Toque no card | Abre `/atendimentos` — histórico centralizado de negociação |
-| Status `agendado` | Ação primária “Concluir” |
-| Status `concluido` | Notas visíveis; ícone abre histórico de atendimento |
+| Status `agendado` | Ação **Concluir** e **Cancelar** |
+| Status `concluido` | Notas visíveis no card; **Ver atendimento** abre histórico |
 | Empty state | CTA “Registrar atendimento” → `/agendas/registrar` |
 | Pull-to-refresh | Recarrega local; dispara sync se Pro + online |
 
 ## Status no app
 
-**Planejado** — painel do dia em `features/home`. Rota `/`.
+**Implementado** — painel do dia em `features/home`. Rota `/`.
 
 ## Dependências técnicas
 
-- `HomeViewModel` (ou `TodayPanelViewModel`) agrega `ServiceAppointmentRepository`.
-- Filtro: `appointmentDate` no dia local + `status != cancelado` (opcional: toggle para mostrar cancelados).
-- `ListenableBuilder(listenable: viewmodel.load, ...)`.
-- Ver [ROTEAMENTO.md](../ROTEAMENTO.md), [agendas.md](agendas.md).
+- `HomeViewModel` — `load`, `markComplete`, `cancelAppointment`
+- Filtro: `filterTodayAppointments` — dia local + `status != cancelado`, ordenado por `startTime`
+- `ListenableBuilder(listenable: viewmodel.load, ...)`
+- Ver [ROTEAMENTO.md](../ROTEAMENTO.md), [agendas.md](agendas.md), [atendimento.md](atendimento.md)

@@ -22,17 +22,18 @@ CRM de atendimentos para agentes de crédito, seguros e profissionais autônomos
 
 ## Core jobs
 
-1. Ver atendimentos de **hoje** ordenados por horário, com atalho para concluir ou anotar.
+1. Ver atendimentos de **hoje** ordenados por horário, com atalho para concluir ou abrir histórico.
 2. Manter **agenda** de clientes com tipo de serviço, data, horário e status.
-3. Registrar **notas de negociação** ligadas ao atendimento (propostas, dores, follow-up).
-4. **Sincronizar** dados entre dispositivos após login (Firestore).
-5. Assinar **Pro** para sync ilimitado e recursos avançados (Stripe).
+3. Consultar **todos os clientes** em lista unificada com busca e abrir histórico de negociação.
+4. Registrar **notas de negociação** e encontros sem agendar horário.
+5. **Sincronizar** dados entre dispositivos após login (Firestore).
+6. Assinar **Pro** para sync ilimitado e recursos avançados (Stripe).
 
 ## Constraints
 
 - **Offline-first** — `DeviceJsonStore` (JSON local) como fonte imediata; sync quando online.
 - **Firebase Auth** — identidade do usuário; sem senha no app além do provedor Firebase.
-- **Firestore** — espelho na nuvem de `ServiceAppointment`; entitlement em `users/{uid}.subscription`.
+- **Firestore** — espelho na nuvem de `ServiceAppointment` e `EncounterNote`; entitlement em `users/{uid}.subscription`.
 - **Stripe** — cobrança **fora do app Flutter** (Cloud Functions + Checkout URL); sem Stripe SDK no cliente.
 - Textos de UI em `lib/core/strings/`; não hardcoded em widgets.
 

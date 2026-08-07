@@ -9,6 +9,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 |----------------|---------|-----------------|--------|
 | Início — painel do dia | [home_hoje.md](home_hoje.md) | Ambos | Implementado |
 | Minha Agenda + formulário | [agendas.md](agendas.md) | Free (limites) / Pro | Implementado |
+| Meus Clientes | [clientes.md](clientes.md) | Ambos | Implementado |
 | Atendimento — histórico centralizado | [atendimento.md](atendimento.md) | Ambos | Implementado |
 | Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Implementado |
 | Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Implementado |
@@ -19,8 +20,8 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 |------|------|-----|
 | Painel do dia | Completo | Completo |
 | Cadastro de atendimentos | Até **50** ativos (configurável) | Ilimitado |
-| Notas por atendimento | Sim (histórico + legado) | Sim |
-| Registrar encontro sem agenda | Sim | Sim |
+| Lista de clientes com busca | Sim | Sim |
+| Histórico de negociação por cliente | Sim | Sim |
 | Séries recorrentes | Até **3** séries ativas | Ilimitado |
 | Sync Firestore multi-dispositivo | — | Sim |
 | Export JSON backup | — | Sim (futuro) |
