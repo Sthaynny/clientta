@@ -7,6 +7,7 @@ import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
+import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
 import 'package:clientta/features/home/screen/components/app_drawer.dart';
 import 'package:clientta/features/home/screen/home_view_model.dart';
 import 'package:clientta/features/shared/components/app_loading_widget.dart';
@@ -31,14 +32,12 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     viewmodel.load.execute();
     viewmodel.markComplete.addListener(_onMarkComplete);
-    viewmodel.updateNotes.addListener(_onUpdateNotes);
     viewmodel.cancelAppointment.addListener(_onCancelAppointment);
   }
 
   @override
   void dispose() {
     viewmodel.markComplete.removeListener(_onMarkComplete);
-    viewmodel.updateNotes.removeListener(_onUpdateNotes);
     viewmodel.cancelAppointment.removeListener(_onCancelAppointment);
     super.dispose();
   }
@@ -57,17 +56,6 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  void _onUpdateNotes() {
-    if (!mounted) return;
-    if (viewmodel.updateNotes.completed) {
-      context.showSnackBarSuccess(quickNotesSavedString);
-      viewmodel.updateNotes.clearResult();
-    } else if (viewmodel.updateNotes.error) {
-      context.showSnackBarError(errorSaveString);
-      viewmodel.updateNotes.clearResult();
-    }
-  }
-
   void _onCancelAppointment() {
     if (!mounted) return;
     if (viewmodel.cancelAppointment.completed) {
@@ -79,8 +67,16 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  Future<void> _openAppointmentForm({ServiceAppointment? entry}) async {
-    await context.go(AppRouters.appointmentForm, arguments: entry);
+  Future<void> _openClientCare(ServiceAppointment entry) async {
+    await context.go(
+      AppRouters.clientCare,
+      arguments: ClientCareArgs(
+        clientName: entry.clientName,
+        clientPhone: entry.clientPhone,
+        serviceType: entry.serviceType,
+        appointmentId: entry.id,
+      ),
+    );
     if (!mounted) return;
     viewmodel.load.execute();
   }
@@ -89,38 +85,6 @@ class _HomeScreenState extends State<HomeScreen>
     await context.go(AppRouters.appointmentForm);
     if (!mounted) return;
     viewmodel.load.execute();
-  }
-
-  Future<void> _showQuickNotes(ServiceAppointment entry) async {
-    final controller = TextEditingController(text: entry.notes ?? '');
-    final saved = await showDialog<bool>(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Semantics(header: true, child: Text(quickNotesDialogTitleString)),
-            content: HubTextFormField(
-              controller: controller,
-              label: quickNotesDialogHintString,
-              maxLines: 3,
-            ),
-            actionsAlignment: MainAxisAlignment.end,
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(cancelString),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(saveString),
-              ),
-            ],
-          ),
-    );
-    if (saved == true && mounted) {
-      await viewmodel.updateNotes.execute(
-        QuickNotesInput(appointment: entry, notes: controller.text),
-      );
-    }
   }
 
   Future<void> _confirmCancel(ServiceAppointment entry) async {
@@ -261,12 +225,12 @@ class _HomeScreenState extends State<HomeScreen>
       endTime: entry.endTime,
       status: entry.status,
       notes: entry.notes,
-      onTap: () => _openAppointmentForm(entry: entry),
+      onTap: () => _openClientCare(entry),
       onMarkComplete:
           entry.status == AppointmentStatus.agendado.value
               ? () => viewmodel.markComplete.execute(entry)
               : null,
-      onAddNotes: () => _showQuickNotes(entry),
+      onAddNotes: () => _openClientCare(entry),
       onCancel:
           entry.status == AppointmentStatus.agendado.value
               ? () => _confirmCancel(entry)

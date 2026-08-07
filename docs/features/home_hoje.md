@@ -27,8 +27,9 @@ Tela inicial (`/`) com **atendimentos do dia corrente**, ordenados por `startTim
 |----------|---------------|
 | Cabeçalho de data | `HubDayHeader` — “Hoje, 7 de agosto” |
 | Card de atendimento | Horário, nome, telefone, tipo de serviço, badge de status |
+| Toque no card | Abre `/atendimentos` — histórico centralizado de negociação |
 | Status `agendado` | Ação primária “Concluir” |
-| Status `concluido` | Notas visíveis; opção editar |
+| Status `concluido` | Notas visíveis; ícone abre histórico de atendimento |
 | Empty state | CTA “Registrar atendimento” → `/agendas/registrar` |
 | Pull-to-refresh | Recarrega local; dispara sync se Pro + online |
 

@@ -16,8 +16,9 @@
 
 | Função | Descrição |
 |--------|-----------|
-| **Início** | Atendimentos de hoje ordenados por horário; atalho para concluir e anotar |
+| **Início** | Atendimentos de hoje ordenados por horário; atalho para concluir e abrir histórico de atendimento |
 | **Minha Agenda** | Listagem agrupada por data ou série; filtro por tipo de serviço |
+| **Atendimento** | Histórico centralizado de negociação por cliente; registrar encontros sem agendar |
 | **Registrar atendimento** | Cliente, telefone, tipo, data, horários, notas, série recorrente |
 | **Sync na nuvem** | Firestore após login (tier Pro) |
 | **Plano Pro** | Assinatura Stripe para sync e recursos avançados |
@@ -37,10 +38,12 @@ Entidade principal: `ServiceAppointment`
 | `appointmentDate` | Data do atendimento |
 | `startTime` / `endTime` | Horário (string `HH:mm`) |
 | `status` | `agendado`, `concluido`, `cancelado` |
-| `notes` | Bloco de anotações da negociação |
+| `notes` | Bloco de anotações da negociação (legado; ver `EncounterNote`) |
 | `seriesId` | Opcional — vínculo em séries recorrentes |
 
-Persistência local: `crm_appointments.json` via `DeviceJsonStore`.
+Entidade complementar: `EncounterNote` — anotações de encontros/negociações por cliente (`clientPhone`), com histórico na tela `/atendimentos`. Persistência local: chave `encounterNotes` em `clientta_data.json`.
+
+Persistência local de agendamentos: `clientta_data.json` (chave `appointments`) via `DeviceJsonStore`.
 
 ## Rotas
 
@@ -48,6 +51,7 @@ Persistência local: `crm_appointments.json` via `DeviceJsonStore`.
 |------|---------|
 | Início (painel do dia) | `/` |
 | Minha Agenda | `/agendas` |
+| Atendimento (histórico do cliente) | `/atendimentos` |
 | Registrar atendimento | `/agendas/registrar` |
 | Plano / assinatura | `/configuracoes/plano` |
 

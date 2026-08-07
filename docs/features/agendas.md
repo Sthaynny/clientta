@@ -46,7 +46,8 @@ Persistência local: `crm_appointments.json` via `ServiceAppointmentRepositoryLo
 | Agrupamento | Por data ou por `seriesId` (séries recorrentes) |
 | Filtros | Tipo de serviço (dropdown ou chips) |
 | Ordenação | Data decrescente; dentro do dia por `startTime` |
-| Ações | Editar, cancelar, excluir (com confirmação) |
+| Ações | Ver atendimento (histórico), editar, excluir (com confirmação) |
+| Toque no card | Abre `/atendimentos` com histórico de negociação do cliente |
 | FAB | `HubFab` → `/agendas/registrar` |
 | Empty state | CTA primeiro atendimento |
 

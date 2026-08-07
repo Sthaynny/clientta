@@ -39,6 +39,7 @@ Objetivo: app utilizável no dia a dia sem sync nem cobrança.
 | 1.2 | **Home** — painel do dia | Ordenação por `startTime`; ações concluir / notas |
 | 1.3 | **Minha Agenda** — lista agrupada | Filtro por `serviceType` |
 | 1.4 | **Formulário** `/agendas/registrar` | Cliente, telefone, tipo, data, horários, notas, `seriesId` |
+| 1.4b | **Atendimento** `/atendimentos` | Histórico de negociação por cliente; registrar encontros sem agenda |
 | 1.5 | Firebase **Auth** (e-mail/senha ou Google) | Gate mínimo para futuro sync |
 | 1.6 | Remover features legadas (domínio universitário) | classes, activities, perfil universidade |
 | 1.7 | `flutter analyze` + testes de domínio | ViewModels de appointments |

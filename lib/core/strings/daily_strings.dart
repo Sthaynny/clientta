@@ -56,6 +56,28 @@ String get markCompleteSuccessString => 'Atendimento concluído.';
 String get cancelAppointmentSuccessString => 'Atendimento cancelado.';
 String get quickNotesSavedString => 'Observação salva.';
 
+String get clientCareTitleString => 'Atendimento';
+String get clientCareTimelineTitleString => 'Histórico de negociação';
+String get clientCareEmptyTitleString => 'Nenhuma anotação ainda';
+String get clientCareEmptyMessageString =>
+    'Registre encontros, ligações e negociações aqui — sem precisar marcar horário na agenda.';
+String get clientCareComposerHintString =>
+    'Anote o que aconteceu agora com este cliente';
+String get clientCareNoteLabelString => 'Nova anotação';
+String get clientCareAddNoteString => 'Registrar encontro';
+String get clientCareFromAppointmentString => 'Agendamento';
+String get clientCareActionString => 'Ver atendimento';
+String get encounterNoteSavedString => 'Encontro registrado.';
+
+String formatEncounterTimestamp(DateTime dateTime) {
+  final day = dateTime.day.toString().padLeft(2, '0');
+  final month = dateTime.month.toString().padLeft(2, '0');
+  final year = dateTime.year;
+  final hour = dateTime.hour.toString().padLeft(2, '0');
+  final minute = dateTime.minute.toString().padLeft(2, '0');
+  return '$day/$month/$year às $hour:$minute';
+}
+
 String get errorClientNameRequiredString => 'Informe o nome do cliente.';
 String get errorClientPhoneRequiredString => 'Informe o telefone do cliente.';
 String get errorServiceTypeRequiredString => 'Selecione o tipo de serviço.';

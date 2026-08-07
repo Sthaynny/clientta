@@ -6,6 +6,7 @@ import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/view/appointments_view_model.dart';
+import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
 import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
@@ -32,6 +33,20 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
   @override
   void onHubRouteVisible() => viewmodel.load.execute();
+
+  Future<void> _openClientCare(ServiceAppointment entry) async {
+    await context.go(
+      AppRouters.clientCare,
+      arguments: ClientCareArgs(
+        clientName: entry.clientName,
+        clientPhone: entry.clientPhone,
+        serviceType: entry.serviceType,
+        appointmentId: entry.id,
+      ),
+    );
+    if (!mounted) return;
+    viewmodel.load.execute();
+  }
 
   Future<void> _openAppointmentForm({ServiceAppointment? entry}) async {
     await context.go(AppRouters.appointmentForm, arguments: entry);
@@ -149,7 +164,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 startTime: entry.startTime,
                 endTime: entry.endTime,
                 status: entry.status,
-                onTap: () => _openAppointmentForm(entry: entry),
+                onTap: () => _openClientCare(entry),
+                onViewCare: () => _openClientCare(entry),
                 onEdit: () => _openAppointmentForm(entry: entry),
                 onDelete: () => _confirmDelete(entry),
               ),

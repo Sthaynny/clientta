@@ -21,6 +21,7 @@ class HubAppointmentCard extends StatelessWidget {
     this.onDelete,
     this.onMarkComplete,
     this.onAddNotes,
+    this.onViewCare,
     this.onCancel,
   });
 
@@ -36,6 +37,7 @@ class HubAppointmentCard extends StatelessWidget {
   final VoidCallback? onDelete;
   final VoidCallback? onMarkComplete;
   final VoidCallback? onAddNotes;
+  final VoidCallback? onViewCare;
   final VoidCallback? onCancel;
 
   String get _semanticLabel {
@@ -103,6 +105,7 @@ class HubAppointmentCard extends StatelessWidget {
                 onDelete != null ||
                 onMarkComplete != null ||
                 onAddNotes != null ||
+                onViewCare != null ||
                 onCancel != null)
               Column(
                 children: [
@@ -128,6 +131,13 @@ class HubAppointmentCard extends StatelessWidget {
                       icon: Icons.note_add_outlined,
                       color: HubColors.inkMuted,
                       onPressed: onAddNotes!,
+                    ),
+                  if (onViewCare != null)
+                    _ActionIcon(
+                      label: clientCareActionString,
+                      icon: Icons.forum_outlined,
+                      color: HubColors.schedule,
+                      onPressed: onViewCare!,
                     ),
                   if (onEdit != null)
                     _ActionIcon(

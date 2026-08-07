@@ -13,6 +13,8 @@ import 'package:clientta/features/appointments/data/appointment_sync_service.dar
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository_remote.dart';
 import 'package:clientta/features/appointments/view/appointments_view_model.dart';
+import 'package:clientta/features/client_care/data/encounter_note_repository_local.dart';
+import 'package:clientta/features/client_care/domain/repositories/encounter_note_repository.dart';
 import 'package:clientta/features/billing/data/datasources/firebase_billing_datasource.dart';
 import 'package:clientta/features/billing/data/repositories/billing_repository_impl.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
@@ -59,6 +61,14 @@ void setup() {
     ),
   );
 
+  dependency.registerLazySingleton<EncounterNoteRepositoryLocal>(
+    () => EncounterNoteRepositoryLocal(dependency()),
+  );
+
+  dependency.registerLazySingleton<EncounterNoteRepository>(
+    () => dependency<EncounterNoteRepositoryLocal>(),
+  );
+
   dependency.registerLazySingleton<FirebaseBillingDatasource>(
     FirebaseBillingDatasource.new,
   );
@@ -69,6 +79,7 @@ void setup() {
   dependency.registerFactory(
     () => HomeViewModel(
       appointmentRepository: dependency(),
+      encounterNoteRepository: dependency(),
       networkStatus: dependency(),
       syncService: dependency(),
       hasProSync: () => dependency<AppointmentSyncService>().canSync(),
