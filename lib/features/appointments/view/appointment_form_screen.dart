@@ -32,6 +32,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   late final TextEditingController clientPhoneController;
   late final TextEditingController notesController;
   final _formKey = GlobalKey<FormState>();
+  bool _saveSubmitted = false;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     );
     notesController = TextEditingController(text: viewmodel.notes);
     viewmodel.save.addListener(_onSave);
+    viewmodel.refreshKnownAppointments();
   }
 
   @override
@@ -98,6 +100,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   }
 
   Future<void> _submit() async {
+    if (_saveSubmitted || viewmodel.save.running) return;
+
     final scope = await _resolveSeriesEditScope();
     if (!mounted || scope == null) return;
 
@@ -106,7 +110,27 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       setState(() {});
       return;
     }
-    viewmodel.save.execute();
+
+    _saveSubmitted = true;
+    await viewmodel.save.execute();
+    if (!mounted) return;
+    if (viewmodel.save.error) {
+      _saveSubmitted = false;
+    }
+  }
+
+  void _onClientPhoneChanged(String value) {
+    viewmodel.clientPhone = value;
+    viewmodel.clearFieldError('clientPhone');
+
+    final resolvedName = viewmodel.resolveClientNameFromPhone(value);
+    if (resolvedName != null && clientNameController.text.trim().isEmpty) {
+      clientNameController.text = resolvedName;
+      viewmodel.clientName = resolvedName;
+      viewmodel.clearFieldError('clientName');
+    }
+
+    setState(() {});
   }
 
   TimeOfDay _timeFromHhMm(String value) {
@@ -145,19 +169,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     final picked = await _pickTime(_timeFromHhMm(viewmodel.startTime));
     if (picked != null) {
       setState(() {
-        viewmodel.startTime = _hhMmFromTime(picked);
+        viewmodel.setStartTime(_hhMmFromTime(picked));
         viewmodel.clearFieldError('startTime');
-        viewmodel.clearFieldError('endTime');
-      });
-    }
-  }
-
-  Future<void> _pickEndTime() async {
-    final picked = await _pickTime(_timeFromHhMm(viewmodel.endTime));
-    if (picked != null) {
-      setState(() {
-        viewmodel.endTime = _hhMmFromTime(picked);
-        viewmodel.clearFieldError('endTime');
       });
     }
   }
@@ -207,11 +220,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               inputFormatters: InputMaskFormatters.brPhone,
               autofillHints: const [AutofillHints.telephoneNumber],
               errorText: errors.clientPhone,
-              onChanged: (value) {
-                viewmodel.clientPhone = value;
-                viewmodel.clearFieldError('clientPhone');
-                setState(() {});
-              },
+              onChanged: _onClientPhoneChanged,
             ),
             DSSpacing.md.y,
             DropdownButtonFormField<String>(
@@ -243,61 +252,28 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               onTap: _pickDate,
             ),
             DSSpacing.md.y,
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      HubTimeFormField(
-                        label: startTimeString,
-                        value: viewmodel.startTime,
-                        onTap: _pickStartTime,
-                      ),
-                      if (errors.startTime != null)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: DSSpacing.xxs.value,
-                            left: DSSpacing.sm.value,
-                          ),
-                          child: Text(
-                            errors.startTime!,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                HubTimeFormField(
+                  label: startTimeString,
+                  value: viewmodel.startTime,
+                  onTap: _pickStartTime,
                 ),
-                DSSpacing.sm.x,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      HubTimeFormField(
-                        label: endTimeString,
-                        value: viewmodel.endTime,
-                        onTap: _pickEndTime,
+                if (errors.startTime != null)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: DSSpacing.xxs.value,
+                      left: DSSpacing.sm.value,
+                    ),
+                    child: Text(
+                      errors.startTime!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
                       ),
-                      if (errors.endTime != null)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: DSSpacing.xxs.value,
-                            left: DSSpacing.sm.value,
-                          ),
-                          child: Text(
-                            errors.endTime!,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                    ],
+                    ),
                   ),
-                ),
               ],
             ),
             DSSpacing.md.y,
@@ -328,27 +304,6 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               maxLines: 3,
               onChanged: (value) => viewmodel.notes = value,
             ),
-            if (viewmodel.showRecurringOptions) ...[
-              DSSpacing.md.y,
-              DSBodyText(
-                recurringSeriesLabelString,
-                fontWeight: FontWeight.w600,
-                color: HubColors.ink,
-              ),
-              DSSpacing.xs.y,
-              DSCaptionText(
-                recurringSeriesHintString,
-                color: HubColors.inkMuted,
-              ),
-              DSSpacing.sm.y,
-              HubWeekdayChips(
-                selectedWeekdays: viewmodel.selectedWeekdays,
-                onChanged:
-                    (weekdays) => setState(
-                      () => viewmodel.selectedWeekdays = weekdays,
-                    ),
-              ),
-            ],
             DSSpacing.xl.y,
             ListenableBuilder(
               listenable: viewmodel.save,
@@ -356,6 +311,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                   (_, __) => HubPrimaryButton(
                     label: saveString,
                     isLoading: viewmodel.save.running,
+                    isEnabled: !_saveSubmitted,
                     onPressed: _submit,
                   ),
             ),

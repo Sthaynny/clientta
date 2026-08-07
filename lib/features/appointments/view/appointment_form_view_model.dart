@@ -3,6 +3,7 @@ import 'package:clientta/core/utils/commands.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/appointments/data/appointment_sync_service.dart';
+import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/appointment_form_validation.dart';
 import 'package:clientta/features/appointments/domain/appointment_series_generator.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
@@ -54,14 +55,47 @@ class AppointmentFormViewModel {
   String endTime = '10:00';
   String status = AppointmentStatus.agendado.value;
   String notes = '';
-  Set<int> selectedWeekdays = {};
   SeriesEditScope? pendingSeriesEditScope;
   AppointmentFormFieldErrors fieldErrors = const AppointmentFormFieldErrors();
 
   bool get isEdit => _initial != null;
   bool get isSeriesEdit =>
       _initial?.seriesId != null && _initial!.seriesId!.isNotEmpty;
-  bool get showRecurringOptions => !isEdit;
+
+  void setStartTime(String value) {
+    startTime = value;
+    endTime = _defaultEndTimeForStart(value);
+  }
+
+  String _defaultEndTimeForStart(String start) {
+    final parts = start.split(':');
+    if (parts.length < 2) return '10:00';
+    final hour = int.tryParse(parts[0]) ?? 9;
+    final minute = int.tryParse(parts[1]) ?? 0;
+    final totalMinutes = (hour * 60 + minute + 60).clamp(0, 23 * 60 + 59);
+    final endHour = totalMinutes ~/ 60;
+    final endMinute = totalMinutes % 60;
+    return '${endHour.toString().padLeft(2, '0')}:${endMinute.toString().padLeft(2, '0')}';
+  }
+
+  void _ensureValidEndTime() {
+    final startMinutes = _minutesFromHhMm(startTime);
+    final endMinutes = _minutesFromHhMm(endTime);
+    if (startMinutes == null ||
+        endMinutes == null ||
+        endMinutes <= startMinutes) {
+      endTime = _defaultEndTimeForStart(startTime);
+    }
+  }
+
+  int? _minutesFromHhMm(String value) {
+    final parts = value.trim().split(':');
+    if (parts.length < 2) return null;
+    final hour = int.tryParse(parts[0]);
+    final minute = int.tryParse(parts[1]);
+    if (hour == null || minute == null) return null;
+    return hour * 60 + minute;
+  }
 
   void hydrate() {
     final entry = _initial;
@@ -96,6 +130,7 @@ class AppointmentFormViewModel {
   }
 
   bool validateFields() {
+    _ensureValidEndTime();
     fieldErrors = validateAppointmentFormFields(
       clientName: clientName,
       clientPhone: clientPhone,
@@ -104,6 +139,21 @@ class AppointmentFormViewModel {
       endTime: endTime,
     );
     return !fieldErrors.hasErrors;
+  }
+
+  List<ServiceAppointment> _knownAppointments = [];
+
+  /// Preenche o nome do cliente quando o telefone já existe na agenda.
+  String? resolveClientNameFromPhone(String phone) {
+    if (clientName.trim().isNotEmpty || isEdit) return null;
+    return findClientNameByPhone(
+      appointments: _knownAppointments,
+      clientPhone: phone,
+    );
+  }
+
+  Future<void> refreshKnownAppointments() async {
+    _knownAppointments = await _repository.getAll();
   }
 
   Future<Result<void>> _save() async {
@@ -127,6 +177,10 @@ class AppointmentFormViewModel {
   Future<Result<void>> _saveCreate(String? notesValue) async {
     final subscription = await _billingRepository.getSubscription();
     final existing = await _repository.getAll();
+    _knownAppointments = existing;
+
+    final trimmedName = clientName.trim();
+    final storedPhone = formatStoredClientPhone(clientPhone);
 
     if (!PlanAccessPolicy.canAddAppointment(
       subscription: subscription,
@@ -141,42 +195,14 @@ class AppointmentFormViewModel {
       );
     }
 
-    if (selectedWeekdays.isNotEmpty &&
-        !PlanAccessPolicy.canCreateSeries(
-          subscription: subscription,
-          existingAppointments: existing,
-        )) {
-      return Result.error(
-        Exception(
-          planFreeLimitSeriesMessage(PlanAccessPolicy.freeMaxActiveSeries),
-        ),
-      );
-    }
-
-    if (selectedWeekdays.isNotEmpty) {
-      final seriesId = DateTime.now().microsecondsSinceEpoch.toString();
-      final entries = buildRecurringAppointments(
-        seriesId: seriesId,
-        anchorDate: appointmentDate,
-        weekdays: selectedWeekdays,
-        clientName: clientName.trim(),
-        clientPhone: clientPhone.trim(),
-        serviceType: serviceType,
-        startTime: startTime.trim(),
-        endTime: endTime.trim(),
-        status: status,
-        notes: notesValue,
-      );
-      await _repository.saveAll(entries);
-      _syncService?.scheduleSync();
-      await _userRepository?.touchLastActivity();
-      return Result.ok();
-    }
-
     final entry = buildSingleAppointment(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      clientName: clientName.trim(),
-      clientPhone: clientPhone.trim(),
+      id: buildAppointmentSlotId(
+        clientPhone: storedPhone,
+        appointmentDate: appointmentDate,
+        startTime: startTime.trim(),
+      ),
+      clientName: trimmedName,
+      clientPhone: storedPhone,
       serviceType: serviceType,
       appointmentDate: appointmentDate,
       startTime: startTime.trim(),
@@ -192,10 +218,11 @@ class AppointmentFormViewModel {
 
   Future<Result<void>> _saveEdit(String? notesValue) async {
     final initial = _initial!;
+    final storedPhone = formatStoredClientPhone(clientPhone);
     final updated = buildSingleAppointment(
       id: initial.id,
       clientName: clientName.trim(),
-      clientPhone: clientPhone.trim(),
+      clientPhone: storedPhone,
       serviceType: serviceType,
       appointmentDate: appointmentDate,
       startTime: startTime.trim(),
@@ -214,7 +241,7 @@ class AppointmentFormViewModel {
         seriesEntries: seriesEntries,
         editedEntry: updated,
         clientName: clientName.trim(),
-        clientPhone: clientPhone.trim(),
+        clientPhone: storedPhone,
         serviceType: serviceType,
         startTime: startTime.trim(),
         endTime: endTime.trim(),

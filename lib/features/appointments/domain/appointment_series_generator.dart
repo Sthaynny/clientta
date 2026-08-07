@@ -1,3 +1,4 @@
+import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 
 const defaultRecurringWeeks = 4;
@@ -34,7 +35,11 @@ List<ServiceAppointment> buildRecurringAppointments({
 
       entries.add(
         ServiceAppointment(
-          id: '${seriesId}_$key',
+          id: buildAppointmentSlotId(
+            clientPhone: clientPhone,
+            appointmentDate: date,
+            startTime: startTime,
+          ),
           clientName: clientName,
           clientPhone: clientPhone,
           serviceType: serviceType,

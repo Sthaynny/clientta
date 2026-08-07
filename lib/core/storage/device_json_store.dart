@@ -8,6 +8,20 @@ class DeviceJsonStore {
   static const fileName = 'clientta_data.json';
   static const legacyFileName = 'university_hub_daily.json';
 
+  Future<void>? _pendingOperation;
+
+  Future<T> _serialized<T>(Future<T> Function() action) async {
+    while (_pendingOperation != null) {
+      await _pendingOperation;
+    }
+
+    final operation = action();
+    _pendingOperation = operation.whenComplete(() {
+      _pendingOperation = null;
+    });
+    return operation;
+  }
+
   Future<File> _file() async {
     final dir = await getApplicationDocumentsDirectory();
     return File('${dir.path}/$fileName');
@@ -23,7 +37,9 @@ class DeviceJsonStore {
     await legacy.rename(current.path);
   }
 
-  Future<Map<String, dynamic>> readRoot() async {
+  Future<Map<String, dynamic>> readRoot() => _serialized(_readRootUnsafe);
+
+  Future<Map<String, dynamic>> _readRootUnsafe() async {
     final dir = await getApplicationDocumentsDirectory();
     await _migrateLegacyIfNeeded(dir);
     final file = await _file();
@@ -41,7 +57,10 @@ class DeviceJsonStore {
     return {};
   }
 
-  Future<void> writeRoot(Map<String, dynamic> data) async {
+  Future<void> writeRoot(Map<String, dynamic> data) =>
+      _serialized(() => _writeRootUnsafe(data));
+
+  Future<void> _writeRootUnsafe(Map<String, dynamic> data) async {
     final file = await _file();
     await file.writeAsString(jsonEncode(data));
   }
