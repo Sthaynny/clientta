@@ -1,4 +1,4 @@
-# A fazer — Lembretes locais (Pro)
+# Finalizadas — Lembretes locais (Pro)
 
 Backlog da feature **C-410** — notificações locais antes do atendimento.
 
@@ -17,9 +17,9 @@ Backlog da feature **C-410** — notificações locais antes do atendimento.
 - Formulário: toggle global de lembretes (Pro)
 - Deep link: toque na notificação → atendimento do cliente
 - Sync após save/delete e no load da home/agenda
+- Política de privacidade — seção 2.4 (notificações locais)
 
 ### Pendente (opcional)
 
 - [ ] Boot receiver Android
-- [ ] Atualizar política de privacidade (notificações locais)
 - [ ] Testes unitários de `AppointmentReminderPolicy`

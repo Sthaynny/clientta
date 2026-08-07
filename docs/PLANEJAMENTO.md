@@ -85,7 +85,7 @@ Detalhe: [features/assinatura_stripe.md](features/assinatura_stripe.md).
 
 | # | Entrega |
 |---|---------|
-| 4.1 | Onboarding (valor offline + primeiro atendimento) |
+| 4.1 | Onboarding (valor offline + primeiro atendimento) | Concluído — C-109 em [tasks/finalizadas/produto_transversal.md](tasks/finalizadas/produto_transversal.md) |
 | 4.2 | Empty states e copy validada com usuários reais |
 | 4.3 | Lembretes locais (`flutter_local_notifications`) — Pro | Concluído — [lembretes_locais.md](features/lembretes_locais.md) |
 | 4.4 | Export JSON de backup — Pro | Concluído — [export_backup.md](features/export_backup.md) |

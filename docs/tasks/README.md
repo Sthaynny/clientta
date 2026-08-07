@@ -23,6 +23,8 @@ Cada entrada usa **ID** (ex. C-101), resumo, objetivo, impacto e link à feature
 | Auth Firebase | [auth_firebase.md](finalizadas/auth_firebase.md) |
 | Produto (transversal) | [produto_transversal.md](finalizadas/produto_transversal.md) |
 | Engenharia | [engenharia.md](finalizadas/engenharia.md) |
+| Lembretes locais (Pro) | [lembretes_locais.md](finalizadas/lembretes_locais.md) |
+| Export / import backup (Pro) | [export_backup.md](finalizadas/export_backup.md) |
 | Design | [design.md](finalizadas/design.md) |
 | Qualidade | [qualidade.md](finalizadas/qualidade.md) |
 
@@ -31,7 +33,6 @@ Cada entrada usa **ID** (ex. C-101), resumo, objetivo, impacto e link à feature
 | Área | Arquivo |
 |------|---------|
 | Qualidade | [qualidade.md](a_fazer/qualidade.md) |
-| Lembretes locais (Pro) | [lembretes_locais.md](a_fazer/lembretes_locais.md) |
 
 ## Documentação relacionada
 

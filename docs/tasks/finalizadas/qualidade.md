@@ -10,7 +10,7 @@
 
 ### Entregue
 
-- Política de privacidade LGPD em [politica-privacidade.md](../../legal/politica-privacidade.md).
+- Política de privacidade LGPD em [politica-privacidade.md](../../legal/politica-privacidade.md) — inclui lembretes locais e backup manual (seção 2.4).
 - Política de assinatura em [politica-assinatura.md](../../legal/politica-assinatura.md).
 
 ---
