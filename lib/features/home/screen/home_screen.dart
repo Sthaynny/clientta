@@ -145,6 +145,12 @@ class _HomeScreenState extends State<HomeScreen>
               padding: EdgeInsets.all(DSSpacing.md.value),
               children: [
                 _HomeSyncStatusSection(viewmodel: viewmodel),
+                HubScreenIntro(
+                  icon: Icons.today_outlined,
+                  message: homeScreenIntroString,
+                  iconColor: HubColors.seed,
+                ),
+                DSSpacing.md.y,
                 HubDayHeader(
                   weekdayLabel: weekdayLabels[now.weekday - 1],
                   dateLabel: formatHubDayHeader(now),
@@ -167,13 +173,16 @@ class _HomeScreenState extends State<HomeScreen>
                         AppRouters.agendas.path,
                       ),
                   child: viewmodel.todayAppointments.isEmpty
-                      ? HubEmptyState(
-                          embedded: true,
-                          icon: Icons.event_note_outlined,
-                          title: emptyAppointmentsHomeTitle,
-                          message: emptyAppointmentsHomeMessage,
-                          actionLabel: addAppointmentString,
-                          onAction: _openRegisterAppointment,
+                      ? HubSurface(
+                          tint: HubColors.canvas,
+                          child: HubEmptyState(
+                            embedded: true,
+                            icon: Icons.event_note_outlined,
+                            title: emptyAppointmentsHomeTitle,
+                            message: emptyAppointmentsHomeMessage,
+                            actionLabel: addAppointmentString,
+                            onAction: _openRegisterAppointment,
+                          ),
                         )
                       : Column(
                           children:
