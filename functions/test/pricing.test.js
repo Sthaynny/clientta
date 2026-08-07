@@ -11,6 +11,8 @@ test('getPlanPricingResponse returns pro plan metadata', () => {
   assert.equal(pricing.pro.id, 'pro');
   assert.equal(pricing.pro.enabled, true);
   assert.match(pricing.pro.price, /^R\$ /);
+  assert.equal(pricing.freeLimits.maxActiveAppointments, 50);
+  assert.equal(pricing.freeLimits.maxActiveSeries, 3);
 });
 
 test('resolvePlanPriceCents returns configured monthly price', () => {

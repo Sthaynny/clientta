@@ -18,6 +18,7 @@ const {
   resolvePlanPriceCents,
   PLAN_CATALOG,
 } = require('./pricing');
+const { getFreePlanLimitsResponse } = require('./plan_limits');
 const {
   resolveEntitlementsForEmail,
   buildPersonalizedPlanPricing,
@@ -257,6 +258,7 @@ const getPlanPricing = onCall(CALLABLE_OPTIONS, async (request) => {
   return {
     pro,
     billingEntitlement,
+    freeLimits: getFreePlanLimitsResponse(),
   };
 });
 

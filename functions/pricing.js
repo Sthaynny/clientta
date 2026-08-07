@@ -1,5 +1,7 @@
 const PRO_MONTHLY_PRICE_CENTS = 2990;
 
+const { getFreePlanLimitsResponse } = require('./plan_limits');
+
 const PLAN_CATALOG = {
   pro: {
     id: 'pro',
@@ -32,6 +34,7 @@ function getPlanPricingResponse(stripePriceId = '') {
 
   return {
     pro: response,
+    freeLimits: getFreePlanLimitsResponse(),
   };
 }
 
