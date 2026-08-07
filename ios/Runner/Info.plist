@@ -68,5 +68,20 @@
     <string>camera</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>O Clientta avisa quando um atendimento agendado está se aproximando.</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>clientta.billing</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>clientta</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

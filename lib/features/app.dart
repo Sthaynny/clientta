@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/utils/billing_checkout_pending.dart';
+import 'package:clientta/features/billing/shared/utils/billing_deep_link_listener.dart';
 import 'package:clientta/features/shared/hub/hub_loading_skeletons.dart';
 import 'package:clientta/core/router/app_navigator.dart';
 import 'package:clientta/core/router/app_router.dart';
@@ -23,6 +24,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool _ready = false;
   bool _onboardingSeen = false;
+  bool _deepLinksStarted = false;
+  final BillingDeepLinkListener _billingDeepLinks = BillingDeepLinkListener();
 
   @override
   void initState() {
@@ -34,7 +37,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _billingDeepLinks.dispose();
     super.dispose();
+  }
+
+  void _ensureBillingDeepLinks() {
+    if (_deepLinksStarted || !_ready || !_onboardingSeen) return;
+    _deepLinksStarted = true;
+    unawaited(_billingDeepLinks.start());
   }
 
   @override
@@ -59,6 +69,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       _onboardingSeen = settings.onboardingSeen;
       _ready = true;
     });
+    _ensureBillingDeepLinks();
   }
 
   Future<void> _finishOnboarding({bool openForm = false}) async {
@@ -68,6 +79,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     setState(() {
       _onboardingSeen = true;
     });
+    _ensureBillingDeepLinks();
     if (openForm) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         AppNavigator.key.currentState?.pushNamed(AppRouters.appointmentForm.path);
@@ -109,6 +121,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       initialRoute: AppRouters.home.path,
       routes: routes,
       navigatorObservers: [hubRouteObserver],
+      builder: (context, child) {
+        _ensureBillingDeepLinks();
+        return child ?? const SizedBox.shrink();
+      },
     );
   }
 }
