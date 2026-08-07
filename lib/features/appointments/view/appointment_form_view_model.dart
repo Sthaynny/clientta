@@ -10,6 +10,9 @@ import 'package:clientta/features/client_care/domain/client_phone_key.dart';
 import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
 import 'package:clientta/features/appointments/domain/appointment_form_validation.dart';
 import 'package:clientta/features/appointments/domain/appointment_series_generator.dart';
+import 'package:clientta/features/appointments/domain/client_identity_propagation.dart';
+import 'package:clientta/features/client_care/domain/client_identity_propagation.dart';
+import 'package:clientta/features/client_care/domain/repositories/encounter_note_repository.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/domain/service_type_catalog.dart';
@@ -36,6 +39,7 @@ class AppointmentFormViewModel {
     AppointmentSyncService? syncService,
     AppointmentReminderCoordinator? reminderCoordinator,
     AppProfileRepository? appProfileRepository,
+    EncounterNoteRepository? encounterRepository,
   }) : _repository = repository,
        _billingRepository = billingRepository,
        _serviceTypeCatalog = serviceTypeCatalog,
@@ -47,7 +51,8 @@ class AppointmentFormViewModel {
        _lockClientFields = lockClientFields,
        _syncService = syncService,
        _reminderCoordinator = reminderCoordinator,
-       _appProfileRepository = appProfileRepository {
+       _appProfileRepository = appProfileRepository,
+       _encounterRepository = encounterRepository {
     save = CommandBase(_save);
   }
 
@@ -63,6 +68,7 @@ class AppointmentFormViewModel {
   final AppointmentSyncService? _syncService;
   final AppointmentReminderCoordinator? _reminderCoordinator;
   final AppProfileRepository? _appProfileRepository;
+  final EncounterNoteRepository? _encounterRepository;
 
   late final CommandBase<void> save;
 
@@ -369,11 +375,12 @@ class AppointmentFormViewModel {
 
   Future<Result<void>> _saveEdit(String? notesValue) async {
     final initial = _initial!;
+    final trimmedName = clientName.trim();
     final storedPhone = formatStoredClientPhone(clientPhone);
     final trimmedServiceType = serviceType.trim();
     final updated = buildSingleAppointment(
       id: initial.id,
-      clientName: clientName.trim(),
+      clientName: trimmedName,
       clientPhone: storedPhone,
       serviceType: trimmedServiceType,
       appointmentDate: appointmentDate,
@@ -384,15 +391,24 @@ class AppointmentFormViewModel {
       seriesId: initial.seriesId,
     );
 
+    final all = await _repository.getAll();
+    final identityChanged = clientIdentityChanged(
+      previousPhone: initial.clientPhone,
+      newPhone: storedPhone,
+      previousName: initial.clientName,
+      newName: trimmedName,
+    );
+
+    List<ServiceAppointment> toSave;
+
     if (isSeriesEdit &&
         pendingSeriesEditScope == SeriesEditScope.entireSeries) {
-      final all = await _repository.getAll();
       final seriesEntries =
           all.where((entry) => entry.seriesId == initial.seriesId).toList();
-      final batch = applySeriesEdit(
+      toSave = applySeriesEdit(
         seriesEntries: seriesEntries,
         editedEntry: updated,
-        clientName: clientName.trim(),
+        clientName: trimmedName,
         clientPhone: storedPhone,
         serviceType: trimmedServiceType,
         startTime: startTime.trim(),
@@ -401,19 +417,51 @@ class AppointmentFormViewModel {
         notes: notesValue,
         entireSeries: true,
       );
-      await _repository.saveAll(batch);
-      await _serviceTypeCatalog.addIfNew(trimmedServiceType);
-      _syncService?.scheduleSync();
-      await _userRepository?.touchLastActivity();
-      await _syncRemindersAfterSave();
-      return Result.ok();
+    } else {
+      toSave = [updated];
     }
 
-    await _repository.save(updated);
+    if (identityChanged) {
+      final excludeIds = toSave.map((entry) => entry.id).toSet();
+      final propagated = propagateClientIdentityToAppointments(
+        appointments: all,
+        previousPhone: initial.clientPhone,
+        newClientName: trimmedName,
+        newClientPhone: storedPhone,
+        excludeIds: excludeIds,
+      );
+      toSave = mergeAppointmentsById([...toSave, ...propagated]);
+      await _propagateEncounterNotes(
+        previousPhone: initial.clientPhone,
+        newClientName: trimmedName,
+        newClientPhone: storedPhone,
+      );
+    }
+
+    await _repository.saveAll(toSave);
     await _serviceTypeCatalog.addIfNew(trimmedServiceType);
     _syncService?.scheduleSync();
     await _userRepository?.touchLastActivity();
     await _syncRemindersAfterSave();
     return Result.ok();
+  }
+
+  Future<void> _propagateEncounterNotes({
+    required String previousPhone,
+    required String newClientName,
+    required String newClientPhone,
+  }) async {
+    final encounterRepository = _encounterRepository;
+    if (encounterRepository == null) return;
+
+    final notes = await encounterRepository.getAll();
+    final updates = propagateClientIdentityToEncounterNotes(
+      notes: notes,
+      previousPhone: previousPhone,
+      newClientName: newClientName,
+      newClientPhone: newClientPhone,
+    );
+    if (updates.isEmpty) return;
+    await encounterRepository.saveAll(updates);
   }
 }
