@@ -7,6 +7,7 @@ import 'package:clientta/features/app.dart';
 import 'package:clientta/features/auth/domain/repositories/user_repository.dart';
 import 'package:clientta/features/auth/view/auth_shell.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 import 'package:clientta/features/shared/hub/hub_loading_skeletons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -106,6 +107,7 @@ class _AuthenticatedBootstrapState extends State<_AuthenticatedBootstrap> {
         } catch (_) {
           // Stripe pode ainda não ter confirmado; login não deve falhar.
         }
+        dependency<SubscriptionSession>().start();
         if (!mounted) return;
         setState(() => _ready = true);
       case Error():

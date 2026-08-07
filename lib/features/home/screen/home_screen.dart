@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/dependecy/dependency.dart';
 import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/strings/strings.dart';
@@ -8,6 +11,7 @@ import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 import 'package:clientta/features/home/screen/components/app_drawer.dart';
 import 'package:clientta/features/home/screen/home_view_model.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
@@ -25,10 +29,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with RouteAware, HubRouteRefreshMixin {
   HomeViewModel get viewmodel => widget.viewmodel;
+  late final SubscriptionSession _subscriptionSession;
 
   @override
   void initState() {
     super.initState();
+    _subscriptionSession = dependency<SubscriptionSession>();
+    _subscriptionSession.addListener(_onSubscriptionChanged);
     viewmodel.load.execute();
     viewmodel.markComplete.addListener(_onMarkComplete);
     viewmodel.cancelAppointment.addListener(_onCancelAppointment);
@@ -36,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    _subscriptionSession.removeListener(_onSubscriptionChanged);
     viewmodel.markComplete.removeListener(_onMarkComplete);
     viewmodel.cancelAppointment.removeListener(_onCancelAppointment);
     super.dispose();
@@ -43,6 +51,15 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void onHubRouteVisible() => viewmodel.load.execute();
+
+  void _onSubscriptionChanged() {
+    if (!mounted) return;
+    unawaited(
+      viewmodel.refreshSubscriptionImpact().then((_) {
+        if (mounted) setState(() {});
+      }),
+    );
+  }
 
   void _onMarkComplete() {
     if (!mounted) return;

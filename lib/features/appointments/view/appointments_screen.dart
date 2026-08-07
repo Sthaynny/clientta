@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:clientta/core/dependecy/dependency.dart';
 import 'package:clientta/core/plan/plan_access_policy.dart';
 import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
@@ -7,6 +10,7 @@ import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/view/appointments_view_model.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
 import 'package:clientta/features/shared/components/body_error_default_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
@@ -24,11 +28,26 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     with RouteAware, HubRouteRefreshMixin {
   AppointmentsViewModel get viewmodel => widget.viewmodel;
   String? _serviceTypeFilter;
+  late final SubscriptionSession _subscriptionSession;
 
   @override
   void initState() {
     super.initState();
+    _subscriptionSession = dependency<SubscriptionSession>();
+    _subscriptionSession.addListener(_onSubscriptionChanged);
     viewmodel.load.execute();
+  }
+
+  @override
+  void dispose() {
+    _subscriptionSession.removeListener(_onSubscriptionChanged);
+    super.dispose();
+  }
+
+  void _onSubscriptionChanged() {
+    if (!mounted) return;
+    viewmodel.applySessionSubscription();
+    setState(() {});
   }
 
   @override

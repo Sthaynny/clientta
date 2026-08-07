@@ -56,6 +56,16 @@ class HomeViewModel {
     await _refreshSyncBanner();
   }
 
+  /// Atualiza indicadores de sync/Pro sem recarregar a lista de atendimentos.
+  Future<void> refreshSubscriptionImpact() async {
+    final isPro = await _hasProSync();
+    showSyncIndicator = isPro;
+    await _refreshSyncBanner();
+    if (isPro) {
+      _syncService?.scheduleSync();
+    }
+  }
+
   Future<Result<void>> _load() async {
     try {
       final sync = _syncService;

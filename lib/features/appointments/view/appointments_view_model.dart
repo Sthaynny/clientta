@@ -8,6 +8,7 @@ import 'package:clientta/features/appointments/domain/models/service_appointment
 import 'package:clientta/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 
 class DeleteAppointmentRequest {
   const DeleteAppointmentRequest({
@@ -25,18 +26,24 @@ class AppointmentsViewModel {
   AppointmentsViewModel({
     required AppointmentRepository repository,
     required BillingRepository billingRepository,
+    SubscriptionSession? subscriptionSession,
     AppointmentSyncService? syncService,
     AppointmentReminderCoordinator? reminderCoordinator,
   }) : _repository = repository,
        _billingRepository = billingRepository,
+       _subscriptionSession = subscriptionSession,
        _syncService = syncService,
        _reminderCoordinator = reminderCoordinator {
     load = CommandBase(_load);
     deleteEntry = CommandAction<void, DeleteAppointmentRequest>(_deleteEntry);
+    if (_subscriptionSession != null) {
+      subscription = _subscriptionSession.subscription;
+    }
   }
 
   final AppointmentRepository _repository;
   final BillingRepository _billingRepository;
+  final SubscriptionSession? _subscriptionSession;
   final AppointmentSyncService? _syncService;
   final AppointmentReminderCoordinator? _reminderCoordinator;
   late final CommandBase<void> load;
@@ -88,13 +95,22 @@ class AppointmentsViewModel {
     return types;
   }
 
+  void applySessionSubscription() {
+    final session = _subscriptionSession;
+    if (session != null) {
+      subscription = session.subscription;
+    }
+  }
+
   Future<Result<void>> _load() async {
     try {
       final sync = _syncService;
       if (sync != null && await sync.canSync()) {
         await sync.sync();
       }
-      subscription = await _billingRepository.getSubscription();
+      subscription =
+          _subscriptionSession?.subscription ??
+          await _billingRepository.getSubscription();
       entries = await _repository.getAll();
       await _reminderCoordinator?.syncForAppointments(entries);
       return Result.ok();

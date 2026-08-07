@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
 import 'package:clientta/core/router/app_router.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/utils/billing_checkout_pending.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
@@ -51,5 +52,7 @@ abstract final class AppNavigator {
         },
       ).catchError((_) {}),
     );
+
+    unawaited(dependency<SubscriptionSession>().refreshFromStripe());
   }
 }

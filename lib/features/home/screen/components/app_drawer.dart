@@ -9,6 +9,7 @@ import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/auth/domain/repositories/auth_repository.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 import 'package:clientta/features/shared/components/app_icon.dart';
 import 'package:clientta/features/shared/hub/hub_legal_footer.dart';
 import 'package:clientta/features/shared/hub/hub_nav_tile.dart';
@@ -167,6 +168,7 @@ class AppDrawer extends StatelessWidget {
 
   Future<void> _signOut(BuildContext context) async {
     Navigator.pop(context);
+    dependency<SubscriptionSession>().reset();
     final result = await dependency<AuthRepository>().signOut();
     if (!context.mounted) return;
     if (result case Error(:final error)) {

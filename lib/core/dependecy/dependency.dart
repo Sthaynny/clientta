@@ -26,6 +26,7 @@ import 'package:clientta/features/client_care/domain/repositories/encounter_note
 import 'package:clientta/features/billing/data/datasources/firebase_billing_datasource.dart';
 import 'package:clientta/features/billing/data/repositories/billing_repository_impl.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
+import 'package:clientta/features/billing/domain/subscription_session.dart';
 import 'package:clientta/features/clients/view/clients_view_model.dart';
 import 'package:clientta/features/home/screen/home_view_model.dart';
 
@@ -115,6 +116,10 @@ void setup() {
     () => BillingRepositoryImpl(dependency()),
   );
 
+  dependency.registerLazySingleton<SubscriptionSession>(
+    () => SubscriptionSession(billingRepository: dependency()),
+  );
+
   dependency.registerFactory(
     () => HomeViewModel(
       appointmentRepository: dependency(),
@@ -128,6 +133,7 @@ void setup() {
     () => AppointmentsViewModel(
       repository: dependency(),
       billingRepository: dependency(),
+      subscriptionSession: dependency(),
       syncService: dependency(),
       reminderCoordinator: dependency(),
     ),
