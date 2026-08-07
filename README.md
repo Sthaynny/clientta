@@ -17,6 +17,7 @@ O <strong>Clientta</strong> é um <strong>CRM de atendimentos</strong> para quem
 | [docs/tasks/README.md](docs/tasks/README.md) | Tarefas por feature (a fazer / finalizadas) |
 | [docs/guia_clientta.md](docs/guia_clientta.md) | Como rodar, Firebase e arquitetura |
 | [docs/billing/readme.md](docs/billing/readme.md) | Stripe, secrets e webhook |
+| [docs/legal/politica-privacidade.md](docs/legal/politica-privacidade.md) | Política de privacidade (LGPD) |
 | [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md) | Rotas do app |
 
 ## Stack

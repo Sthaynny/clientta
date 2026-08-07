@@ -117,7 +117,7 @@ URLs de retorno Checkout (Dashboard Stripe):
 - [ ] Trocar `sk_test` por `sk_live` nos secrets
 - [ ] Webhook live com secret distinto
 - [ ] Regras Firestore revisadas
-- [ ] Política de privacidade menciona Stripe e Firebase
+- [x] Política de privacidade menciona Stripe e Firebase
 - [ ] Página de plano sem expor secrets ou price IDs sensíveis em logs
 
 ## Documentação relacionada
