@@ -12,7 +12,8 @@
 
 ### Entregue
 
-- `HubDayHeader`, `HubHomeQuickActions`, `HubAppointmentCard` com ações rápidas.
+- `HubDayHeader`, `HubHomeQuickActions`, `HubAppointmentCard` com barra de ações horizontal.
+- Toque no card ou **Ver atendimento** abre `/atendimentos` (substitui observação rápida).
 - Empty state com CTA → `/agendas/registrar`.
 - Pull-to-refresh; estados loading, error e feedback via snackbar.
 

@@ -6,7 +6,7 @@ Checklist antes de delegar a um subagente.
 
 - Flutter MVVM + `CommandBase` / `Result<T>`
 - GetIt em `lib/core/dependecy/dependency.dart`
-- Persistência local: `DeviceJsonStore` → `crm_appointments.json`
+- Persistência local: `DeviceJsonStore` → `clientta_data.json` (chaves `appointments`, `encounterNotes`)
 - Firebase Auth + Firestore (sync Pro)
 - Stripe via Cloud Functions (`functions/`), checkout com `url_launcher`
 
@@ -28,7 +28,9 @@ lib/features/<feature>/
 | `/agendas` | agendas |
 | `/agendas/registrar` | agendas |
 | `/login`, `/cadastro` | auth-firebase |
-| `/configuracoes/plano` | assinatura-stripe |
+| `/clientes` | clientes (Meus Clientes) |
+| `/atendimentos` | atendimento |
+| `/plano` | assinatura-stripe |
 
 ## Backlog por fase (PLANEJAMENTO.md)
 

@@ -25,7 +25,11 @@ Novas features seguem o desenho de `appointments` (substitui `classes` / `activi
 
 `ServiceAppointment`: id, clientName, clientPhone, serviceType, appointmentDate, startTime, endTime, status (agendado/concluido/cancelado), notes, seriesId.
 
-Arquivo local: `crm_appointments.json`.
+Arquivo local: `clientta_data.json` (chave `appointments`).
+
+Entidade complementar: `EncounterNote` — histórico de negociação por cliente (`clientPhone`). Chave `encounterNotes` em `clientta_data.json`.
+
+Agregado de UI: `ClientProfile` — lista de clientes em `/clientes` (derivado, não persistido).
 
 ## Estado (MVVM + Commands)
 
@@ -44,7 +48,7 @@ Arquivo local: `crm_appointments.json`.
 
 - Enum `AppRouters` + mapa `routes` em `app_router.dart`.
 - Navegação: `context.go(AppRouters.xxx, arguments: entry)` (`build_context.dart`).
-- Rotas núcleo: `/`, `/agendas`, `/agendas/registrar`, `/configuracoes/plano`.
+- Rotas núcleo: `/`, `/agendas`, `/clientes`, `/atendimentos`, `/agendas/registrar`, `/plano`.
 
 ## Firebase
 

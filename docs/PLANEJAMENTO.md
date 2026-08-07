@@ -35,7 +35,7 @@ Objetivo: app utilizável no dia a dia sem sync nem cobrança.
 
 | # | Entrega | Notas |
 |---|---------|--------|
-| 1.1 | Modelo `ServiceAppointment` + repositório local | `crm_appointments.json` |
+| 1.1 | Modelo `ServiceAppointment` + repositório local | `clientta_data.json` (chave `appointments`) |
 | 1.2 | **Home** — painel do dia | Ordenação por `startTime`; ações concluir / notas |
 | 1.3 | **Minha Agenda** — lista agrupada | Filtro por `serviceType` |
 | 1.4 | **Formulário** `/agendas/registrar` | Cliente, telefone, tipo, data, horários, notas, `seriesId` |
@@ -73,7 +73,7 @@ Objetivo: monetização por assinatura mensal.
 |---|---------|--------|
 | 3.1 | Cloud Functions callables | `getPlanPricing`, `createSubscription`, etc. |
 | 3.2 | Webhook `stripeBillingWebhook` | Atualiza `users/{uid}.subscription` |
-| 3.3 | Tela `/configuracoes/plano` | `url_launcher` para Checkout |
+| 3.3 | Tela `/plano` | `url_launcher` para Checkout |
 | 3.4 | Sandbox com chaves de teste | Ver [billing/readme.md](billing/readme.md) |
 | 3.5 | Cancelamento e sync de status | `cancelSubscription`, `syncSubscriptionStatus` |
 

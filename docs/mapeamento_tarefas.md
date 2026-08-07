@@ -44,8 +44,11 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 | C-105 | engenharia | **Firebase Auth** (login/cadastro) | Identidade para sync e billing | Alto — infra | Não iniciado | [guia_clientta.md](guia_clientta.md) |
 | C-106 | engenharia | Remover features legadas (classes, activities) | Código alinhado ao CRM | Alto — manutenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
 | C-107 | produto | Ordenar painel do dia por `startTime` | Leitura natural da agenda | Médio — UX | Não iniciado | [home_hoje.md](features/home_hoje.md) |
-| C-108 | produto | Diálogo de confirmação ao excluir | Evitar perda de dados | Médio — confiança | Não iniciado | [agendas.md](features/agendas.md) |
-| C-109 | produto | **Onboarding** leve (offline + primeiro atendimento) | Ativar na primeira sessão | Alto — retenção | Não iniciado | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
+| C-108 | produto | Diálogo de confirmação ao excluir | Evitar perda de dados | Médio — confiança | Concluído | [agendas.md](features/agendas.md) |
+| C-109 | produto | **Onboarding** leve (offline + primeiro atendimento) | Ativar na primeira sessão | Alto — retenção | Concluído | [PLANEJAMENTO.md](PLANEJAMENTO.md) §3 |
+| C-110 | produto | **Atendimento** `/atendimentos` | Histórico de negociação por cliente | Alto — contexto | Concluído | [atendimento.md](features/atendimento.md) |
+| C-112 | produto | **Meus Clientes** `/clientes` | Lista unificada com busca | Alto — navegação | Concluído | [clientes.md](features/clientes.md) |
+| C-113 | design | Cards com telefone e ações de contato | UX operacional no campo | Médio — UX | Concluído | [clientes.md](features/clientes.md) |
 
 ---
 
@@ -88,12 +91,12 @@ Complementa [PLANEJAMENTO.md](PLANEJAMENTO.md) (fases) e [features/README.md](fe
 
 | Status | Quantidade (IDs) |
 |--------|------------------|
-| Concluído | 4 (C-001–C-004) |
+| Concluído | 9 (C-001–C-004, C-108–C-110, C-112–C-113) |
 | Em andamento | 2 (C-401, C-404) |
-| Não iniciado | 23 |
+| Não iniciado | 21 |
 | Bloqueado | 0 |
 
-**Total de tarefas listadas:** 29
+**Total de tarefas listadas:** 32
 
 ---
 

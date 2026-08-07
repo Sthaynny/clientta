@@ -20,8 +20,10 @@ Barrel: `lib/features/shared/hub/hub.dart`.
 | Componente | Uso |
 |------------|-----|
 | `HubAppBar` | Todas as telas; `canPop: true` em fluxos secundários |
-| `HubSurface` | Cards de atendimento |
-| `HubClassCard` / tile de agenda | Adaptar para appointment até `HubAppointmentCard` existir |
+| `HubSurface` | Cards de atendimento e cliente |
+| `HubAppointmentCard` | Card de agendamento (home e agenda) |
+| `HubClientCard` / `HubClientAvatar` | Card e avatar na lista de clientes |
+| `HubClientContactBar` | Ligar e WhatsApp no atendimento |
 | `HubSectionHeader` | Seções na home e lista |
 | `HubDayHeader` | Cabeçalho “Hoje” no painel do dia |
 | `HubEmptyState` | Sem atendimentos — CTA registrar |
@@ -63,7 +65,7 @@ Scaffold(
 
 ## Tela de plano Pro
 
-- Rota `/configuracoes/plano`.
+- Rota `/plano`.
 - Exibir preço de `getPlanPricing`.
 - CTA assinar abre Checkout via `url_launcher`.
 - Botões sync status e cancelar assinatura.
@@ -72,7 +74,7 @@ Scaffold(
 
 - Espaçamento: `DSSpacing.*.x` / `.y`.
 - Ícones: `Icons.*_outlined` / `_rounded`.
-- Drawer: Agenda, Plano Pro, Sair.
+- Drawer: Início, Agenda, **Meus Clientes**, Plano Pro, Sair.
 - Feedback: `showSnackBarInfo|Error|Success|Warning` em `build_context.dart`.
 
 ## Checklist antes de PR de UI

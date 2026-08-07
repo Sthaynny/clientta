@@ -13,7 +13,7 @@ Papel: CRUD de `ServiceAppointment` em `/agendas` e `/agendas/registrar`.
 | Entrega | Detalhe |
 |---------|---------|
 | Modelo | `ServiceAppointment` imutável, fromMap/toMap/copyWith |
-| Repo local | `crm_appointments.json` via `DeviceJsonStore` |
+| Repo local | `clientta_data.json` via `DeviceJsonStore` |
 | Lista `/agendas` | Agrupamento por data/série; filtro `serviceType`; FAB |
 | Formulário | Cliente, telefone, tipo, data, horários, notas, `seriesId` |
 | Validação | `appointment_form_validation.dart` |
