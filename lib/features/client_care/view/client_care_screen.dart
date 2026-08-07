@@ -119,6 +119,12 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                         ),
                       ),
                       DSSpacing.lg.y,
+                      HubScreenIntro(
+                        icon: Icons.forum_outlined,
+                        message: clientCareTimelineIntroString,
+                        iconColor: HubColors.seed,
+                      ),
+                      DSSpacing.md.y,
                       HubSectionHeader(
                         title: clientCareTimelineTitleString,
                         count: viewmodel.timeline.isEmpty
@@ -127,11 +133,14 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                       ),
                       DSSpacing.sm.y,
                       if (viewmodel.timeline.isEmpty)
-                        HubEmptyState(
-                          embedded: true,
-                          icon: Icons.forum_outlined,
-                          title: clientCareEmptyTitleString,
-                          message: clientCareEmptyMessageString,
+                        HubSurface(
+                          tint: HubColors.canvas,
+                          child: HubEmptyState(
+                            embedded: true,
+                            icon: Icons.forum_outlined,
+                            title: clientCareEmptyTitleString,
+                            message: clientCareEmptyMessageString,
+                          ),
                         )
                       else
                         ...viewmodel.timeline.map(
