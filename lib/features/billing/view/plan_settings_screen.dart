@@ -16,6 +16,7 @@ import 'package:clientta/features/billing/domain/entities/plan_pricing_catalog.d
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 import 'package:clientta/features/billing/domain/repositories/billing_repository.dart';
 import 'package:clientta/features/billing/shared/utils/billing_return_url.dart';
+import 'package:clientta/features/shared/components/app_loading_widget.dart';
 import 'package:clientta/features/shared/hub/hub.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -241,24 +242,12 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
   }
 
   Future<void> _cancelSubscription() async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showHubConfirmDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(planCancelTitleString),
-            content: Text(planCancelMessageString),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(cancelString),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: TextButton.styleFrom(foregroundColor: HubColors.error),
-                child: Text(planCancelButtonString),
-              ),
-            ],
-          ),
+      title: planCancelTitleString,
+      message: planCancelMessageString,
+      confirmLabel: planCancelButtonString,
+      destructive: true,
     );
 
     if (confirmed != true || !mounted) return;
@@ -298,7 +287,7 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
       ),
       body:
           _loading
-              ? const Center(child: CircularProgressIndicator())
+              ? const AppLoadingWidget()
               : ListView(
                 padding: EdgeInsets.all(DSSpacing.md.value),
                 children: [
@@ -348,6 +337,8 @@ class _PlanSettingsScreenState extends State<PlanSettingsScreen> {
                           planProDescriptionString,
                           color: HubColors.inkMuted,
                         ),
+                        DSSpacing.md.y,
+                        HubProBenefitsList(benefits: planProBenefits),
                         DSSpacing.md.y,
                         if (hasDiscount && !hasPro) ...[
                           DSBodyText(
