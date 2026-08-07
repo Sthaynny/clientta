@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
+import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/features/client_care/domain/models/care_timeline_entry.dart';
 import 'package:clientta/features/client_care/view/client_care_view_model.dart';
 import 'package:clientta/features/shared/components/app_loading_widget.dart';
@@ -197,7 +198,7 @@ class _ClientHeader extends StatelessWidget {
           DSHeadlineSmallText(clientName, color: HubColors.ink),
           if (clientPhone.trim().isNotEmpty) ...[
             DSSpacing.xxs.y,
-            DSCaptionText(clientPhone, color: HubColors.inkMuted),
+            DSCaptionText(formatBrPhone(clientPhone), color: HubColors.inkMuted),
           ],
           if (serviceType != null && serviceType!.trim().isNotEmpty) ...[
             DSSpacing.xs.y,

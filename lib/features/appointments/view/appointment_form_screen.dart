@@ -4,6 +4,7 @@ import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/strings/strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
+import 'package:clientta/core/utils/input_masks.dart';
 import 'package:clientta/core/utils/extension/datetime.dart';
 import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
@@ -38,7 +39,9 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     viewmodel = widget.viewmodel;
     viewmodel.hydrate();
     clientNameController = TextEditingController(text: viewmodel.clientName);
-    clientPhoneController = TextEditingController(text: viewmodel.clientPhone);
+    clientPhoneController = TextEditingController(
+      text: formatBrPhone(viewmodel.clientPhone),
+    );
     notesController = TextEditingController(text: viewmodel.notes);
     viewmodel.save.addListener(_onSave);
   }
@@ -201,6 +204,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               controller: clientPhoneController,
               label: clientPhoneString,
               keyboardType: TextInputType.phone,
+              inputFormatters: InputMaskFormatters.brPhone,
+              autofillHints: const [AutofillHints.telephoneNumber],
               errorText: errors.clientPhone,
               onChanged: (value) {
                 viewmodel.clientPhone = value;

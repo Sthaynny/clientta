@@ -1,3 +1,4 @@
+import 'package:clientta/core/utils/input_masks.dart';
+
 /// Normaliza telefone para agrupar histórico do mesmo cliente.
-String normalizeClientPhone(String phone) =>
-    phone.replaceAll(RegExp(r'\D'), '');
+String normalizeClientPhone(String phone) => extractDigits(phone);
