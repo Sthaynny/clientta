@@ -6,6 +6,7 @@
 **/google-services.plist
 **/firebase_options.dart
 functions/.secret.local
+functions/.env
 
 ### Android ###
 # Built application files
