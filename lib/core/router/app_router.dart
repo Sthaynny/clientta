@@ -22,6 +22,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
     String? prefillClientName;
     String? prefillClientPhone;
     String? prefillServiceType;
+    var lockClientFields = false;
 
     if (rawArgs is ServiceAppointment) {
       editEntry = rawArgs;
@@ -30,6 +31,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
       prefillClientName = rawArgs.prefillClientName;
       prefillClientPhone = rawArgs.prefillClientPhone;
       prefillServiceType = rawArgs.prefillServiceType;
+      lockClientFields = rawArgs.lockClientFields;
     }
 
     return AppointmentFormScreen(
@@ -42,6 +44,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
         prefillClientName: prefillClientName,
         prefillClientPhone: prefillClientPhone,
         prefillServiceType: prefillServiceType,
+        lockClientFields: lockClientFields,
       ),
       isEdit: editEntry != null,
     );

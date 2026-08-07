@@ -55,6 +55,11 @@ String get appointmentStatusString => 'Status';
 String get startTimeString => 'Início';
 String get endTimeString => 'Fim';
 String get notesOptionalString => 'Observações (opcional)';
+String get appointmentReminderNotesLabelString =>
+    'Lembrete do agendamento (opcional)';
+String get appointmentReminderNotesHintString =>
+    'Ex.: fechar seguro com o cliente, retornar sobre a apólice';
+String get scheduleClientReminderTitleString => 'Agendar lembrete';
 String get markCompleteString => 'Concluir atendimento';
 String get quickNotesString => 'Adicionar observação';
 String get deleteString => 'Excluir';
@@ -108,9 +113,9 @@ String get clientCareNoteLabelString => 'Nova anotação';
 String get clientCareAddNoteString => 'Registrar encontro';
 String get clientCareFromAppointmentString => 'Agendamento';
 String get clientCareActionString => 'Ver atendimento';
-String get clientCareScheduleAppointmentString => 'Agendar na home';
+String get clientCareScheduleAppointmentString => 'Agendar lembrete';
 String get clientCareScheduleAppointmentHintString =>
-    'Cria um agendamento que aparece no painel do dia.';
+    'Cria um agendamento com data e horário. Use as observações para o que precisa fazer com o cliente.';
 String get encounterStartedDefaultBodyString => 'Atendimento iniciado.';
 String get encounterAlreadyRegisteredTodayString =>
     'Atendimento de hoje já registrado para este cliente.';

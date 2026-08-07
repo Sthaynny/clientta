@@ -24,6 +24,7 @@ class AppointmentFormViewModel {
     String? prefillClientName,
     String? prefillClientPhone,
     String? prefillServiceType,
+    bool lockClientFields = false,
     AppointmentSyncService? syncService,
   }) : _repository = repository,
        _billingRepository = billingRepository,
@@ -32,6 +33,7 @@ class AppointmentFormViewModel {
        _prefillClientName = prefillClientName,
        _prefillClientPhone = prefillClientPhone,
        _prefillServiceType = prefillServiceType,
+       _lockClientFields = lockClientFields,
        _syncService = syncService {
     save = CommandBase(_save);
   }
@@ -43,6 +45,7 @@ class AppointmentFormViewModel {
   final String? _prefillClientName;
   final String? _prefillClientPhone;
   final String? _prefillServiceType;
+  final bool _lockClientFields;
   final AppointmentSyncService? _syncService;
 
   late final CommandBase<void> save;
@@ -59,6 +62,7 @@ class AppointmentFormViewModel {
   AppointmentFormFieldErrors fieldErrors = const AppointmentFormFieldErrors();
 
   bool get isEdit => _initial != null;
+  bool get lockClientFields => _lockClientFields && !isEdit;
   bool get isSeriesEdit =>
       _initial?.seriesId != null && _initial!.seriesId!.isNotEmpty;
 

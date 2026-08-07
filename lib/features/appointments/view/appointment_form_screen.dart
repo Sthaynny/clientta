@@ -195,7 +195,11 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       appBar: HubAppBar(
         canPop: true,
         showBrandMark: false,
-        title: widget.isEdit ? editAppointmentString : addAppointmentString,
+        title: widget.isEdit
+            ? editAppointmentString
+            : viewmodel.lockClientFields
+            ? scheduleClientReminderTitleString
+            : addAppointmentString,
       ),
       body: Form(
         key: _formKey,
@@ -205,22 +209,27 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
             HubTextFormField(
               controller: clientNameController,
               label: clientNameString,
+              enabled: !viewmodel.lockClientFields,
               errorText: errors.clientName,
-              onChanged: (value) {
-                viewmodel.clientName = value;
-                viewmodel.clearFieldError('clientName');
-                setState(() {});
-              },
+              onChanged: viewmodel.lockClientFields
+                  ? null
+                  : (value) {
+                    viewmodel.clientName = value;
+                    viewmodel.clearFieldError('clientName');
+                    setState(() {});
+                  },
             ),
             DSSpacing.md.y,
             HubTextFormField(
               controller: clientPhoneController,
               label: clientPhoneString,
+              enabled: !viewmodel.lockClientFields,
               keyboardType: TextInputType.phone,
               inputFormatters: InputMaskFormatters.brPhone,
               autofillHints: const [AutofillHints.telephoneNumber],
               errorText: errors.clientPhone,
-              onChanged: _onClientPhoneChanged,
+              onChanged:
+                  viewmodel.lockClientFields ? null : _onClientPhoneChanged,
             ),
             DSSpacing.md.y,
             DropdownButtonFormField<String>(
@@ -300,7 +309,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
             DSSpacing.md.y,
             HubTextFormField(
               controller: notesController,
-              label: notesOptionalString,
+              label: viewmodel.lockClientFields
+                  ? appointmentReminderNotesLabelString
+                  : notesOptionalString,
+              hint: viewmodel.lockClientFields
+                  ? appointmentReminderNotesHintString
+                  : null,
               maxLines: 3,
               onChanged: (value) => viewmodel.notes = value,
             ),
