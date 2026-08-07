@@ -258,11 +258,14 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
             ? scheduleClientReminderTitleString
             : addAppointmentString,
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.all(DSSpacing.md.value),
-          children: [
+      body: Column(
+        children: [
+          Expanded(
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                padding: EdgeInsets.all(DSSpacing.md.value),
+                children: [
             HubScreenIntro(
               icon: Icons.event_available_outlined,
               message: appointmentFormIntroString,
@@ -437,8 +440,13 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 ],
               ),
             ],
-            DSSpacing.xl.y,
-            ListenableBuilder(
+            DSSpacing.md.y,
+                ],
+              ),
+            ),
+          ),
+          HubFormStickyBar(
+            child: ListenableBuilder(
               listenable: viewmodel.save,
               builder:
                   (_, __) => HubPrimaryButton(
@@ -448,9 +456,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                     onPressed: _submit,
                   ),
             ),
-            DSSpacing.md.y,
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
