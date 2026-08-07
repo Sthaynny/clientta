@@ -58,6 +58,12 @@ class _ClientsScreenState extends State<ClientsScreen>
     viewmodel.load.execute();
   }
 
+  Future<void> _openRegisterAppointment() async {
+    await context.go(AppRouters.appointmentForm);
+    if (!mounted) return;
+    viewmodel.load.execute();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,9 +120,12 @@ class _ClientsScreenState extends State<ClientsScreen>
                     height: MediaQuery.sizeOf(context).height * 0.38,
                     child: HubEmptyState(
                       embedded: true,
+                      useSurface: true,
                       icon: Icons.people_outline_rounded,
                       title: clientsEmptyTitleString,
                       message: clientsEmptyMessageString,
+                      actionLabel: addAppointmentString,
+                      onAction: _openRegisterAppointment,
                     ),
                   )
                 else if (viewmodel.visibleProfiles.isEmpty)
@@ -124,6 +133,7 @@ class _ClientsScreenState extends State<ClientsScreen>
                     padding: EdgeInsets.symmetric(vertical: DSSpacing.lg.value),
                     child: HubEmptyState(
                       embedded: true,
+                      useSurface: true,
                       icon: Icons.person_search_outlined,
                       title: clientsSearchEmptyTitleString,
                       message: clientsSearchEmptyMessageString,

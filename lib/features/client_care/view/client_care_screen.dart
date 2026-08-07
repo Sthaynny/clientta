@@ -132,14 +132,12 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                       ),
                       DSSpacing.sm.y,
                       if (viewmodel.timeline.isEmpty)
-                        HubSurface(
-                          tint: HubColors.canvas,
-                          child: HubEmptyState(
-                            embedded: true,
-                            icon: Icons.forum_outlined,
-                            title: clientCareEmptyTitleString,
-                            message: clientCareEmptyMessageString,
-                          ),
+                        HubEmptyState(
+                          embedded: true,
+                          useSurface: true,
+                          icon: Icons.forum_outlined,
+                          title: clientCareEmptyTitleString,
+                          message: clientCareEmptyMessageString,
                         )
                       else
                         ...viewmodel.timeline.map(

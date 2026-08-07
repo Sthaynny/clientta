@@ -172,16 +172,14 @@ class _HomeScreenState extends State<HomeScreen>
                         AppRouters.agendas.path,
                       ),
                   child: viewmodel.todayAppointments.isEmpty
-                      ? HubSurface(
-                          tint: HubColors.canvas,
-                          child: HubEmptyState(
-                            embedded: true,
-                            icon: Icons.event_note_outlined,
-                            title: emptyAppointmentsHomeTitle,
-                            message: emptyAppointmentsHomeMessage,
-                            actionLabel: addAppointmentString,
-                            onAction: _openRegisterAppointment,
-                          ),
+                      ? HubEmptyState(
+                          embedded: true,
+                          useSurface: true,
+                          icon: Icons.event_note_outlined,
+                          title: emptyAppointmentsHomeTitle,
+                          message: emptyAppointmentsHomeMessage,
+                          actionLabel: addAppointmentString,
+                          onAction: _openRegisterAppointment,
                         )
                       : Column(
                           children:

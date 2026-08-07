@@ -251,6 +251,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                   SizedBox(
                     height: MediaQuery.sizeOf(context).height * 0.42,
                     child: HubEmptyState(
+                      useSurface: true,
                       icon: Icons.event_note_outlined,
                       title: emptyAgendaTitle,
                       message: emptyAgendaMessage,
@@ -281,9 +282,12 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                   DSSpacing.lg.y,
                   HubEmptyState(
                     embedded: true,
+                    useSurface: true,
                     icon: Icons.filter_list_off_outlined,
                     title: filterEmptyTitleString,
                     message: filterEmptyMessageString,
+                    actionLabel: filterClearActionString,
+                    onAction: () => setState(() => _serviceTypeFilter = null),
                   ),
                 ],
               ),

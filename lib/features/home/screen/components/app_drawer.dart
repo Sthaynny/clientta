@@ -66,8 +66,24 @@ class AppDrawer extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.symmetric(vertical: DSSpacing.sm.value),
+                padding: EdgeInsets.fromLTRB(
+                  DSSpacing.sm.value,
+                  DSSpacing.xs.value,
+                  DSSpacing.sm.value,
+                  DSSpacing.sm.value,
+                ),
                 children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: DSSpacing.sm.value,
+                      vertical: DSSpacing.xxs.value,
+                    ),
+                    child: DSCaptionText(
+                      drawerNavSectionString,
+                      color: HubColors.inkMuted,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   HubNavTile(
                     icon: Icons.today_outlined,
                     label: homeTodayString,

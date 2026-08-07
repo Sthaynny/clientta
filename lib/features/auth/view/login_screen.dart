@@ -101,6 +101,20 @@ class _LoginScreenState extends State<LoginScreen> {
     return HubAuthScaffold(
       title: loginWelcomeString,
       subtitle: loginSubtitleString,
+      highlights: [
+        HubAuthHighlight(
+          icon: Icons.cloud_off_outlined,
+          label: authHighlightOfflineString,
+        ),
+        HubAuthHighlight(
+          icon: Icons.sync_outlined,
+          label: authHighlightSyncString,
+        ),
+        HubAuthHighlight(
+          icon: Icons.verified_user_outlined,
+          label: authHighlightSecureString,
+        ),
+      ],
       footer: Center(
         child: TextButton(
           onPressed:
