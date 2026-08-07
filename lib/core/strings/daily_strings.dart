@@ -112,6 +112,7 @@ String get clientCareComposerHintString =>
 String get clientCareNoteLabelString => 'Nova anotação';
 String get clientCareAddNoteString => 'Registrar encontro';
 String get clientCareFromAppointmentString => 'Agendamento';
+String get careTimelineEncounterLabelString => 'Registro de encontro';
 String get clientCareActionString => 'Ver atendimento';
 String get clientCareScheduleAppointmentString => 'Agendar lembrete';
 String get clientCareScheduleAppointmentHintString =>
@@ -201,6 +202,15 @@ String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';
 String get planProDescriptionString =>
     'Mais atendimentos na agenda, mesma conta em outro celular, aviso antes do horário e cópia dos seus dados.';
+const planProBenefits = [
+  'Mais atendimentos e repetições na agenda',
+  'Mesma agenda em outro celular',
+  'Aviso antes do horário do atendimento',
+  'Exportar e importar seus dados',
+];
+String get formSectionClientString => 'Cliente';
+String get formSectionAppointmentString => 'Horário e status';
+String get formSectionNotesString => 'Observações';
 String get planSubscribeButtonString => 'Assinar plano Pro';
 String get planSubscribeSuccessString => 'Assinatura ativada com sucesso!';
 String get planSubscribePendingString =>
