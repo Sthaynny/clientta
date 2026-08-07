@@ -18,8 +18,8 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
-// Play: Android 6.0+ (API 23). Flutter reescreve `minSdk = 23` literal no build — usar constante.
-private val playStoreMinSdk = 23
+// Play: Android 7.0+ (API 24). integration_test e Flutter exigem no mínimo 24.
+private val playStoreMinSdk = 24
 
 android {
     namespace = "br.com.sthaynny.clientta"
