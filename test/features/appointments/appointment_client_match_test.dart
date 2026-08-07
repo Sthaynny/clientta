@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:clientta/features/appointments/domain/appointment_client_match.dart';
-import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
 import 'package:clientta/features/appointments/domain/service_type_catalog.dart';
 import '../../mock/model_mock.dart';
 
