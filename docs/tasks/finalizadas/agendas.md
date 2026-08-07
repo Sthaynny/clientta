@@ -1,4 +1,4 @@
-# A fazer — Minha Agenda
+# Finalizadas — Minha Agenda
 
 **Feature:** [agendas.md](../../features/agendas.md)
 
@@ -6,21 +6,17 @@
 
 ## C-101 — Modelo e repositório local
 
-- **Status:** Concluído
 - **O que fazer:** `ServiceAppointment` + `AppointmentRepositoryLocal` (chave `appointments` em `clientta_data.json` via `DeviceJsonStore`).
 - **Objetivo:** Base de domínio do CRM.
 - **Impacto:** **Alto** — núcleo.
-- **Feature:** [agendas.md](../../features/agendas.md)
 
 ---
 
 ## C-103 — Lista Minha Agenda
 
-- **Status:** Concluído
 - **O que fazer:** Tela `/agendas` agrupada por data/série com filtro por tipo de serviço.
 - **Objetivo:** Histórico e navegação da agenda completa.
 - **Impacto:** **Alto** — retenção.
-- **Feature:** [agendas.md](../../features/agendas.md)
 
 ### Entregue
 
@@ -32,11 +28,9 @@
 
 ## C-104 — Formulário de atendimento
 
-- **Status:** Concluído
 - **O que fazer:** Formulário `/agendas/registrar` com notas e séries recorrentes.
 - **Objetivo:** Cadastro rápido no campo.
 - **Impacto:** **Alto** — conversão de uso.
-- **Feature:** [agendas.md](../../features/agendas.md)
 
 ### Entregue
 
@@ -49,13 +43,6 @@
 
 ## C-108 — Confirmação ao excluir
 
-- **Status:** Concluído
 - **O que fazer:** Diálogo antes de excluir atendimento ou série.
 - **Objetivo:** Evitar perda acidental de histórico.
 - **Impacto:** **Médio** — confiança.
-- **Feature:** [agendas.md](../../features/agendas.md)
-
-### Pendências (baixa prioridade)
-
-- Data visível no card dentro de grupos de série (hoje o cabeçalho do grupo cobre).
-- Renomear chave de persistência para `crm_appointments.json` literal (opcional; hoje `appointments` em `clientta_data.json`).

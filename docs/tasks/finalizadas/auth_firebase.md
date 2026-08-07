@@ -1,4 +1,4 @@
-# A fazer — Auth Firebase
+# Finalizadas — Auth Firebase
 
 **Feature:** [guia_clientta.md](../../guia_clientta.md)
 
@@ -6,11 +6,9 @@
 
 ## C-105 — Firebase Auth
 
-- **Status:** Concluído (e-mail/senha + Google Sign-In no código). Pendência operacional: SHA-1/SHA-256 no Firebase Console.
 - **O que fazer:** Login e cadastro (e-mail/senha ou Google) com rotas `/login`, `/cadastro`.
 - **Objetivo:** Identidade (`uid`) para Firestore e Stripe.
 - **Impacto:** **Alto** — infraestrutura.
-- **Feature:** [guia_clientta.md](../../guia_clientta.md)
 
 ### Entregue
 
@@ -25,7 +23,7 @@
 
 ### Pendências operacionais
 
-- **Google Sign-In:** adicionar SHA-1 e SHA-256 do app Android no Firebase Console (Configurações do projeto → Seus apps → Android).
-- Reexecutar `flutterfire configure` para popular o OAuth client em `google-services.json` (atualmente vazio).
-- Habilitar provedor **Google** em Authentication → Sign-in method no Firebase Console.
+- **Google Sign-In:** adicionar SHA-1 e SHA-256 do app Android no Firebase Console.
+- Reexecutar `flutterfire configure` para popular o OAuth client em `google-services.json`.
+- Habilitar provedor **Google** em Authentication → Sign-in method.
 - iOS: conferir `REVERSED_CLIENT_ID` no `Info.plist` após `flutterfire configure`.
