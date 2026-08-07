@@ -29,20 +29,35 @@ class EncounterNoteRepositoryLocal implements EncounterNoteRepository {
 
   @override
   Future<void> save(EncounterNote note) async {
+    await saveAll([note]);
+  }
+
+  @override
+  Future<void> saveAll(
+    List<EncounterNote> notes, {
+    List<String> deleteIds = const [],
+  }) async {
     final root = await _store.readRoot();
     final list = (root[_key] as List<dynamic>? ?? [])
         .map((e) => Map<String, dynamic>.from(e as Map))
         .toList();
 
-    final stamped = note.updatedAt == null
-        ? note.copyWith(updatedAt: DateTime.now())
-        : note;
-    final map = stamped.toMap();
-    final index = list.indexWhere((e) => e['id'] == note.id);
-    if (index >= 0) {
-      list[index] = map;
-    } else {
-      list.add(map);
+    if (deleteIds.isNotEmpty) {
+      final remove = deleteIds.toSet();
+      list.removeWhere((e) => remove.contains(e['id'] as String));
+    }
+
+    for (final note in notes) {
+      final stamped = note.updatedAt == null
+          ? note.copyWith(updatedAt: DateTime.now())
+          : note;
+      final map = stamped.toMap();
+      final index = list.indexWhere((e) => e['id'] == note.id);
+      if (index >= 0) {
+        list[index] = map;
+      } else {
+        list.add(map);
+      }
     }
 
     root[_key] = list;
@@ -51,13 +66,7 @@ class EncounterNoteRepositoryLocal implements EncounterNoteRepository {
 
   @override
   Future<void> delete(String id) async {
-    final root = await _store.readRoot();
-    final list = (root[_key] as List<dynamic>? ?? [])
-        .map((e) => Map<String, dynamic>.from(e as Map))
-        .toList();
-    list.removeWhere((e) => e['id'] == id);
-    root[_key] = list;
-    await _store.writeRoot(root);
+    await saveAll(const [], deleteIds: [id]);
   }
 
   Future<List<EncounterNote>> _readEntries() async {

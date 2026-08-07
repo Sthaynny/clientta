@@ -7,5 +7,10 @@ abstract class EncounterNoteRepository {
 
   Future<void> save(EncounterNote note);
 
+  Future<void> saveAll(
+    List<EncounterNote> notes, {
+    List<String> deleteIds = const [],
+  });
+
   Future<void> delete(String id);
 }
