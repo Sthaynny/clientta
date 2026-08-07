@@ -79,15 +79,15 @@ String get onboardingOfflineMessage =>
     'Registre atendimentos no estacionamento, entre ligações ou no cliente. Os dados ficam no aparelho e você não depende de internet para consultar.';
 String get onboardingFirstAppointmentTitle => 'Registre seu primeiro atendimento';
 String get onboardingFirstAppointmentMessage =>
-    'Anote quem você atendeu, o serviço e o horário. Em segundos você tem clareza do dia e do próximo passo com cada cliente.';
+    'Anote cliente, serviço e horário. Em poucos segundos você sabe o que fazer em seguida.';
 String get onboardingContinueString => 'Continuar';
 String get onboardingRegisterCtaString => 'Registrar atendimento';
 String get quickAddAppointmentString => 'Novo agendamento';
 String get offlineBannerMessageString =>
     'Você está offline. Seus atendimentos continuam salvos neste aparelho.';
 String get syncPendingBannerMessageString =>
-    'Sem conexão. A sincronização retoma automaticamente quando a rede voltar.';
-String get syncingBannerMessageString => 'Sincronizando sua agenda na nuvem...';
+    'Sem internet. Quando a rede voltar, a agenda atualiza sozinha.';
+String get syncingBannerMessageString => 'Atualizando sua agenda...';
 String formatLastSyncLabel(DateTime syncedAt) {
   final time =
       '${syncedAt.hour.toString().padLeft(2, '0')}:'
@@ -106,9 +106,9 @@ String get clientCareTitleString => 'Atendimento';
 String get clientCareTimelineTitleString => 'Histórico de negociação';
 String get clientCareEmptyTitleString => 'Nenhuma anotação ainda';
 String get clientCareEmptyMessageString =>
-    'Registre encontros, ligações e negociações aqui — sem precisar marcar horário na agenda.';
+    'Anote ligações, reuniões e o que combinou com o cliente, sem marcar horário na agenda.';
 String get clientCareComposerHintString =>
-    'Sem texto, registra o início do atendimento de hoje (uma vez). Com texto, adiciona anotação.';
+    'Deixe em branco para marcar que começou o atendimento hoje. Escreva algo para guardar um detalhe.';
 String get clientCareNoteLabelString => 'Nova anotação';
 String get clientCareAddNoteString => 'Registrar encontro';
 String get clientCareFromAppointmentString => 'Agendamento';
@@ -175,9 +175,9 @@ String get filterEmptyMessageString =>
 
 String get recurringSeriesLabelString => 'Repetir nos dias';
 String get recurringSeriesHintString =>
-    'Opcional. Cria atendimentos nas próximas 4 semanas nos dias selecionados.';
+    'Opcional. Cria os próximos 4 encontros nos dias que você marcar.';
 
-String get recurringSeriesGroupTitleString => 'Série recorrente';
+String get recurringSeriesGroupTitleString => 'Repetição semanal';
 String recurringSeriesGroupSubtitle({
   required String clientName,
   required String serviceType,
@@ -188,11 +188,10 @@ String get quickNotesDialogHintString => 'Anote algo sobre o atendimento';
 
 String get loginWelcomeString => 'Bem-vindo ao Clientta';
 String get loginSubtitleString =>
-    'Entre com seu e-mail para sincronizar sua agenda e gerenciar o plano Pro.';
-
+    'Entre com seu e-mail para usar a mesma agenda em outro celular.';
 String get registerWelcomeString => 'Crie sua conta';
 String get registerSubtitleString =>
-    'Cadastre-se para salvar sua agenda na nuvem e assinar o Clientta Pro.';
+    'Cadastre-se para guardar a agenda online e assinar o Clientta Pro.';
 String get registerString => 'Criar conta';
 String get createAccountString => 'Ainda não tem conta? Cadastre-se';
 String get alreadyHaveAccountString => 'Já tem conta? Entrar';
@@ -201,7 +200,7 @@ String get authDividerOrString => 'ou';
 String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';
 String get planProDescriptionString =>
-    'Agenda ilimitada, sincronização na nuvem, lembretes, exportação de backup e suporte prioritário.';
+    'Mais atendimentos na agenda, mesma conta em outro celular, aviso antes do horário e cópia dos seus dados.';
 String get planSubscribeButtonString => 'Assinar plano Pro';
 String get planSubscribeSuccessString => 'Assinatura ativada com sucesso!';
 String get planSubscribePendingString =>
@@ -230,11 +229,11 @@ String get planCancelSuccessString =>
 String get planCancelErrorString =>
     'Não foi possível cancelar a assinatura. Tente novamente.';
 String get planManageProString =>
-    'Sua assinatura Pro está ativa. Use as ações abaixo para sincronizar ou cancelar.';
+    'Assinatura ativa. Aqui você confere o status ou cancela.';
 String get planInactivityPolicyString =>
-    'Assinaturas Pro sem uso por 2 meses são canceladas automaticamente ao fim do período já pago. O uso inclui criar, editar ou sincronizar atendimentos.';
+    'Se ficar 2 meses sem abrir o app ou mexer na agenda, o Pro é encerrado ao fim do mês já pago.';
 String get planUpgradeHintString =>
-    'Assine o Pro para agenda ilimitada e sincronização na nuvem.';
+    'No Pro você coloca mais atendimentos na agenda e usa o mesmo login em outro celular.';
 String get planComplimentaryAccessString =>
     'Seu e-mail tem acesso Pro liberado sem assinatura paga.';
 String planDiscountAppliedString(int percentOff) =>
@@ -242,15 +241,15 @@ String planDiscountAppliedString(int percentOff) =>
 String get planDiscountPriceLabelString => 'Seu preço com desconto';
 String get planBasePriceLabelString => 'Preço padrão';
 String planFreeLimitAppointmentsMessage(int limit) =>
-    'O plano gratuito permite até $limit atendimentos ativos. Assine o Pro para continuar.';
+    'No plano gratuito cabem até $limit atendimentos ativos. Assine o Pro para continuar.';
 String planFreeLimitSeriesMessage(int limit) =>
-    'O plano gratuito permite até $limit séries recorrentes ativas. Assine o Pro para continuar.';
+    'No plano gratuito cabem até $limit repetições semanais ativas. Assine o Pro para continuar.';
 String get planFreeSyncBlockedMessageString =>
-    'A sincronização na nuvem está disponível apenas no plano Pro.';
+    'Usar a mesma agenda em mais de um aparelho é recurso do plano Pro.';
 String planFreeUsageAppointmentsLabel(int current, int max) =>
     '$current de $max atendimentos ativos';
 String planFreeUsageSeriesLabel(int current, int max) =>
-    '$current de $max séries recorrentes ativas';
+    '$current de $max repetições semanais ativas';
 String get planFreeUsageUpgradeActionString => 'Ver plano Pro';
 String get appointmentReminderTitleString => 'Atendimento em breve';
 String appointmentReminderBody({
@@ -259,44 +258,44 @@ String appointmentReminderBody({
   required String startTime,
 }) => '$clientName · $serviceType às $startTime';
 String get planReminderProRequiredString =>
-    'Lembretes antes do atendimento estão disponíveis no plano Pro.';
-String get planReminderSectionTitleString => 'Lembretes de atendimento';
+    'Aviso antes do horário é do plano Pro.';
+String get planReminderSectionTitleString => 'Lembretes';
 String get planReminderEnableLabelString => 'Avisar antes do horário';
 String get planReminderEnableSubtitleString =>
-    'Notificação local no celular — sem internet, apenas no plano Pro.';
+    'O celular avisa antes do compromisso. Funciona sem internet.';
 String get planReminderLeadLabelString => 'Antecedência';
 String reminderLeadMinutesLabel(int minutes) => '$minutes min antes';
 String get appointmentFormReminderLabelString =>
     'Lembrar antes do atendimento';
 String appointmentFormReminderSubtitle(int leadMinutes) =>
-    'Notificação $leadMinutes min antes do horário (plano Pro).';
+    'Aviso $leadMinutes min antes do horário.';
 String get appointmentFormReminderFreeSubtitleString =>
-    'Recurso do plano Pro — assine para receber avisos no celular.';
-String get reminderSettingsSavedString => 'Preferências de lembrete salvas.';
-String get planBackupSectionTitleString => 'Backup dos dados';
+    'Disponível no plano Pro.';
+String get reminderSettingsSavedString => 'Lembretes atualizados.';
+String get planBackupSectionTitleString => 'Cópia dos seus dados';
 String get planBackupDescriptionString =>
-    'Exporte um arquivo JSON com agendamentos, clientes e notas deste aparelho.';
-String get planBackupExportButtonString => 'Exportar backup JSON';
+    'Gere um arquivo com agenda, clientes e anotações deste celular. Você escolhe onde guardar.';
+String get planBackupExportButtonString => 'Salvar cópia';
 String get planBackupExportSuccessString =>
-    'Backup pronto para salvar ou compartilhar.';
+    'Arquivo pronto para guardar ou enviar.';
 String get planBackupExportErrorString =>
-    'Não foi possível exportar o backup. Tente novamente.';
+    'Não deu para salvar a cópia. Tente de novo.';
 String get planBackupProRequiredString =>
-    'Backup de dados está disponível no plano Pro.';
-String get planBackupImportButtonString => 'Importar backup JSON';
-String get planBackupImportTitleString => 'Substituir dados locais?';
+    'Salvar ou restaurar dados é recurso do plano Pro.';
+String get planBackupImportButtonString => 'Restaurar de um arquivo';
+String get planBackupImportTitleString => 'Trocar tudo pelo arquivo?';
 String get planBackupImportMessageString =>
-    'Os agendamentos e notas deste aparelho serão substituídos pelo conteúdo do arquivo. Esta ação não pode ser desfeita.';
-String get planBackupImportConfirmButtonString => 'Substituir dados';
+    'Agenda e anotações deste celular saem e entram as do arquivo. Não dá para desfazer.';
+String get planBackupImportConfirmButtonString => 'Substituir tudo';
 String planBackupImportSuccessString({
   required int appointments,
   required int notes,
 }) =>
-    'Backup restaurado: $appointments atendimentos e $notes notas de atendimento.';
+    'Pronto: $appointments atendimentos e $notes anotações restaurados.';
 String get planBackupImportErrorString =>
-    'Não foi possível importar o backup. Verifique o arquivo e tente novamente.';
+    'Não deu para restaurar. Confira o arquivo e tente de novo.';
 String get planBackupImportInvalidString =>
-    'Arquivo inválido. Use um backup exportado pelo Clientta.';
+    'Não reconhecemos o arquivo. Use uma cópia salva pelo Clientta.';
 
 const weekdayLabels = [
   'Segunda-feira',
