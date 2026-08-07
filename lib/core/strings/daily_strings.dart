@@ -211,6 +211,14 @@ String get registerString => 'Criar conta';
 String get createAccountString => 'Ainda não tem conta? Cadastre-se';
 String get alreadyHaveAccountString => 'Já tem conta? Entrar';
 String get authDividerOrString => 'ou';
+String get authHighlightOfflineString =>
+    'Agenda no celular, mesmo sem internet';
+String get authHighlightSyncString =>
+    'Mesma agenda em outro aparelho com o Pro';
+String get authHighlightSecureString =>
+    'Login seguro com e-mail ou Google';
+String get filterClearActionString => 'Limpar filtro';
+String get drawerNavSectionString => 'Navegação';
 
 String get planSettingsTitleString => 'Plano e assinatura';
 String get planProTitleString => 'Clientta Pro';

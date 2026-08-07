@@ -1,5 +1,6 @@
 export 'hub_app_bar.dart';
 export 'hub_appointment_card.dart';
+export 'hub_auth_highlights.dart';
 export 'hub_auth_scaffold.dart';
 export 'hub_client_card.dart';
 export 'hub_client_contact_bar.dart';
@@ -27,6 +28,7 @@ export 'hub_search_field.dart';
 export 'hub_service_type_filter.dart';
 export 'hub_service_type_field.dart';
 export 'hub_form_section.dart';
+export 'hub_form_sticky_bar.dart';
 export 'hub_timeline_entry_card.dart';
 export 'hub_surface.dart';
 export 'hub_switch_form_field.dart';

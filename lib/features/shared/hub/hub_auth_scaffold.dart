@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/features/shared/components/app_icon.dart';
+import 'package:clientta/features/shared/hub/hub_auth_highlights.dart';
 import 'package:clientta/features/shared/hub/hub_surface.dart';
 
 /// Layout compartilhado para telas de autenticação — limpo, focado e acessível.
@@ -12,12 +13,14 @@ class HubAuthScaffold extends StatelessWidget {
     required this.subtitle,
     required this.child,
     this.footer,
+    this.highlights,
   });
 
   final String title;
   final String subtitle;
   final Widget child;
   final Widget? footer;
+  final List<HubAuthHighlight>? highlights;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +80,10 @@ class HubAuthScaffold extends StatelessWidget {
                           ),
                         ),
                         DSSpacing.xl.y,
+                        if (highlights != null && highlights!.isNotEmpty) ...[
+                          HubAuthHighlights(items: highlights!),
+                          DSSpacing.md.y,
+                        ],
                         HubSurface(
                           padding: EdgeInsets.all(DSSpacing.lg.value),
                           child: child,
