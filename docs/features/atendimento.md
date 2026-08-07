@@ -36,7 +36,7 @@ Notas antigas em `ServiceAppointment.notes` continuam visíveis no histórico (b
 | Histórico por cliente | Sim | Sim |
 | Registrar encontro sem agenda | Sim | Sim |
 | Notas legadas de agendamento | Sim | Sim |
-| Sync Firestore de `encounterNotes` | — | Futuro |
+| Sync Firestore de `encounterNotes` | — | Sim |
 
 ## Tela (`/atendimentos`)
 
@@ -68,6 +68,8 @@ Notas antigas em `ServiceAppointment.notes` continuam visíveis no histórico (b
 - `ClientCareViewModel` — `load`, `addNote`
 - `buildCareTimeline` — agrega `EncounterNote` + notas legadas de agendamentos
 - `EncounterNoteRepository` — CRUD local offline-first
+- `EncounterNoteRepositoryRemote` — sync Pro em `users/{uid}/encounterNotes/{id}`
+- `AppointmentSyncService` — merge bidirecional de encounter notes junto com appointments
 - Rotas: [ROTEAMENTO.md](../ROTEAMENTO.md)
 
 ## Status no app

@@ -16,6 +16,7 @@ Sincronização **bidirecional** entre `DeviceJsonStore` (local) e **Firestore**
 ### Pro
 
 - Upload e download de `ServiceAppointment` sob `users/{uid}/appointments/{appointmentId}`.
+- Upload e download de `EncounterNote` sob `users/{uid}/encounterNotes/{noteId}`.
 - Resolução de conflitos: **última escrita vence** por `updatedAt` (timestamp server ou client).
 - Sync em background ao abrir app e após cada save local (debounce).
 - Indicador na UI: última sync, fila pendente, erro de rede.
@@ -41,6 +42,9 @@ users/{uid}
   appointments/{appointmentId}
     clientName, clientPhone, serviceType, ...
     updatedAt, userId
+  encounterNotes/{noteId}
+    clientPhone, clientName, body, appointmentId?, ...
+    createdAt, updatedAt, userId
 ```
 
 ## Regras de segurança
