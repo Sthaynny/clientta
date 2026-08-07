@@ -81,6 +81,12 @@ class AppDrawer extends StatelessWidget {
                     isSelected: currentRoute == AppRouters.agendas.path,
                   ),
                   HubNavTile(
+                    icon: Icons.people_outline_rounded,
+                    label: myClientsString,
+                    route: AppRouters.clients,
+                    isSelected: currentRoute == AppRouters.clients.path,
+                  ),
+                  HubNavTile(
                     icon: Icons.workspace_premium_outlined,
                     label: planSettingsTitleString,
                     route: AppRouters.planSettings,

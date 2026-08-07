@@ -230,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen>
           entry.status == AppointmentStatus.agendado.value
               ? () => viewmodel.markComplete.execute(entry)
               : null,
-      onAddNotes: () => _openClientCare(entry),
       onViewCare: () => _openClientCare(entry),
       onCancel:
           entry.status == AppointmentStatus.agendado.value

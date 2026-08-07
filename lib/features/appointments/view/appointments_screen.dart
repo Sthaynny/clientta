@@ -167,7 +167,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 status: entry.status,
                 notes: entry.notes,
                 onTap: () => _openClientCare(entry),
-                onAddNotes: () => _openClientCare(entry),
                 onViewCare: () => _openClientCare(entry),
                 onEdit: () => _openAppointmentForm(entry: entry),
                 onDelete: () => _confirmDelete(entry),

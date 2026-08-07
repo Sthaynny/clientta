@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:clientta/features/appointments/domain/models/appointment_status.dart';
-import 'package:clientta/features/appointments/domain/models/service_appointment.dart';
+import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/features/client_care/domain/care_timeline_builder.dart';
-import 'package:clientta/features/client_care/domain/models/care_timeline_entry.dart';
+import 'package:clientta/features/client_care/domain/encounter_session.dart';
 import 'package:clientta/features/client_care/domain/models/encounter_note.dart';
 
 void main() {
   group('buildCareTimeline', () {
-    test('combina notas de encontro e agendamentos legados', () {
+    test('ordena notas de encontro da mais recente para a mais antiga', () {
       final encounterNotes = [
         EncounterNote(
           id: 'note-1',
@@ -16,105 +15,68 @@ void main() {
           body: 'Cliente pediu retorno na sexta.',
           createdAt: DateTime(2026, 3, 12, 15, 30),
         ),
-      ];
-
-      final appointments = [
-        _appointment(
-          id: 'apt-1',
-          notes: 'Proposta enviada por e-mail.',
-          date: DateTime(2026, 3, 10),
-        ),
-        _appointment(
-          id: 'apt-2',
-          notes: 'Nota vinculada',
-          date: DateTime(2026, 3, 11),
-        ),
-      ];
-
-      final linkedNote = EncounterNote(
-        id: 'note-2',
-        clientPhone: '(11) 99999-0000',
-        clientName: 'Maria',
-        appointmentId: 'apt-2',
-        body: 'Negociação fechada.',
-        createdAt: DateTime(2026, 3, 11, 10),
-      );
-
-      final timeline = buildCareTimeline(
-        clientPhone: '11999990000',
-        encounterNotes: [...encounterNotes, linkedNote],
-        appointments: appointments,
-      );
-
-      expect(timeline.length, 3);
-      expect(timeline.first.body, 'Cliente pediu retorno na sexta.');
-      expect(
-        timeline.any((entry) => entry.source == CareTimelineSource.appointment),
-        isTrue,
-      );
-      expect(
-        timeline.any((entry) => entry.id == 'appointment-apt-2'),
-        isFalse,
-      );
-    });
-
-    test('ordena encontros recentes acima de agendamentos futuros', () {
-      final encounterNotes = [
         EncounterNote(
-          id: 'note-now',
+          id: 'note-2',
           clientPhone: '(11) 99999-0000',
           clientName: 'Maria',
-          body: 'Ligação de retorno hoje.',
-          createdAt: DateTime(2026, 8, 7, 15, 30),
+          body: 'Negociação fechada.',
+          createdAt: DateTime(2026, 3, 11, 10),
         ),
       ];
 
-      final appointments = [
-        _appointment(
-          id: 'apt-future',
-          notes: 'Nota em agendamento futuro.',
-          date: DateTime(2026, 8, 14),
-          updatedAt: DateTime(2026, 8, 1, 9),
-        ),
-      ];
+      final timeline = buildCareTimeline(encounterNotes: encounterNotes);
 
-      final timeline = buildCareTimeline(
-        clientPhone: '11999990000',
-        encounterNotes: encounterNotes,
-        appointments: appointments,
-      );
-
-      expect(timeline.first.body, 'Ligação de retorno hoje.');
+      expect(timeline.length, 2);
+      expect(timeline.first.body, 'Cliente pediu retorno na sexta.');
+      expect(timeline.last.body, 'Negociação fechada.');
     });
 
-    test('retorna lista vazia sem notas nem agendamentos', () {
-      final timeline = buildCareTimeline(
-        clientPhone: '11999990000',
-        encounterNotes: const [],
-        appointments: const [],
-      );
+    test('retorna lista vazia sem notas', () {
+      final timeline = buildCareTimeline(encounterNotes: const []);
 
       expect(timeline, isEmpty);
     });
   });
-}
 
-ServiceAppointment _appointment({
-  required String id,
-  required DateTime date,
-  String? notes,
-  DateTime? updatedAt,
-}) {
-  return ServiceAppointment(
-    id: id,
-    clientName: 'Maria',
-    clientPhone: '(11) 99999-0000',
-    serviceType: 'Empréstimo Consignado',
-    appointmentDate: date,
-    startTime: '09:00',
-    endTime: '10:00',
-    status: AppointmentStatus.concluido.value,
-    notes: notes,
-    updatedAt: updatedAt,
-  );
+  group('hasEncounterSessionToday', () {
+    test('detecta sessão iniciada no mesmo dia', () {
+      final reference = DateTime(2026, 8, 7, 16);
+
+      final hasSession = hasEncounterSessionToday(
+        [
+          EncounterNote(
+            id: 'note-1',
+            clientPhone: '11999990000',
+            clientName: 'Maria',
+            body: encounterStartedDefaultBodyString,
+            createdAt: DateTime(2026, 8, 7, 9),
+          ),
+        ],
+        sessionBody: encounterStartedDefaultBodyString,
+        reference: reference,
+      );
+
+      expect(hasSession, isTrue);
+    });
+
+    test('ignora sessão de outro dia', () {
+      final reference = DateTime(2026, 8, 7, 16);
+
+      final hasSession = hasEncounterSessionToday(
+        [
+          EncounterNote(
+            id: 'note-1',
+            clientPhone: '11999990000',
+            clientName: 'Maria',
+            body: encounterStartedDefaultBodyString,
+            createdAt: DateTime(2026, 8, 6, 9),
+          ),
+        ],
+        sessionBody: encounterStartedDefaultBodyString,
+        reference: reference,
+      );
+
+      expect(hasSession, isFalse);
+    });
+  });
 }

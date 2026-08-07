@@ -46,6 +46,74 @@ class HubAppointmentCard extends StatelessWidget {
     return '$startTime a $endTime, $clientName, $serviceType, ${appointmentStatus.label}';
   }
 
+  List<_CardAction> get _actions {
+    final appointmentStatus = AppointmentStatus.fromValue(status);
+    final actions = <_CardAction>[];
+
+    if (onMarkComplete != null &&
+        appointmentStatus == AppointmentStatus.agendado) {
+      actions.add(
+        _CardAction(
+          label: markCompleteString,
+          icon: Icons.check_circle_outline,
+          color: HubColors.seed,
+          onPressed: onMarkComplete!,
+        ),
+      );
+    }
+    if (onCancel != null && appointmentStatus == AppointmentStatus.agendado) {
+      actions.add(
+        _CardAction(
+          label: cancelAppointmentActionString,
+          icon: Icons.cancel_outlined,
+          color: HubColors.warning,
+          onPressed: onCancel!,
+        ),
+      );
+    }
+    if (onViewCare != null) {
+      actions.add(
+        _CardAction(
+          label: clientCareActionString,
+          icon: Icons.forum_outlined,
+          color: HubColors.schedule,
+          onPressed: onViewCare!,
+        ),
+      );
+    } else if (onAddNotes != null) {
+      actions.add(
+        _CardAction(
+          label: quickNotesString,
+          icon: Icons.note_add_outlined,
+          color: HubColors.inkMuted,
+          onPressed: onAddNotes!,
+        ),
+      );
+    }
+    if (onEdit != null) {
+      actions.add(
+        _CardAction(
+          label: editActionString,
+          icon: Icons.edit_outlined,
+          color: HubColors.inkMuted,
+          onPressed: onEdit!,
+        ),
+      );
+    }
+    if (onDelete != null) {
+      actions.add(
+        _CardAction(
+          label: deleteString,
+          icon: Icons.delete_outline,
+          color: HubColors.error,
+          onPressed: onDelete!,
+        ),
+      );
+    }
+
+    return actions;
+  }
+
   @override
   Widget build(BuildContext context) {
     final appointmentStatus = AppointmentStatus.fromValue(status);
@@ -53,6 +121,7 @@ class HubAppointmentCard extends StatelessWidget {
         appointmentStatus == AppointmentStatus.concluido &&
         notes != null &&
         notes!.trim().isNotEmpty;
+    final actions = _actions;
 
     return Semantics(
       label: _semanticLabel,
@@ -62,100 +131,61 @@ class HubAppointmentCard extends StatelessWidget {
         onTap: onTap,
         semanticsLabel: _semanticLabel,
         padding: EdgeInsets.all(DSSpacing.md.value),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ExcludeSemantics(child: _TimeBlock(start: startTime, end: endTime)),
-            DSSpacing.md.x,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DSHeadlineSmallText(
-                    clientName,
-                    color: HubColors.ink,
-                    height: 1.25,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExcludeSemantics(
+                  child: _TimeBlock(start: startTime, end: endTime),
+                ),
+                DSSpacing.md.x,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DSHeadlineSmallText(
+                        clientName,
+                        color: HubColors.ink,
+                        height: 1.25,
+                      ),
+                      if (clientPhone != null &&
+                          clientPhone!.trim().isNotEmpty) ...[
+                        DSSpacing.xxs.y,
+                        DSCaptionText(
+                          formatBrPhone(clientPhone!),
+                          color: HubColors.inkMuted,
+                        ),
+                      ],
+                      DSSpacing.xxs.y,
+                      DSCaptionText(
+                        serviceType,
+                        color: HubColors.schedule,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      if (showNotes) ...[
+                        DSSpacing.xs.y,
+                        DSCaptionText(
+                          notes!,
+                          color: HubColors.inkMuted,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                      DSSpacing.xs.y,
+                      _StatusBadge(status: appointmentStatus),
+                    ],
                   ),
-                  if (clientPhone != null && clientPhone!.trim().isNotEmpty) ...[
-                    DSSpacing.xxs.y,
-                    DSCaptionText(
-                      formatBrPhone(clientPhone!),
-                      color: HubColors.inkMuted,
-                    ),
-                  ],
-                  DSSpacing.xxs.y,
-                  DSCaptionText(
-                    serviceType,
-                    color: HubColors.inkMuted,
-                  ),
-                  if (showNotes) ...[
-                    DSSpacing.xs.y,
-                    DSCaptionText(
-                      notes!,
-                      color: HubColors.inkMuted,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                  DSSpacing.xs.y,
-                  _StatusBadge(status: appointmentStatus),
-                ],
-              ),
+                ),
+              ],
             ),
-            if (onEdit != null ||
-                onDelete != null ||
-                onMarkComplete != null ||
-                onAddNotes != null ||
-                onViewCare != null ||
-                onCancel != null)
-              Column(
-                children: [
-                  if (onMarkComplete != null &&
-                      appointmentStatus == AppointmentStatus.agendado)
-                    _ActionIcon(
-                      label: markCompleteString,
-                      icon: Icons.check_circle_outline,
-                      color: HubColors.seed,
-                      onPressed: onMarkComplete!,
-                    ),
-                  if (onCancel != null &&
-                      appointmentStatus == AppointmentStatus.agendado)
-                    _ActionIcon(
-                      label: cancelAppointmentActionString,
-                      icon: Icons.cancel_outlined,
-                      color: HubColors.warning,
-                      onPressed: onCancel!,
-                    ),
-                  if (onAddNotes != null)
-                    _ActionIcon(
-                      label: quickNotesString,
-                      icon: Icons.note_add_outlined,
-                      color: HubColors.inkMuted,
-                      onPressed: onAddNotes!,
-                    ),
-                  if (onViewCare != null)
-                    _ActionIcon(
-                      label: clientCareActionString,
-                      icon: Icons.forum_outlined,
-                      color: HubColors.schedule,
-                      onPressed: onViewCare!,
-                    ),
-                  if (onEdit != null)
-                    _ActionIcon(
-                      label: editActionString,
-                      icon: Icons.edit_outlined,
-                      color: HubColors.inkMuted,
-                      onPressed: onEdit!,
-                    ),
-                  if (onDelete != null)
-                    _ActionIcon(
-                      label: deleteString,
-                      icon: Icons.delete_outline,
-                      color: HubColors.error,
-                      onPressed: onDelete!,
-                    ),
-                ],
-              ),
+            if (actions.isNotEmpty) ...[
+              DSSpacing.sm.y,
+              const Divider(height: 1, color: HubColors.border),
+              DSSpacing.xs.y,
+              _ActionBar(actions: actions),
+            ],
           ],
         ),
       ),
@@ -163,8 +193,26 @@ class HubAppointmentCard extends StatelessWidget {
   }
 }
 
-class _ActionIcon extends StatelessWidget {
-  const _ActionIcon({
+class _ActionBar extends StatelessWidget {
+  const _ActionBar({required this.actions});
+
+  final List<_CardAction> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (var i = 0; i < actions.length; i++) ...[
+          if (i > 0) DSSpacing.xs.x,
+          Expanded(child: _ActionButton(action: actions[i])),
+        ],
+      ],
+    );
+  }
+}
+
+class _CardAction {
+  const _CardAction({
     required this.label,
     required this.icon,
     required this.color,
@@ -175,20 +223,46 @@ class _ActionIcon extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onPressed;
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({required this.action});
+
+  final _CardAction action;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: label,
-      child: IconButton(
-        tooltip: label,
-        style: IconButton.styleFrom(
-          minimumSize: const Size(HubTheme.minTouchTarget, HubTheme.minTouchTarget),
+      label: action.label,
+      child: Material(
+        color: HubColors.canvas,
+        borderRadius: BorderRadius.circular(DSSpacing.xs.value),
+        child: InkWell(
+          onTap: action.onPressed,
+          borderRadius: BorderRadius.circular(DSSpacing.xs.value),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: DSSpacing.xs.value,
+              horizontal: DSSpacing.xxs.value,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(action.icon, size: 18, color: action.color),
+                DSSpacing.xxs.y,
+                DSCaptionSmallText(
+                  action.label,
+                  color: HubColors.inkMuted,
+                  fontWeight: FontWeight.w600,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
         ),
-        onPressed: onPressed,
-        icon: Icon(icon, size: 20),
-        color: color,
       ),
     );
   }

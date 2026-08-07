@@ -7,6 +7,7 @@ import 'package:clientta/features/appointments/view/appointment_form_view_model.
 import 'package:clientta/features/appointments/view/appointments_screen.dart';
 import 'package:clientta/features/billing/view/plan_settings_screen.dart';
 import 'package:clientta/features/client_care/domain/models/client_care_args.dart';
+import 'package:clientta/features/clients/view/clients_screen.dart';
 import 'package:clientta/features/client_care/view/client_care_screen.dart';
 import 'package:clientta/features/client_care/view/client_care_view_model.dart';
 import 'package:clientta/features/home/screen/home_screen.dart';
@@ -14,6 +15,7 @@ import 'package:clientta/features/home/screen/home_screen.dart';
 final Map<String, Widget Function(BuildContext)> routes = {
   AppRouters.home.path: (context) => HomeScreen(viewmodel: dependency()),
   AppRouters.agendas.path: (context) => AppointmentsScreen(viewmodel: dependency()),
+  AppRouters.clients.path: (context) => ClientsScreen(viewmodel: dependency()),
   AppRouters.appointmentForm.path: (context) {
     final rawArgs = ModalRoute.of(context)?.settings.arguments;
     ServiceAppointment? editEntry;
@@ -51,7 +53,6 @@ final Map<String, Widget Function(BuildContext)> routes = {
     return ClientCareScreen(
       viewmodel: ClientCareViewModel(
         encounterRepository: dependency(),
-        appointmentRepository: dependency(),
         syncService: dependency(),
         args: args,
       ),
@@ -62,6 +63,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
 enum AppRouters {
   home,
   agendas,
+  clients,
   appointmentForm,
   clientCare,
   planSettings;
@@ -71,6 +73,7 @@ enum AppRouters {
   String get path => switch (this) {
     home => '/',
     agendas => '/agendas',
+    clients => '/clientes',
     appointmentForm => '/agendas/registrar',
     clientCare => '/atendimentos',
     planSettings => '/plano',

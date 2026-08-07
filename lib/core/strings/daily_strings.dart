@@ -4,6 +4,47 @@ String homeDayStatAppointments(int count) =>
 String get appointmentsTodayString => 'Agendamentos de hoje';
 String get noAppointmentsTodayString => 'Nenhum agendamento para hoje.';
 String get myAgendaString => 'Minha Agenda';
+String get myClientsString => 'Meus Clientes';
+String get clientsSearchHintString => 'Buscar por nome ou telefone';
+String get clientsEmptyTitleString => 'Nenhum cliente ainda';
+String get clientsEmptyMessageString =>
+    'Registre atendimentos na agenda para ver seus clientes reunidos aqui.';
+String get clientsSearchEmptyTitleString => 'Nenhum cliente encontrado';
+String get clientsSearchEmptyMessageString =>
+    'Tente outro nome ou telefone, ou limpe a busca.';
+String clientProfileAppointmentsLabel(int count) =>
+    count == 1 ? '1 agendamento' : '$count agendamentos';
+String clientProfileEncountersLabel(int count) =>
+    count == 1 ? '1 encontro' : '$count encontros';
+String clientProfileLastActivityLabel(DateTime date) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final day = DateTime(date.year, date.month, date.day);
+  if (day == today) return 'Ativo hoje';
+  final yesterday = today.subtract(const Duration(days: 1));
+  if (day == yesterday) return 'Ativo ontem';
+  final dayLabel = date.day.toString().padLeft(2, '0');
+  final monthLabel = date.month.toString().padLeft(2, '0');
+  return 'Ativo em $dayLabel/$monthLabel';
+}
+String clientProfileNextAppointmentLabel({
+  required DateTime date,
+  required String startTime,
+}) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final appointmentDay = DateTime(date.year, date.month, date.day);
+  if (appointmentDay == today) {
+    return 'Próximo: hoje às $startTime';
+  }
+  final tomorrow = today.add(const Duration(days: 1));
+  if (appointmentDay == tomorrow) {
+    return 'Próximo: amanhã às $startTime';
+  }
+  final dayLabel = date.day.toString().padLeft(2, '0');
+  final monthLabel = date.month.toString().padLeft(2, '0');
+  return 'Próximo: $dayLabel/$monthLabel às $startTime';
+}
 String get addAppointmentString => 'Registrar agendamento';
 String get editAppointmentString => 'Editar agendamento';
 String get clientNameString => 'Nome do cliente';
@@ -62,7 +103,7 @@ String get clientCareEmptyTitleString => 'Nenhuma anotação ainda';
 String get clientCareEmptyMessageString =>
     'Registre encontros, ligações e negociações aqui — sem precisar marcar horário na agenda.';
 String get clientCareComposerHintString =>
-    'Opcional: anote o que aconteceu. Sem texto, registra só o início do atendimento.';
+    'Sem texto, registra o início do atendimento de hoje (uma vez). Com texto, adiciona anotação.';
 String get clientCareNoteLabelString => 'Nova anotação';
 String get clientCareAddNoteString => 'Registrar encontro';
 String get clientCareFromAppointmentString => 'Agendamento';
@@ -71,6 +112,8 @@ String get clientCareScheduleAppointmentString => 'Agendar na home';
 String get clientCareScheduleAppointmentHintString =>
     'Cria um agendamento que aparece no painel do dia.';
 String get encounterStartedDefaultBodyString => 'Atendimento iniciado.';
+String get encounterAlreadyRegisteredTodayString =>
+    'Atendimento de hoje já registrado para este cliente.';
 String get clientCallActionString => 'Ligar';
 String get clientWhatsAppActionString => 'WhatsApp';
 String get clientContactLaunchFailedString =>

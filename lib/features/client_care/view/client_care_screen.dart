@@ -1,6 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/router/app_router.dart';
+import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
@@ -43,7 +44,14 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
     if (!mounted) return;
     if (viewmodel.addNote.completed) {
       _noteController.clear();
-      context.showSnackBarSuccess(encounterNoteSavedString);
+      if (viewmodel.addNote.result case Ok(value: final addResult)
+          when addResult != null) {
+        if (addResult == AddEncounterNoteResult.saved) {
+          context.showSnackBarSuccess(encounterNoteSavedString);
+        } else {
+          context.showSnackBarInfo(encounterAlreadyRegisteredTodayString);
+        }
+      }
       viewmodel.addNote.clearResult();
     } else if (viewmodel.addNote.error) {
       context.showSnackBarError(errorSaveString);
@@ -162,17 +170,8 @@ class _ClientCareScreenState extends State<ClientCareScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (entry.source == CareTimelineSource.appointment)
-                  _SourceBadge(label: clientCareFromAppointmentString),
               ],
             ),
-            if (entry.contextLabel != null) ...[
-              DSSpacing.xxs.y,
-              DSCaptionSmallText(
-                entry.contextLabel!,
-                color: HubColors.inkMuted,
-              ),
-            ],
             if (entry.serviceType != null) ...[
               DSSpacing.xxs.y,
               DSCaptionSmallText(
@@ -214,15 +213,51 @@ class _ClientHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DSHeadlineSmallText(clientName, color: HubColors.ink),
-          if (clientPhone.trim().isNotEmpty) ...[
-            DSSpacing.xxs.y,
-            DSCaptionText(formatBrPhone(clientPhone), color: HubColors.inkMuted),
-          ],
-          if (serviceType != null && serviceType!.trim().isNotEmpty) ...[
-            DSSpacing.xs.y,
-            DSCaptionText(serviceType!, color: HubColors.schedule),
-          ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HubClientAvatar(
+                initials: clientInitials(clientName),
+                radius: 28,
+              ),
+              DSSpacing.md.x,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DSHeadlineSmallText(clientName, color: HubColors.ink),
+                    if (clientPhone.trim().isNotEmpty) ...[
+                      DSSpacing.xxs.y,
+                      DSCaptionText(
+                        formatBrPhone(clientPhone),
+                        color: HubColors.inkMuted,
+                      ),
+                    ],
+                    if (serviceType != null && serviceType!.trim().isNotEmpty) ...[
+                      DSSpacing.xs.y,
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: HubColors.scheduleMuted,
+                          borderRadius: BorderRadius.circular(DSSpacing.xs.value),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: DSSpacing.sm.value,
+                            vertical: DSSpacing.xxs.value,
+                          ),
+                          child: DSCaptionSmallText(
+                            serviceType!,
+                            color: HubColors.schedule,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
           DSSpacing.md.y,
           HubClientContactBar(
             clientPhone: clientPhone,
@@ -267,33 +302,6 @@ class _ClientHeader extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class _SourceBadge extends StatelessWidget {
-  const _SourceBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: HubColors.scheduleMuted,
-        borderRadius: BorderRadius.circular(DSSpacing.xs.value),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: DSSpacing.sm.value,
-          vertical: DSSpacing.xxs.value,
-        ),
-        child: DSCaptionSmallText(
-          label,
-          color: HubColors.schedule,
-          fontWeight: FontWeight.w700,
-        ),
       ),
     );
   }
