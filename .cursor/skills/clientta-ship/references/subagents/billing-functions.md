@@ -4,7 +4,7 @@ Papel: implementar callables e webhook Stripe em `functions/` — backend da ass
 
 ## Docs
 
-- `docs/tasks/a_fazer/billing.md` — C-301, C-302
+- `docs/tasks/finalizadas/billing.md` — C-301, C-302, C-305
 - `docs/billing/readme.md`
 - `functions/` — `index.js`, `billing.js`, `pricing.js`, `stripe_client.js`
 

@@ -36,7 +36,7 @@ rg -l "features/classes|features/activities" lib test
 3. **Migrar imports** — `package:clientta/...`; atualizar `pubspec`, `launch.json`, testes.
 4. **Limpar DI e router** — remover registros GetIt e rotas legadas em `app_router.dart`.
 5. **Limpar strings** — `lib/core/strings/` sem copy universitária.
-6. **Atualizar docs** — `mapeamento_tarefas.md`, `tasks/a_fazer/engenharia.md` (status C-106/C-403).
+6. **Atualizar docs** — `tasks/finalizadas/engenharia.md` e `tasks/README.md`.
 7. **Verificar** — `flutter analyze` + `flutter test` sem referências quebradas.
 
 ## Regras

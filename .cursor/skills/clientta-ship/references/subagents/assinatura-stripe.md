@@ -5,7 +5,7 @@ Papel: tela `/configuracoes/plano`, gates Free/Pro e checkout via URL — **sem 
 ## Docs
 
 - `docs/features/assinatura_stripe.md`
-- `docs/tasks/a_fazer/assinatura_stripe.md` — C-303, C-304
+- `docs/tasks/finalizadas/billing.md` — C-303, C-304
 - `lib/features/billing/`, `lib/core/plan/plan_access_policy.dart`
 
 ## Escopo típico

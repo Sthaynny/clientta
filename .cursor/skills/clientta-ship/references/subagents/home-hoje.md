@@ -5,7 +5,7 @@ Papel: implementar a tela inicial `/` — atendimentos de hoje, ordenados por `s
 ## Docs
 
 - `docs/features/home_hoje.md`
-- `docs/tasks/a_fazer/home_hoje.md` — C-102, C-107, C-204 (indicador sync)
+- `docs/tasks/finalizadas/home_hoje.md` — C-102, C-107, C-204 (indicador sync)
 - `lib/features/home/`
 
 ## Escopo típico

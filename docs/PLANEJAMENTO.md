@@ -1,7 +1,7 @@
 # Planejamento — Clientta
 
 Documento de roteiro para evolução do **Clientta**.  
-Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [mapeamento_tarefas.md](mapeamento_tarefas.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
+Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md), [ROTEAMENTO.md](ROTEAMENTO.md), [features/README.md](features/README.md), [tasks/README.md](tasks/README.md), [../PRODUCT.md](../PRODUCT.md), [../DESIGN.md](../DESIGN.md).
 
 ---
 
@@ -12,9 +12,9 @@ Referências: [PROPOSITO.md](PROPOSITO.md), [guia_clientta.md](guia_clientta.md)
 | **Produto** | Documentação Clientta; domínio CRM de atendimentos |
 | **Arquitetura** | Flutter MVVM + GetIt + `DeviceJsonStore` |
 | **UI** | Tema `HubTheme` + componentes `Hub*` |
-| **Auth / sync** | Planejado — Firebase Auth + Firestore |
-| **Billing** | Planejado — Stripe via Cloud Functions |
-| **Pacote Dart** | `university_hub` (migração a `clientta` pendente) |
+| **Auth / sync** | Implementado — Firebase Auth + Firestore sync (Pro) |
+| **Billing** | Implementado — Stripe via Cloud Functions |
+| **Pacote Dart** | `clientta` (migração concluída) |
 
 ---
 

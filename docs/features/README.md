@@ -7,10 +7,10 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 
 | Funcionalidade | Arquivo | Plano principal | Status |
 |----------------|---------|-----------------|--------|
-| Início — painel do dia | [home_hoje.md](home_hoje.md) | Ambos | Planejado (migração) |
-| Minha Agenda + formulário | [agendas.md](agendas.md) | Free (limites) / Pro | Planejado |
-| Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Planejado |
-| Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Planejado |
+| Início — painel do dia | [home_hoje.md](home_hoje.md) | Ambos | Implementado |
+| Minha Agenda + formulário | [agendas.md](agendas.md) | Free (limites) / Pro | Implementado |
+| Sincronização na nuvem | [sincronizacao_nuvem.md](sincronizacao_nuvem.md) | Pro | Implementado |
+| Assinatura Stripe (Pro) | [assinatura_stripe.md](assinatura_stripe.md) | Pro | Implementado |
 
 ## Comparativo Free vs Pro
 
@@ -25,7 +25,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Lembretes locais | — | Sim (futuro) |
 | Suporte | Comunidade | Prioritário (futuro) |
 
-Limites Free são enforcement no app + validação opcional em Functions.
+Limites Free são enforcement no app via `PlanAccessPolicy`.
 
 ## Documentação relacionada
 
@@ -33,5 +33,5 @@ Limites Free são enforcement no app + validação opcional em Functions.
 - [PROPOSITO.md](../PROPOSITO.md) — visão do produto
 - [PLANEJAMENTO.md](../PLANEJAMENTO.md) — fases de entrega
 - [billing/readme.md](../billing/readme.md) — setup Stripe
-- [mapeamento_tarefas.md](../mapeamento_tarefas.md) — tarefas com objetivo e impacto
-- [tasks/README.md](../tasks/README.md) — tarefas a fazer e finalizadas
+- [legal/politica-assinatura.md](../legal/politica-assinatura.md) — regras da assinatura Pro
+- [tasks/README.md](../tasks/README.md) — backlog e entregas

@@ -36,7 +36,7 @@ lib/features/<feature>/
 |------|------|----------------|
 | 1 MVP | auth + agendamentos locais | C-101…C-109 |
 | 2 Pro | sync Firestore | C-201…C-204 |
-| 3 Pro | billing Stripe | C-301…C-304 |
+| 3 Pro | billing Stripe | C-301…C-305 |
 | Contínuo | qualidade + legado | C-401…C-404, C-106, C-403 |
 
 ## Verificação obrigatória

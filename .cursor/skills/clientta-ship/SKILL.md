@@ -29,7 +29,7 @@ Progresso:
 | Fonte | Extrair |
 |-------|---------|
 | `docs/features/*.md` | comportamento, Free/Pro, rotas |
-| `docs/tasks/a_fazer/*.md` | IDs C-xxx, status, impacto |
+| `docs/tasks/README.md` | IDs C-xxx — finalizadas e a fazer |
 | `docs/PLANEJAMENTO.md` | fase e dependências |
 | `lib/features/appointments/` | padrão de referência (MVVM) |
 | `.cursor/rules/clientta-*.mdc` | arquitetura obrigatória |

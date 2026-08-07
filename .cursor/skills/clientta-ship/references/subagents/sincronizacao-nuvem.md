@@ -5,7 +5,7 @@ Papel: espelhar `ServiceAppointment` no Firestore com sync bidirecional — **so
 ## Docs
 
 - `docs/features/sincronizacao_nuvem.md`
-- `docs/tasks/a_fazer/sincronizacao_nuvem.md` — C-201…C-204
+- `docs/tasks/finalizadas/sincronizacao_nuvem.md` — C-201…C-203
 - `firestore.rules`, `firestore.indexes.json`
 
 ## Escopo típico

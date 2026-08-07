@@ -13,11 +13,11 @@ O <strong>Clientta</strong> é um <strong>CRM de atendimentos</strong> para quem
 | [DESIGN.md](DESIGN.md) | Cena de uso, paleta e componentes |
 | [docs/features/README.md](docs/features/README.md) | Catálogo Free / Pro |
 | [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.md) | Fases de entrega (MVP → billing) |
-| [docs/mapeamento_tarefas.md](docs/mapeamento_tarefas.md) | Mapeamento de tarefas (objetivo e impacto) |
-| [docs/tasks/README.md](docs/tasks/README.md) | Tarefas por feature (a fazer / finalizadas) |
+| [docs/tasks/README.md](docs/tasks/README.md) | Tarefas (finalizadas / a fazer) |
 | [docs/guia_clientta.md](docs/guia_clientta.md) | Como rodar, Firebase e arquitetura |
-| [docs/billing/readme.md](docs/billing/readme.md) | Stripe, secrets e webhook |
+| [docs/billing/readme.md](docs/billing/readme.md) | Stripe — setup operacional |
 | [docs/legal/politica-privacidade.md](docs/legal/politica-privacidade.md) | Política de privacidade (LGPD) |
+| [docs/legal/politica-assinatura.md](docs/legal/politica-assinatura.md) | Política de assinatura Pro |
 | [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md) | Rotas do app |
 
 ## Stack

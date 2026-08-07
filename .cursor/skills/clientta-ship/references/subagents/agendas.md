@@ -5,7 +5,7 @@ Papel: CRUD de `ServiceAppointment` em `/agendas` e `/agendas/registrar`.
 ## Docs
 
 - `docs/features/agendas.md`
-- `docs/tasks/a_fazer/agendas.md` — C-101, C-103, C-104, C-108
+- `docs/tasks/finalizadas/agendas.md` — C-101, C-103, C-104, C-108
 - `lib/features/appointments/` (padrão de referência)
 
 ## Escopo típico

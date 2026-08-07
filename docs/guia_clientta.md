@@ -28,7 +28,7 @@ Variáveis e config:
 lib/features/
   home/              # Painel do dia (/)
   appointments/      # Agenda + formulário (/agendas, /agendas/registrar)
-  subscription/      # Plano Pro (/configuracoes/plano)
+  billing/           # Plano Pro (/configuracoes/plano)
   auth/              # Login Firebase
   shared/hub/        # Componentes Hub*
 lib/core/

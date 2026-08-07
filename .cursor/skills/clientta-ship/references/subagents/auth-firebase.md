@@ -4,7 +4,7 @@ Papel: login/cadastro com Firebase Auth; gate mínimo para sync e billing.
 
 ## Docs
 
-- `docs/tasks/a_fazer/auth_firebase.md` — C-105
+- `docs/tasks/finalizadas/auth_firebase.md` — C-105
 - `docs/guia_clientta.md`
 - `lib/features/auth/`, `lib/core/config/firebase_bootstrap.dart`
 
@@ -41,7 +41,7 @@ Papel: login/cadastro com Firebase Auth; gate mínimo para sync e billing.
 
 ```text
 Você implementa Firebase Auth no Clientta (C-105).
-Leia docs/tasks/a_fazer/auth_firebase.md e lib/features/auth/.
+Leia docs/tasks/finalizadas/auth_firebase.md e lib/features/auth/.
 Escopo: …
 Métodos: e-mail/senha [e Google se pedido].
 ```
