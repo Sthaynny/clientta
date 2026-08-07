@@ -263,6 +263,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         child: ListView(
           padding: EdgeInsets.all(DSSpacing.md.value),
           children: [
+            HubScreenIntro(
+              icon: Icons.event_available_outlined,
+              message: appointmentFormIntroString,
+              iconColor: HubColors.schedule,
+            ),
+            DSSpacing.lg.y,
             HubFormSection(
               title: formSectionClientString,
               children: [
@@ -381,55 +387,54 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ],
             ),
             if (!widget.isEdit && !viewmodel.lockClientFields) ...[
-              DSSpacing.md.y,
-              HubSwitchFormField(
-                label: appointmentFormReminderLabelString,
-                subtitle:
-                    viewmodel.hasProReminders
-                        ? appointmentFormReminderSubtitle(
-                          viewmodel.reminderLeadMinutes,
-                        )
-                        : appointmentFormReminderFreeSubtitleString,
-                value: viewmodel.hasProReminders && viewmodel.remindersEnabled,
-                onChanged: (enabled) async {
-                  if (!viewmodel.hasProReminders) {
-                    context.showSnackBarWarning(
-                      AppointmentReminderCoordinator.proRequiredMessage(),
-                    );
-                    await context.go(AppRouters.planSettings);
-                    return;
-                  }
-                  final updated = await viewmodel.updateRemindersEnabled(
-                    enabled,
-                  );
-                  if (!mounted) return;
-                  if (updated) {
-                    setState(() {});
-                    if (context.mounted) {
-                      context.showSnackBarSuccess(reminderSettingsSavedString);
-                    }
-                  }
-                },
-              ),
-            ],
-            if (!widget.isEdit && !viewmodel.lockClientFields) ...[
-              DSSpacing.md.y,
-              DSCaptionText(
-                recurringSeriesLabelString,
-                color: HubColors.inkMuted,
-                fontWeight: FontWeight.w600,
-              ),
-              DSSpacing.xxs.y,
-              DSCaptionText(
-                recurringSeriesHintString,
-                color: HubColors.inkMuted,
-              ),
-              DSSpacing.sm.y,
-              HubWeekdayChips(
-                selectedWeekdays: viewmodel.selectedWeekdays,
-                onChanged: (value) {
-                  setState(() => viewmodel.selectedWeekdays = value);
-                },
+              DSSpacing.lg.y,
+              HubFormSection(
+                title: formSectionOptionsString,
+                subtitle: recurringSeriesHintString,
+                children: [
+                  HubSwitchFormField(
+                    label: appointmentFormReminderLabelString,
+                    subtitle:
+                        viewmodel.hasProReminders
+                            ? appointmentFormReminderSubtitle(
+                              viewmodel.reminderLeadMinutes,
+                            )
+                            : appointmentFormReminderFreeSubtitleString,
+                    value: viewmodel.hasProReminders && viewmodel.remindersEnabled,
+                    onChanged: (enabled) async {
+                      if (!viewmodel.hasProReminders) {
+                        context.showSnackBarWarning(
+                          AppointmentReminderCoordinator.proRequiredMessage(),
+                        );
+                        await context.go(AppRouters.planSettings);
+                        return;
+                      }
+                      final updated = await viewmodel.updateRemindersEnabled(
+                        enabled,
+                      );
+                      if (!mounted) return;
+                      if (updated) {
+                        setState(() {});
+                        if (context.mounted) {
+                          context.showSnackBarSuccess(reminderSettingsSavedString);
+                        }
+                      }
+                    },
+                  ),
+                  DSSpacing.md.y,
+                  DSCaptionText(
+                    recurringSeriesLabelString,
+                    color: HubColors.inkMuted,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  DSSpacing.sm.y,
+                  HubWeekdayChips(
+                    selectedWeekdays: viewmodel.selectedWeekdays,
+                    onChanged: (value) {
+                      setState(() => viewmodel.selectedWeekdays = value);
+                    },
+                  ),
+                ],
               ),
             ],
             DSSpacing.xl.y,
