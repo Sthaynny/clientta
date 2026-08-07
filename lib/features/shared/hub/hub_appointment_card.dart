@@ -300,7 +300,7 @@ class _ActionButton extends StatelessWidget {
     final actionBg =
         prominent ? action.color.withValues(alpha: 0.1) : theme.scaffoldBackgroundColor;
     final labelColor =
-        prominent ? action.color : theme.colorScheme.onSurfaceVariant;
+        prominent ? action.color : HubColors.inkMuted;
     final isFullWidth = layout == _ActionButtonLayout.fullWidth;
 
     return Semantics(
@@ -308,7 +308,7 @@ class _ActionButton extends StatelessWidget {
       label: action.label,
       enabled: enabled,
       child: Opacity(
-        opacity: enabled ? 1 : 0.38,
+        opacity: enabled ? 1 : 0.55,
         child: Material(
           color: actionBg,
           borderRadius: BorderRadius.circular(DSSpacing.xs.value),

@@ -109,6 +109,7 @@ Scaffold(
 
 - [ ] Strings em `daily_strings.dart` / `strings.dart` — copy alinhada ao CRM
 - [ ] Tema via `HubTheme` / `HubColors`
+- [ ] Texto secundário: `HubColors.inkMuted` em `surface`/`canvas` (≥4.5:1); hints via `InputDecorationTheme.hintStyle`
 - [ ] Estados vazio, **shimmer loading** e erro
 - [ ] Sem `CircularProgressIndicator` em telas de feature
 - [ ] Analyzer limpo em `lib/`

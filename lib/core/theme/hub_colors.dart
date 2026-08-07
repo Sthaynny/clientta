@@ -8,8 +8,12 @@ abstract final class HubColors {
   static const Color canvas = Color(0xFFF4F6F8);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color ink = Color(0xFF1A1F24);
-  static const Color inkMuted = Color(0xFF5C6670);
-  static const Color border = Color(0xFFE2E6EA);
+  /// Texto secundário — ≥4.5:1 em `surface` e `canvas` (WCAG AA corpo).
+  static const Color inkMuted = Color(0xFF475467);
+  /// Contorno de componentes — ≥3:1 em `surface` (WCAG UI).
+  static const Color border = Color(0xFF8A939C);
+  /// Contorno decorativo leve (não usar para texto).
+  static const Color borderSubtle = Color(0xFFE2E6EA);
   static const Color schedule = Color(0xFF2D6A8F);
   static const Color scheduleMuted = Color(0xFFE8F1F6);
   static const Color success = Color(0xFF2E7D52);

@@ -17,8 +17,9 @@ Tom **profissional e confiável** — clareza operacional.
 | `canvas` | Fundo do app | `#F4F6F8` |
 | `surface` | Cards, sheets | `#FFFFFF` |
 | `ink` | Texto principal | `#1A1F24` |
-| `inkMuted` | Subtítulos, meta (telefone, tipo) | `#5C6670` |
-| `border` | Contornos sutis | `#E2E6EA` |
+| `inkMuted` | Subtítulos, meta (telefone, tipo) | `#475467` |
+| `border` | Contornos de componentes (≥3:1 em `surface`) | `#8A939C` |
+| `borderSubtle` | Divisores decorativos (não para texto) | `#E2E6EA` |
 | `schedule` | Bloco de horário / badge de serviço | `#2D6A8F` |
 | `success` | Status concluído | `#2E7D52` |
 | `warning` | Status agendado / pendente | `#C47A2A` |

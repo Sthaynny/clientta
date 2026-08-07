@@ -28,6 +28,9 @@ abstract final class HubTheme {
         onSecondary: Colors.white,
         surface: HubColors.surface,
         onSurface: HubColors.ink,
+        onSurfaceVariant: HubColors.inkMuted,
+        outline: HubColors.border,
+        outlineVariant: HubColors.borderSubtle,
         error: HubColors.error,
         onError: Colors.white,
       ),
@@ -99,6 +102,17 @@ abstract final class HubTheme {
           borderSide: const BorderSide(color: HubColors.error, width: 2),
         ),
         labelStyle: const TextStyle(color: HubColors.inkMuted),
+        floatingLabelStyle: const TextStyle(color: HubColors.inkMuted),
+        hintStyle: const TextStyle(
+          color: HubColors.inkMuted,
+          fontSize: 16,
+          height: 1.25,
+        ),
+        helperStyle: const TextStyle(
+          color: HubColors.inkMuted,
+          fontSize: 13,
+          height: 1.35,
+        ),
         errorStyle: const TextStyle(color: HubColors.error, fontSize: 13),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

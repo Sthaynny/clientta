@@ -276,7 +276,7 @@ class _HomeSyncStatusSectionState extends State<_HomeSyncStatusSection> {
   }
 
   Widget _content(BuildContext context) {
-    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final muted = HubColors.inkMuted;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
