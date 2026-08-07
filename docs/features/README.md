@@ -21,7 +21,7 @@ Monetização: **assinatura mensal Stripe** (tier Pro); entitlement em Firestore
 | Área | Free | Pro |
 |------|------|-----|
 | Painel do dia | Completo | Completo |
-| Cadastro de atendimentos | Até **50** ativos (configurável) | Ilimitado |
+| Cadastro de atendimentos | Até **25** ativos (configurável) | Ilimitado |
 | Lista de clientes com busca | Sim | Sim |
 | Histórico de negociação por cliente | Sim | Sim |
 | Séries recorrentes | Até **3** séries ativas | Ilimitado |

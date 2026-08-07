@@ -3,7 +3,7 @@ import 'package:clientta/features/appointments/domain/models/service_appointment
 import 'package:clientta/features/billing/domain/entities/user_subscription.dart';
 
 abstract final class PlanAccessPolicy {
-  static const int freeMaxActiveAppointments = 50;
+  static const int freeMaxActiveAppointments = 25;
   static const int freeMaxActiveSeries = 3;
 
   static bool hasProAccess(UserSubscription subscription) {

@@ -17,7 +17,7 @@ Papel: tela `/configuracoes/plano`, gates Free/Pro e checkout via URL — **sem 
 | Tela plano | Preço, assinar, cancelar, sincronizar status |
 | Checkout | `url_launcher` com URL de `createSubscription` |
 | Return URL | `billing_return_url.dart` — deep link / web |
-| Gates | Limites Free (50 ativos, 3 séries); bloqueio sync sem Pro |
+| Gates | Limites Free (25 ativos, 3 séries); bloqueio sync sem Pro |
 | Leitura only | Cliente **não** escreve `subscription` |
 
 ## Callables (consumir, não implementar aqui)
