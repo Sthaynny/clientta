@@ -1,25 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:clientta/core/storage/app_profile_settings.dart';
+import 'package:clientta/features/appointments/domain/reminders/appointment_reminder_settings.dart';
 
 void main() {
-  test('AppProfileSettings usa rótulo padrão sem nome', () {
-    const settings = AppProfileSettings();
-    expect(settings.displayUniversityLabel, 'Sua universidade');
-  });
-
-  test('AppProfileSettings round-trip no mapa de perfil', () {
-    const original = AppProfileSettings(universityName: '  Minha Faculdade  ');
-    final map = original.toMap();
-    final restored = AppProfileSettings.fromMap(map);
-    expect(restored.universityName, 'Minha Faculdade');
-    expect(restored.displayUniversityLabel, 'Minha Faculdade');
-  });
-
-  test('nome vazio não persiste chave', () {
-    const settings = AppProfileSettings(universityName: '   ');
-    expect(settings.toMap(), isEmpty);
-  });
-
   test('onboardingSeen round-trip no mapa de perfil', () {
     const original = AppProfileSettings(onboardingSeen: true);
     final map = original.toMap();
@@ -29,6 +12,19 @@ void main() {
 
   test('onboardingSeen false não persiste chave', () {
     const settings = AppProfileSettings(onboardingSeen: false);
-    expect(settings.toMap(), isEmpty);
+    expect(settings.toMap().containsKey('onboardingSeen'), isFalse);
+  });
+
+  test('appointmentReminders round-trip no mapa de perfil', () {
+    const original = AppProfileSettings(
+      appointmentReminders: AppointmentReminderSettings(
+        enabled: false,
+        leadMinutes: 30,
+      ),
+    );
+    final map = original.toMap();
+    final restored = AppProfileSettings.fromMap(map);
+    expect(restored.appointmentReminders.enabled, isFalse);
+    expect(restored.appointmentReminders.leadMinutes, 30);
   });
 }

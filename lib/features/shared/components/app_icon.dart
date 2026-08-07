@@ -7,9 +7,6 @@ class AppIcon extends StatelessWidget {
 
   const AppIcon.onDark({super.key, this.size = 60}) : _path = _onDarkPath;
 
-  /// Alias legado — preferir [AppIcon.onDark].
-  const AppIcon.hub({super.key, this.size = 60}) : _path = _onDarkPath;
-
   static const _onLightPath = 'assets/images/app-icon-on-light.png';
   static const _onDarkPath = 'assets/images/app-icon-mark.png';
 

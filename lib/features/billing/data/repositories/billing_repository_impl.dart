@@ -33,15 +33,6 @@ class BillingRepositoryImpl implements BillingRepository {
       _datasource.watchSubscription();
 
   @override
-  Future<BillingEntitlement> getBillingEntitlement() async {
-    try {
-      return await _datasource.getBillingEntitlement();
-    } catch (_) {
-      return BillingEntitlement.none;
-    }
-  }
-
-  @override
   Future<BillingEntitlement> syncEntitlements() async {
     try {
       return await _datasource.syncEntitlements();

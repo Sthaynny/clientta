@@ -66,19 +66,6 @@ class FirebaseBillingDatasource {
     return Map<String, dynamic>.from(response);
   }
 
-  Future<BillingEntitlement> getBillingEntitlement() async {
-    final uid = _uid;
-    if (uid == null) return BillingEntitlement.none;
-
-    final snapshot = await _firestore.collection('users').doc(uid).get();
-    final entitlementRaw = snapshot.data()?['billingEntitlement'];
-    if (entitlementRaw is! Map) return BillingEntitlement.none;
-
-    return BillingEntitlement.fromMap(
-      Map<String, dynamic>.from(entitlementRaw),
-    );
-  }
-
   Future<BillingEntitlement> syncEntitlements() async {
     final response = await _callFunction('syncEntitlements', {});
     final entitlementRaw = response['billingEntitlement'];

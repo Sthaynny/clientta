@@ -3,19 +3,24 @@ import 'package:clientta/core/utils/result.dart';
 import 'package:clientta/features/auth/data/auth_repository_firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class _MockUserCredential extends Mock implements UserCredential {}
 
+class _MockGoogleSignIn extends Mock implements GoogleSignIn {}
+
 void main() {
   late _MockFirebaseAuth auth;
+  late _MockGoogleSignIn googleSignIn;
   late AuthRepositoryFirebase repository;
 
   setUp(() {
     auth = _MockFirebaseAuth();
-    repository = AuthRepositoryFirebase(auth: auth);
+    googleSignIn = _MockGoogleSignIn();
+    repository = AuthRepositoryFirebase(auth: auth, googleSignIn: googleSignIn);
   });
 
   group('AuthRepositoryFirebase', () {
@@ -75,6 +80,7 @@ void main() {
 
     test('signOut succeeds', () async {
       when(() => auth.signOut()).thenAnswer((_) async {});
+      when(() => googleSignIn.signOut()).thenAnswer((_) async => null);
 
       final result = await repository.signOut();
 

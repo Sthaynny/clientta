@@ -9,8 +9,6 @@ abstract class BillingRepository {
 
   Stream<UserSubscription> watchSubscription();
 
-  Future<BillingEntitlement> getBillingEntitlement();
-
   Future<BillingEntitlement> syncEntitlements();
 
   Future<SubscriptionCheckout> createSubscription({
