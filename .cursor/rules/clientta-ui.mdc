@@ -26,7 +26,9 @@ Barrel: `lib/features/shared/hub/hub.dart`.
 | `HubClientContactBar` | Ligar e WhatsApp no atendimento |
 | `HubSectionHeader` | Seções na home e lista |
 | `HubDayHeader` | Cabeçalho “Hoje” no painel do dia |
-| `HubEmptyState` | Sem atendimentos — CTA registrar |
+| `HubEmptyState` | Sem atendimentos — CTA registrar; `useSurface: true` em seções |
+| `HubAuthHighlights` | Destaques em login/cadastro |
+| `HubFormStickyBar` | CTA fixo no rodapé de formulários longos |
 | `HubFab` | FAB em `/agendas` |
 | `HubOfflineBanner` | Offline / sync pendente |
 | `HubShimmer` / `HubShimmerBox` | Base do loading skeleton |

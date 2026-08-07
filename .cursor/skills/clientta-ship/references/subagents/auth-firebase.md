@@ -36,6 +36,7 @@ Papel: login/cadastro com Firebase Auth; gate mínimo para sync e billing.
 
 - Fluxo manual: cadastro → login → logout
 - `flutter analyze` + `flutter test` (mocks de Auth se aplicável)
+- Telas auth: `HubAuthScaffold` com `HubAuthHighlights`; ver `hub_auth_highlights.dart`
 
 ## Prompt sugerido (Task)
 
