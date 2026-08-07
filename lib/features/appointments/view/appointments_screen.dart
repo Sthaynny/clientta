@@ -120,24 +120,11 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
     return Padding(
       padding: EdgeInsets.only(bottom: DSSpacing.md.value),
-      child: DropdownButtonFormField<String?>(
-        key: ValueKey(_serviceTypeFilter),
-        initialValue: _serviceTypeFilter,
-        decoration: InputDecoration(
-          labelText: filterServiceTypeLabelString,
-        ),
-        items: [
-          DropdownMenuItem<String?>(
-            value: null,
-            child: Text(filterAllServiceTypesString),
-          ),
-          ...types.map(
-            (type) => DropdownMenuItem<String?>(
-              value: type,
-              child: Text(type),
-            ),
-          ),
-        ],
+      child: HubServiceTypeFilter(
+        label: filterServiceTypeLabelString,
+        allLabel: filterAllServiceTypesString,
+        types: types,
+        selected: _serviceTypeFilter,
         onChanged: (value) => setState(() => _serviceTypeFilter = value),
       ),
     );
