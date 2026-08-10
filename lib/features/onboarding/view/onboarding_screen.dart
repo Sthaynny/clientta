@@ -85,7 +85,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           Expanded(
             child: SafeArea(
-              top: false,
               child: Column(
                 children: [
                   Padding(
