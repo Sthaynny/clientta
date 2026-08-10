@@ -1,0 +1,87 @@
+# Clientta — manifest de assets de loja (skill publicidade)
+# Regenerar: bash tool/regenerate_store_assets.sh
+
+brand:
+  name: Clientta
+  colors:
+    primary: "#1A6B52"
+    primary_dark: "#0F4535"
+    accent: "#F5C518"
+    muted: "#B8D4CB"
+
+paths:
+  prints: docs/stores/prints
+  assets: docs/stores/store-assets
+  icon_512: docs/stores/store-assets/icon/icon_512.png
+  icon_1024: docs/stores/store-assets/icon/icon_1024.png
+  icon_fallback: assets/images/app-icon.png
+  feature_graphic: docs/stores/store-assets/feature_graphic/feature_graphic_1024x500.png
+  phone_out: docs/stores/store-assets/screenshots/phone
+  tablet_7_out: docs/stores/store-assets/screenshots/tablet_7
+  tablet_10_out: docs/stores/store-assets/screenshots/tablet_10
+  app_store_iphone: docs/stores/store-assets/screenshots/app_store/iphone
+  app_store_ipad: docs/stores/store-assets/screenshots/app_store/ipad
+
+feature_graphic:
+  print: 01_home_seu_dia.png
+  headline: "Agenda, clientes\ne contexto."
+  subline: "Clientta · offline no celular"
+
+phone_screenshots:
+  - out: phone_01_home.png
+    print: 01_home_seu_dia.png
+    headline: "Veja quem\natender hoje"
+    tilt: -3.5
+    x_bias: 0.50
+  - out: phone_02_agenda.png
+    print: 02_minha_agenda.png
+    headline: "Agenda e clientes\norganizados"
+    tilt: 3.0
+    x_bias: 0.48
+  - out: phone_03_clientes.png
+    print: 03_meus_clientes.png
+    headline: "Histórico de cada\nnegociação"
+    tilt: -2.5
+    x_bias: 0.52
+  - out: phone_04_atendimento.png
+    print: 04_atendimento_historico.png
+    headline: "Registre sem\nperder contexto"
+    tilt: 2.5
+    x_bias: 0.50
+  - out: phone_05_offline.png
+    print: 01_home_seu_dia.png
+    headline: "Funciona mesmo\nsem internet"
+    tilt: -4.0
+    x_bias: 0.50
+
+tablet_screenshots:
+  - out: tablet_01_home.png
+    print: 01_home_seu_dia.png
+  - out: tablet_02_agenda.png
+    print: 02_minha_agenda.png
+  - out: tablet_03_clientes.png
+    print: 03_meus_clientes.png
+  - out: tablet_04_atendimento.png
+    print: 04_atendimento_historico.png
+
+instagram:
+  capa:
+    out: docs/stores/store-assets/banners/instagram/ig_01_capa.png
+    print: 01_home_seu_dia.png
+    headline: "Passei meses\nconstruindo isso"
+    brand: "no intervalo do trabalho"
+  cta:
+    out: docs/stores/store-assets/banners/instagram/ig_05_cta.png
+    title: Clientta
+    line1: "Em breve na Play Store"
+    line2: "Segue para acompanhar"
+
+launcher:
+  enabled: true
+  hub_green: "#1B6B5C"
+  hub_schedule: "#2D6A8F"
+  android_res: android/app/src/main/res
+  ios_icons: ios/Runner/Assets.xcassets/AppIcon.appiconset
+  app_icon: assets/images/app-icon.png
+  app_icon_mark: assets/images/app-icon-mark.png
+  app_icon_on_light: assets/images/app-icon-on-light.png

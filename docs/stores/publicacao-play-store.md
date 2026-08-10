@@ -77,27 +77,34 @@ agenda, atendimento, CRM, clientes, seguros, crédito, offline, corretor, vended
 ```
 docs/stores/store-assets/
 ├── icon/
-│   └── icon_512.png
+│   ├── icon_512.png          # Google Play
+│   └── icon_1024.png         # App Store Connect
 ├── feature_graphic/
 │   └── feature_graphic_1024x500.png
 └── screenshots/
-    └── phone/
-        ├── phone_01_home.png
-        ├── phone_02_agenda.png
-        ├── phone_03_clientes.png
-        ├── phone_04_atendimento.png
-        └── phone_05_offline.png
+    ├── phone/                # Promocionais 1080×1920 (Play)
+    │   ├── phone_01_home.png … phone_05_offline.png
+    ├── tablet_7/             # UI em tablet 7" — 1920×1080 landscape
+    │   └── tablet_01…04
+    ├── tablet_10/            # UI em tablet 10" — 2560×1440 landscape
+    │   └── tablet_01…04
+    └── app_store/
+        ├── iphone/           # 1290×2796 (6.7")
+        └── ipad/             # 2048×2732 (12.9" iPad Pro)
 ```
 
 | Arquivo | Spec | Descrição |
 |---------|------|-----------|
-| `icon_512.png` | 512×512 | Ícone da marca |
+| `icon_512.png` | **512×512** | Ícone Google Play |
+| `icon_1024.png` | **1024×1024** | Ícone App Store Connect |
 | `feature_graphic_1024x500.png` | 1024×500 | Banner horizontal com print da Home |
 | `phone_01…05` | 1080×1920 (9:16) | Screenshots promocionais com headline |
+| `tablet_7/tablet_01…04` | **1920×1080** (16:9) | Tablet 7" — só UI, sem headline |
+| `tablet_10/tablet_01…04` | **2560×1440** (16:9) | Tablet 10" — só UI, sem headline |
+| `app_store/iphone/*` | 1290×2796 | iPhone 6.7" (upscale dos phone) |
+| `app_store/ipad/*` | 2048×2732 | iPad 12.9" portrait |
 
-Regenerar artes: `python tool/compose_feature_graphic.py`, `python tool/compose_store_screenshots.py`, `python tool/compose_instagram_capa.py` e `python tool/compose_instagram_cta.py` (a partir de `tool/`).
-
-O módulo `store_compose_common.py` recorta status bar e navegação do emulador, aplica máscara arredondada na UI e monta moldura com notch e sombra.
+Regenerar artes: `bash tool/regenerate_store_assets.sh` (skill publicidade + `docs/stores/store-manifest.yaml`).
 
 ---
 
@@ -114,9 +121,11 @@ O módulo `store_compose_common.py` recorta status bar e navegação do emulador
 - [ ] Nome: Clientta
 - [ ] Breve descrição (≤80 caracteres)
 - [ ] Descrição completa
-- [ ] Ícone 512×512 enviado
+- [ ] Ícone 512×512 enviado (`icon/icon_512.png`)
 - [ ] Feature graphic 1024×500 enviado
 - [ ] Mínimo 4 screenshots telefone (1080×1920) — usar `phone_01` a `phone_04`
+- [ ] Tablet 7": mínimo 4 screenshots (1920×1080) — `screenshots/tablet_7/tablet_01…04`
+- [ ] Tablet 10": mínimo 4 screenshots (2560×1440) — `screenshots/tablet_10/tablet_01…04`
 - [ ] Categoria: Produtividade
 - [ ] Classificação de conteúdo preenchida
 - [ ] Público-alvo e país de distribuição definidos
