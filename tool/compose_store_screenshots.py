@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compose Google Play feature graphic (1024x500) with a real UI print."""
+"""Compose Google Play promotional phone screenshots (1080x1920) from real UI prints."""
 
 from __future__ import annotations
 
@@ -9,21 +9,27 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = ROOT / "docs/stores/store-assets/feature_graphic/feature_graphic_1024x500.png"
-DEFAULT_PRINT = ROOT / "docs/stores/prints/01_home_seu_dia.png"
+PRINTS = ROOT / "docs/stores/prints"
+DEFAULT_OUT = ROOT / "docs/stores/store-assets/screenshots/phone"
 FONT_BOLD = Path(r"C:/Windows/Fonts/segoeuib.ttf")
 FONT_REG = Path(r"C:/Windows/Fonts/segoeui.ttf")
 
 TEAL = (0x1A, 0x6B, 0x52)
 TEAL_DARK = (0x0F, 0x45, 0x35)
-GOLD = (0xF5, 0xC5, 0x18)
 WHITE = (255, 255, 255)
 BEZEL = (28, 28, 30)
 SCREEN_BG = (18, 18, 20)
 
-CANVAS = (1024, 500)
-HEADLINE = "Agenda, clientes\ne contexto."
-SUBLINE = "Clientta · offline no celular"
+CANVAS = (1080, 1920)
+HEADLINE_RATIO = 0.32
+
+SCREENSHOTS = [
+    ("phone_01_home.png", "01_home_seu_dia.png", "Veja quem\natender hoje"),
+    ("phone_02_agenda.png", "02_minha_agenda.png", "Agenda e clientes\norganizados"),
+    ("phone_03_clientes.png", "03_meus_clientes.png", "Histórico de cada\nnegociação"),
+    ("phone_04_atendimento.png", "04_atendimento_historico.png", "Registre sem\nperder contexto"),
+    ("phone_05_offline.png", "01_home_seu_dia.png", "Funciona mesmo\nsem internet"),
+]
 
 
 def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
@@ -49,21 +55,16 @@ def _vertical_gradient(size: tuple[int, int]) -> Image.Image:
 def _phone_with_screen(screen: Image.Image, phone_h: int) -> Image.Image:
     aspect = screen.width / screen.height
     phone_w = int(phone_h * aspect)
-    bezel = max(10, phone_h // 42)
-    radius_outer = max(28, phone_h // 14)
-    radius_inner = max(18, phone_h // 20)
+    bezel = max(12, phone_h // 40)
+    radius_outer = max(32, phone_h // 13)
+    radius_inner = max(22, phone_h // 18)
 
     canvas = Image.new("RGBA", (phone_w + bezel * 2, phone_h + bezel * 2), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
     outer = (0, 0, phone_w + bezel * 2 - 1, phone_h + bezel * 2 - 1)
     draw.rounded_rectangle(outer, radius=radius_outer, fill=BEZEL)
 
-    inner = (
-        bezel,
-        bezel,
-        bezel + phone_w - 1,
-        bezel + phone_h - 1,
-    )
+    inner = (bezel, bezel, bezel + phone_w - 1, bezel + phone_h - 1)
     draw.rounded_rectangle(inner, radius=radius_inner, fill=SCREEN_BG)
 
     fitted = screen.resize((phone_w, phone_h), Image.Resampling.LANCZOS)
@@ -71,37 +72,29 @@ def _phone_with_screen(screen: Image.Image, phone_h: int) -> Image.Image:
     return canvas
 
 
-def compose(*, print_path: Path, out_path: Path, headline: str = HEADLINE) -> None:
+def compose_one(*, print_path: Path, out_path: Path, headline: str) -> None:
     canvas = _vertical_gradient(CANVAS)
     draw = ImageDraw.Draw(canvas)
 
-    # Soft watermark circle (brand accent, no fake crest).
-    wm_r = 220
-    wm = Image.new("RGBA", (wm_r * 2, wm_r * 2), (0, 0, 0, 0))
-    ImageDraw.Draw(wm).ellipse((0, 0, wm_r * 2 - 1, wm_r * 2 - 1), fill=(255, 255, 255, 18))
-    canvas.paste(wm, (40, 120), wm)
+    headline_h = int(CANVAS[1] * HEADLINE_RATIO)
+    title_font = _font(72, bold=True)
+    sub_font = _font(28, bold=False)
 
-    title_font = _font(52, bold=True)
-    sub_font = _font(22, bold=False)
-    x_text = 56
-    y = 118
+    y = int(headline_h * 0.22)
     for line in headline.split("\n"):
-        draw.text((x_text, y), line, font=title_font, fill=WHITE)
-        y += 58
-    draw.rectangle((x_text, y + 8, x_text + 120, y + 14), fill=GOLD)
-    draw.text((x_text, y + 28), SUBLINE, font=sub_font, fill=(184, 212, 203))
+        draw.text((64, y), line, font=title_font, fill=WHITE)
+        y += 82
+
+    draw.text((64, y + 12), "Clientta", font=sub_font, fill=(184, 212, 203))
 
     screen = Image.open(print_path).convert("RGB")
-    # Trim emulator chrome slightly; keeps real in-app UI.
     trim_top = int(screen.height * 0.055)
     screen = screen.crop((0, trim_top, screen.width, screen.height))
 
-    phone_h = 430
+    phone_h = int(CANVAS[1] * 0.58)
     phone = _phone_with_screen(screen, phone_h)
-    phone = phone.rotate(-8, expand=True, resample=Image.Resampling.BICUBIC)
-
-    px = CANVAS[0] - phone.width - 36
-    py = (CANVAS[1] - phone.height) // 2 + 8
+    px = (CANVAS[0] - phone.width) // 2
+    py = headline_h + int((CANVAS[1] - headline_h - phone.height) * 0.42)
     canvas.paste(phone, (px, py), phone)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -111,10 +104,16 @@ def compose(*, print_path: Path, out_path: Path, headline: str = HEADLINE) -> No
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--print", type=Path, default=DEFAULT_PRINT, dest="print_path")
+    parser.add_argument("--prints", type=Path, default=PRINTS)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = parser.parse_args()
-    compose(print_path=args.print_path.resolve(), out_path=args.out.resolve())
+
+    for out_name, print_name, headline in SCREENSHOTS:
+        compose_one(
+            print_path=(args.prints / print_name).resolve(),
+            out_path=(args.out / out_name).resolve(),
+            headline=headline,
+        )
 
 
 if __name__ == "__main__":
