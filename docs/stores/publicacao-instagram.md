@@ -30,7 +30,7 @@ Peça para perfil pessoal (não marca): bastidores do projeto, tom de dev compar
 
 ### Card 1 — Gancho
 
-**Arte:** `docs/stores/store-assets/banners/instagram/ig_01_capa.png`  
+**Arte:** `docs/stores/store-assets/banners/instagram/ig_01_capa.png` (gerada com print real via `tool/compose_instagram_capa.py`)  
 **Texto na arte:** "Passei meses construindo isso no intervalo do trabalho"
 
 **Ideia:** rosto não obrigatório; pode ser só o celular com a Home.

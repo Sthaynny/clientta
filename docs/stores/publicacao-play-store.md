@@ -95,7 +95,9 @@ docs/stores/store-assets/
 | `feature_graphic_1024x500.png` | 1024×500 | Banner horizontal com print da Home |
 | `phone_01…05` | 1080×1920 (9:16) | Screenshots promocionais com headline |
 
-Regenerar artes: `python tool/compose_feature_graphic.py` e `python tool/compose_store_screenshots.py`.
+Regenerar artes: `python tool/compose_feature_graphic.py`, `python tool/compose_store_screenshots.py`, `python tool/compose_instagram_capa.py` e `python tool/compose_instagram_cta.py` (a partir de `tool/`).
+
+O módulo `store_compose_common.py` recorta status bar e navegação do emulador, aplica máscara arredondada na UI e monta moldura com notch e sombra.
 
 ---
 

@@ -20,9 +20,14 @@ docs/stores/
 ## Regenerar artes
 
 ```bash
-python tool/compose_feature_graphic.py
-python tool/compose_store_screenshots.py
+cd tool
+python compose_feature_graphic.py
+python compose_store_screenshots.py
+python compose_instagram_capa.py
+python compose_instagram_cta.py
 ```
+
+Módulo compartilhado: `tool/store_compose_common.py` (recorte da status bar, moldura com notch, máscara arredondada e sombra).
 
 ## Guias
 

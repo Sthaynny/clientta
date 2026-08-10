@@ -5,42 +5,27 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
+
+from store_compose_common import (
+    GOLD,
+    MUTED,
+    WHITE,
+    add_decor,
+    diagonal_gradient,
+    font,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 ICON = ROOT / "docs/stores/store-assets/icon/icon_512.png"
 OUT = ROOT / "docs/stores/store-assets/banners/instagram/ig_05_cta.png"
-FONT_BOLD = Path(r"C:/Windows/Fonts/segoeuib.ttf")
-FONT_REG = Path(r"C:/Windows/Fonts/segoeui.ttf")
 
-TEAL = (0x1A, 0x6B, 0x52)
-TEAL_DARK = (0x0F, 0x45, 0x35)
-WHITE = (255, 255, 255)
 CANVAS = (1080, 1350)
 
 
-def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    path = FONT_BOLD if bold else FONT_REG
-    if path.is_file():
-        return ImageFont.truetype(str(path), size=size)
-    return ImageFont.load_default()
-
-
-def _gradient(size: tuple[int, int]) -> Image.Image:
-    w, h = size
-    base = Image.new("RGB", size, TEAL_DARK)
-    draw = ImageDraw.Draw(base)
-    for y in range(h):
-        t = y / max(h - 1, 1)
-        r = int(TEAL_DARK[0] * (1 - t) + TEAL[0] * t)
-        g = int(TEAL_DARK[1] * (1 - t) + TEAL[1] * t)
-        b = int(TEAL_DARK[2] * (1 - t) + TEAL[2] * t)
-        draw.line([(0, y), (w, y)], fill=(r, g, b))
-    return base
-
-
 def main() -> None:
-    canvas = _gradient(CANVAS)
+    canvas = diagonal_gradient(CANVAS, angle_deg=130)
+    add_decor(canvas, variant=4)
     draw = ImageDraw.Draw(canvas)
 
     icon = Image.open(ICON).convert("RGBA")
@@ -50,19 +35,24 @@ def main() -> None:
     iy = int(CANVAS[1] * 0.28)
     canvas.paste(icon, (ix, iy), icon)
 
-    title = _font(64, bold=True)
-    sub = _font(34, bold=False)
+    title = font(64, bold=True)
+    sub = font(34, bold=False)
 
-    draw.text((CANVAS[0] // 2, iy + icon_size + 48), "Clientta", font=title, fill=WHITE, anchor="mt")
+    text_y = iy + icon_size + 48
+    draw.text((CANVAS[0] // 2, text_y), "Clientta", font=title, fill=WHITE, anchor="mt")
+    draw.rectangle(
+        (CANVAS[0] // 2 - 70, text_y + 72, CANVAS[0] // 2 + 70, text_y + 78),
+        fill=GOLD,
+    )
     draw.text(
-        (CANVAS[0] // 2, iy + icon_size + 130),
+        (CANVAS[0] // 2, text_y + 96),
         "Em breve na Play Store",
         font=sub,
-        fill=(184, 212, 203),
+        fill=MUTED,
         anchor="mt",
     )
     draw.text(
-        (CANVAS[0] // 2, iy + icon_size + 200),
+        (CANVAS[0] // 2, text_y + 152),
         "Segue para acompanhar",
         font=sub,
         fill=WHITE,
