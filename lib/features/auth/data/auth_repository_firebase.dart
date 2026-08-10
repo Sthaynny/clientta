@@ -86,6 +86,21 @@ class AuthRepositoryFirebase implements AuthRepository {
   }
 
   @override
+  Future<Result<void>> sendPasswordResetEmail({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+      return const Result.ok();
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'user-not-found') {
+        return const Result.ok();
+      }
+      return Result.error(Exception(_mapAuthError(error)));
+    } catch (_) {
+      return Result.error(Exception(errorDefaultString));
+    }
+  }
+
+  @override
   Future<Result<void>> signOut() async {
     try {
       await Future.wait([

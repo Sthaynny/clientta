@@ -22,125 +22,131 @@ class AppDrawer extends StatelessWidget {
     final currentRoute = ModalRoute.of(context)?.settings.name;
 
     return Drawer(
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              color: HubColors.seedDark,
-              padding: EdgeInsets.fromLTRB(
-                DSSpacing.lg.value,
-                DSSpacing.lg.value,
-                DSSpacing.lg.value,
-                DSSpacing.md.value,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      AppIcon.onDark(size: 44),
-                      DSSpacing.sm.x,
-                      Expanded(
-                        child: Text(
-                          AppMission.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.02,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ColoredBox(
+            color: HubColors.seedDark,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  DSSpacing.lg.value,
+                  DSSpacing.lg.value,
+                  DSSpacing.lg.value,
+                  DSSpacing.md.value,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppIcon.onDark(size: 44),
+                        DSSpacing.sm.x,
+                        Expanded(
+                          child: Text(
+                            AppMission.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.02,
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                    DSSpacing.sm.y,
+                    Text(
+                      AppMission.tagline,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 14,
+                        height: 1.4,
                       ),
-                    ],
-                  ),
-                  DSSpacing.sm.y,
-                  Text(
-                    AppMission.tagline,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.85),
-                      fontSize: 14,
-                      height: 1.4,
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(
-                  DSSpacing.sm.value,
-                  DSSpacing.xs.value,
-                  DSSpacing.sm.value,
-                  DSSpacing.sm.value,
+                  ],
                 ),
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: DSSpacing.sm.value,
-                      vertical: DSSpacing.xxs.value,
-                    ),
-                    child: DSCaptionText(
-                      drawerNavSectionString,
-                      color: HubColors.inkMuted,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  HubNavTile(
-                    icon: Icons.today_outlined,
-                    label: homeTodayString,
-                    route: AppRouters.home,
-                    isSelected: currentRoute == AppRouters.home.path,
-                  ),
-                  HubNavTile(
-                    icon: Icons.event_note_outlined,
-                    label: myAgendaString,
-                    route: AppRouters.agendas,
-                    isSelected: currentRoute == AppRouters.agendas.path,
-                  ),
-                  HubNavTile(
-                    icon: Icons.people_outline_rounded,
-                    label: myClientsString,
-                    route: AppRouters.clients,
-                    isSelected: currentRoute == AppRouters.clients.path,
-                  ),
-                  HubNavTile(
-                    icon: Icons.workspace_premium_outlined,
-                    label: planSettingsTitleString,
-                    route: AppRouters.planSettings,
-                    isSelected: currentRoute == AppRouters.planSettings.path,
-                  ),
-                ],
               ),
             ),
-            const Divider(height: 1),
-            Padding(
+          ),
+          Expanded(
+            child: ListView(
               padding: EdgeInsets.fromLTRB(
                 DSSpacing.sm.value,
-                DSSpacing.sm.value,
-                DSSpacing.sm.value,
                 DSSpacing.xs.value,
+                DSSpacing.sm.value,
+                DSSpacing.sm.value,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: DSSpacing.sm.value,
-                      vertical: DSSpacing.xxs.value,
-                    ),
-                    child: DSCaptionText(
-                      legalSectionString,
-                      color: HubColors.inkMuted,
-                      fontWeight: FontWeight.w600,
-                    ),
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: DSSpacing.sm.value,
+                    vertical: DSSpacing.xxs.value,
                   ),
-                  const HubLegalLinks(alignment: WrapAlignment.start),
-                ],
-              ),
+                  child: DSCaptionText(
+                    drawerNavSectionString,
+                    color: HubColors.inkMuted,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                HubNavTile(
+                  icon: Icons.today_outlined,
+                  label: homeTodayString,
+                  route: AppRouters.home,
+                  isSelected: currentRoute == AppRouters.home.path,
+                ),
+                HubNavTile(
+                  icon: Icons.event_note_outlined,
+                  label: myAgendaString,
+                  route: AppRouters.agendas,
+                  isSelected: currentRoute == AppRouters.agendas.path,
+                ),
+                HubNavTile(
+                  icon: Icons.people_outline_rounded,
+                  label: myClientsString,
+                  route: AppRouters.clients,
+                  isSelected: currentRoute == AppRouters.clients.path,
+                ),
+                HubNavTile(
+                  icon: Icons.workspace_premium_outlined,
+                  label: planSettingsTitleString,
+                  route: AppRouters.planSettings,
+                  isSelected: currentRoute == AppRouters.planSettings.path,
+                ),
+              ],
             ),
-            const Divider(height: 1),
-            Padding(
+          ),
+          const Divider(height: 1),
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              DSSpacing.sm.value,
+              DSSpacing.sm.value,
+              DSSpacing.sm.value,
+              DSSpacing.xs.value,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: DSSpacing.sm.value,
+                    vertical: DSSpacing.xxs.value,
+                  ),
+                  child: DSCaptionText(
+                    legalSectionString,
+                    color: HubColors.inkMuted,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const HubLegalLinks(alignment: WrapAlignment.start),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          SafeArea(
+            top: false,
+            child: Padding(
               padding: EdgeInsets.fromLTRB(
                 DSSpacing.sm.value,
                 DSSpacing.sm.value,
@@ -160,8 +166,8 @@ class AppDrawer extends StatelessWidget {
                 onTap: () => _signOut(context),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

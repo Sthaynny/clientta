@@ -210,6 +210,14 @@ String get registerSubtitleString =>
 String get registerString => 'Criar conta';
 String get createAccountString => 'Ainda não tem conta? Cadastre-se';
 String get alreadyHaveAccountString => 'Já tem conta? Entrar';
+String get forgotPasswordString => 'Esqueci minha senha';
+String get forgotPasswordTitleString => 'Recuperar senha';
+String get forgotPasswordSubtitleString =>
+    'Informe o e-mail da sua conta. Enviaremos um link para você criar uma nova senha.';
+String get sendPasswordResetLinkString => 'Enviar link';
+String get forgotPasswordSuccessString =>
+    'Se existir uma conta com este e-mail, você receberá um link para redefinir sua senha. Verifique também a caixa de spam.';
+String get forgotPasswordBackToLoginString => 'Voltar para o login';
 String get authDividerOrString => 'ou';
 String get authHighlightOfflineString =>
     'Agenda no celular, mesmo sem internet';

@@ -90,12 +90,14 @@ enum AppRouters {
 /// Public auth routes (outside [MyApp] — gated by [AuthGate]).
 enum AuthRouters {
   login,
-  register;
+  register,
+  forgotPassword;
 
   const AuthRouters();
 
   String get path => switch (this) {
     login => '/login',
     register => '/cadastro',
+    forgotPassword => '/recuperar-senha',
   };
 }

@@ -138,6 +138,18 @@ class _LoginScreenState extends State<LoginScreen> {
               autofillHints: const [AutofillHints.password],
               validator: _validatePassword,
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed:
+                    _loading
+                        ? null
+                        : () => Navigator.of(context).pushNamed(
+                          AuthRouters.forgotPassword.path,
+                        ),
+                child: Text(forgotPasswordString),
+              ),
+            ),
             DSSpacing.xl.y,
             HubPrimaryButton(
               label: loginString,

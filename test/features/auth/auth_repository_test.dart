@@ -86,5 +86,42 @@ void main() {
 
       expect(result.isOk, true);
     });
+
+    test('sendPasswordResetEmail succeeds', () async {
+      when(
+        () => auth.sendPasswordResetEmail(email: 'user@clientta.com'),
+      ).thenAnswer((_) async {});
+
+      final result = await repository.sendPasswordResetEmail(
+        email: 'user@clientta.com',
+      );
+
+      expect(result.isOk, true);
+    });
+
+    test('sendPasswordResetEmail treats user-not-found as success', () async {
+      when(
+        () => auth.sendPasswordResetEmail(email: any(named: 'email')),
+      ).thenThrow(FirebaseAuthException(code: 'user-not-found'));
+
+      final result = await repository.sendPasswordResetEmail(
+        email: 'unknown@clientta.com',
+      );
+
+      expect(result.isOk, true);
+    });
+
+    test('sendPasswordResetEmail maps invalid email', () async {
+      when(
+        () => auth.sendPasswordResetEmail(email: any(named: 'email')),
+      ).thenThrow(FirebaseAuthException(code: 'invalid-email'));
+
+      final result = await repository.sendPasswordResetEmail(
+        email: 'not-an-email',
+      );
+
+      expect(result.isError, true);
+      expect(result.error.toString(), contains(errorEmailInvalidString));
+    });
   });
 }
