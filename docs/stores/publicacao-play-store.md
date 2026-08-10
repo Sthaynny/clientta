@@ -106,8 +106,9 @@ O módulo `store_compose_common.py` recorta status bar e navegação do emulador
 ### Conta e app
 - [ ] Conta de desenvolvedor Google Play ativa (taxa única)
 - [ ] App criado no Console com package name do projeto
-- [ ] Política de privacidade publicada: `docs/legal/politica-privacidade.md` (URL acessível)
-- [ ] Política de assinatura Pro: `docs/legal/politica-assinatura.md`
+- [ ] Política de privacidade publicada: `https://sthaynny.github.io/pages-public/clientta/privacidade/`
+- [ ] URL de exclusão de conta: `https://sthaynny.github.io/pages-public/clientta/exclusao-de-conta/`
+- [ ] Política de assinatura Pro: `https://sthaynny.github.io/pages-public/clientta/assinatura/`
 
 ### Ficha da loja (pt-BR)
 - [ ] Nome: Clientta

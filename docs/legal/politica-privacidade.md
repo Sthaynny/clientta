@@ -1,6 +1,6 @@
 # Política de Privacidade — Clientta
 
-**Última atualização:** 7 de agosto de 2026
+**Última atualização:** 10 de agosto de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **Clientta** (“App”) coleta, usa, armazena e protege dados pessoais, em conformidade com a **Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)** e demais normas aplicáveis no Brasil.
 
@@ -180,7 +180,7 @@ Prestadores de infraestrutura podem processar dados em servidores fora do Brasil
 | **Dados de assinatura (Stripe/Firestore)** | Conforme exigências fiscais e contratuais aplicáveis à cobrança |
 | **Logs técnicos** | Pelo tempo necessário à segurança e diagnóstico, geralmente limitado |
 
-Você pode solicitar a exclusão da conta e dos dados associados conforme a seção [Direitos do titular](#11-direitos-do-titular).
+Você pode solicitar a exclusão da conta e dos dados associados conforme a seção [Direitos do titular](#11-direitos-do-titular) e a página [Exclusão de conta](exclusao-de-conta.md).
 
 ---
 
@@ -198,7 +198,7 @@ Nos termos da LGPD, você pode exercer, em relação aos seus dados pessoais:
 - **Revogação do consentimento**
 - **Oposição** a tratamento baseado em legítimo interesse, quando cabível
 
-Para exercer esses direitos, envie solicitação para **igorsthaynny@gmail.com**, informando seu e-mail de cadastro e o pedido desejado. O controlador responderá em prazo razoável, conforme a LGPD.
+Para exercer esses direitos, envie solicitação para **igorsthaynny@gmail.com**, informando seu e-mail de cadastro e o pedido desejado. Para **exclusão de conta**, consulte também [exclusao-de-conta.md](exclusao-de-conta.md). O controlador responderá em prazo razoável, conforme a LGPD.
 
 Se você incluiu dados de **clientes** no App, lembre-se de que esses terceiros também possuem direitos perante você, na qualidade de responsável pelo relacionamento comercial com eles.
 

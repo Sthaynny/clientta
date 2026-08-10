@@ -17,6 +17,7 @@ O <strong>Clientta</strong> é um app para quem vende crédito, seguros e servi�
 | [docs/guia_clientta.md](docs/guia_clientta.md) | Como rodar, Firebase e arquitetura |
 | [docs/billing/readme.md](docs/billing/readme.md) | Stripe — setup operacional |
 | [docs/legal/politica-privacidade.md](docs/legal/politica-privacidade.md) | Política de privacidade (LGPD) |
+| [docs/legal/exclusao-de-conta.md](docs/legal/exclusao-de-conta.md) | Exclusão de conta (Google Play) |
 | [docs/legal/politica-assinatura.md](docs/legal/politica-assinatura.md) | Política de assinatura Pro |
 | [docs/ROTEAMENTO.md](docs/ROTEAMENTO.md) | Rotas do app |
 

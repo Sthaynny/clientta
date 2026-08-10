@@ -12,4 +12,7 @@ abstract final class AppLegalConstants {
 
   static const String subscriptionPolicyUrl =
       'https://sthaynny.github.io/pages-public/clientta/assinatura/';
+
+  static const String accountDeletionUrl =
+      'https://sthaynny.github.io/pages-public/clientta/exclusao-de-conta/';
 }
