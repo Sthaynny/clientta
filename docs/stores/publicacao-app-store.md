@@ -39,7 +39,11 @@ docs/stores/store-assets/
 | `iphone_01…05` | **1290×2796** | Screenshots iPhone 6.7" |
 | `ipad_01…04` | **2048×2732** | Screenshots iPad 12.9" |
 
-Regenerar: `python tool/export_app_store_screenshots.py` (após phone e tablet_10).
+Regenerar (skill publicidade):
+
+```bash
+bash ~/.agents/skills/publicidade/scripts/compose-store-assets.sh . docs/stores/store-manifest.yaml
+```
 
 ---
 
@@ -76,6 +80,6 @@ Regenerar: `python tool/export_app_store_screenshots.py` (após phone e tablet_1
 
 ## Notas
 
-- Ícone Play (512×512) e App Store (1024×1024) são arquivos distintos — ver `tool/resize_store_icons.py`.
+- Ícone Play (512×512) e App Store (1024×1024) são gerados por `resize_store_icons.py` na skill publicidade.
 - Screenshots iPhone são upscale dos promocionais phone; para máxima nitidez, capturar no simulador 6.7" e substituir em `prints/`.
 - iPad: assets derivados do tablet 10"; preferir capturas reais em iPad se o app for otimizado para telas grandes.

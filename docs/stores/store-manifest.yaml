@@ -1,5 +1,5 @@
 # Clientta — manifest de assets de loja (skill publicidade)
-# Regenerar: bash tool/regenerate_store_assets.sh
+# Regenerar: bash ~/.agents/skills/publicidade/scripts/compose-store-assets.sh . docs/stores/store-manifest.yaml
 
 brand:
   name: Clientta

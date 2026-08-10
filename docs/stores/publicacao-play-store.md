@@ -84,9 +84,9 @@ docs/stores/store-assets/
 └── screenshots/
     ├── phone/                # Promocionais 1080×1920 (Play)
     │   ├── phone_01_home.png … phone_05_offline.png
-    ├── tablet_7/             # UI em tablet 7" — 1920×1080 landscape
+    ├── tablet_7/             # UI em tablet 7" — 1200×1920 portrait
     │   └── tablet_01…04
-    ├── tablet_10/            # UI em tablet 10" — 2560×1440 landscape
+    ├── tablet_10/            # UI em tablet 10" — 1600×2560 portrait
     │   └── tablet_01…04
     └── app_store/
         ├── iphone/           # 1290×2796 (6.7")
@@ -99,12 +99,18 @@ docs/stores/store-assets/
 | `icon_1024.png` | **1024×1024** | Ícone App Store Connect |
 | `feature_graphic_1024x500.png` | 1024×500 | Banner horizontal com print da Home |
 | `phone_01…05` | 1080×1920 (9:16) | Screenshots promocionais com headline |
-| `tablet_7/tablet_01…04` | **1920×1080** (16:9) | Tablet 7" — só UI, sem headline |
-| `tablet_10/tablet_01…04` | **2560×1440** (16:9) | Tablet 10" — só UI, sem headline |
+| `tablet_7/tablet_01…04` | **1200×1920** (9:16) | Tablet 7" portrait — UI preenche moldura |
+| `tablet_10/tablet_01…04` | **1600×2560** (9:16) | Tablet 10" portrait — UI preenche moldura |
 | `app_store/iphone/*` | 1290×2796 | iPhone 6.7" (upscale dos phone) |
 | `app_store/ipad/*` | 2048×2732 | iPad 12.9" portrait |
 
-Regenerar artes: `bash tool/regenerate_store_assets.sh` (skill publicidade + `docs/stores/store-manifest.yaml`).
+Regenerar artes (skill **publicidade**, sem scripts no repo):
+
+```bash
+bash ~/.agents/skills/publicidade/scripts/compose-store-assets.sh . docs/stores/store-manifest.yaml
+```
+
+Manifest do projeto: `docs/stores/store-manifest.yaml`
 
 ---
 
@@ -124,8 +130,8 @@ Regenerar artes: `bash tool/regenerate_store_assets.sh` (skill publicidade + `do
 - [ ] Ícone 512×512 enviado (`icon/icon_512.png`)
 - [ ] Feature graphic 1024×500 enviado
 - [ ] Mínimo 4 screenshots telefone (1080×1920) — usar `phone_01` a `phone_04`
-- [ ] Tablet 7": mínimo 4 screenshots (1920×1080) — `screenshots/tablet_7/tablet_01…04`
-- [ ] Tablet 10": mínimo 4 screenshots (2560×1440) — `screenshots/tablet_10/tablet_01…04`
+- [ ] Tablet 7": mínimo 4 screenshots (1200×1920) — `screenshots/tablet_7/tablet_01…04`
+- [ ] Tablet 10": mínimo 4 screenshots (1600×2560) — `screenshots/tablet_10/tablet_01…04`
 - [ ] Categoria: Produtividade
 - [ ] Classificação de conteúdo preenchida
 - [ ] Público-alvo e país de distribuição definidos
