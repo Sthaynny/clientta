@@ -6,7 +6,7 @@ import 'package:clientta/core/strings/daily_strings.dart';
 import 'package:clientta/core/theme/hub_colors.dart';
 import 'package:clientta/core/utils/extension/build_context.dart';
 
-/// Links para política de privacidade e assinatura Pro.
+/// Links legais: privacidade, assinatura Pro e exclusão de conta.
 class HubLegalLinks extends StatelessWidget {
   const HubLegalLinks({
     super.key,
@@ -47,6 +47,20 @@ class HubLegalLinks extends StatelessWidget {
             ),
           ),
         ),
+        Text(
+          '·',
+          style: TextStyle(color: HubColors.inkMuted.withValues(alpha: 0.6)),
+        ),
+        TextButton(
+          onPressed: () => _openAccountDeletion(context),
+          child: Text(
+            accountDeletionPolicyString,
+            style: const TextStyle(
+              color: HubColors.seed,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -59,6 +73,12 @@ class HubLegalLinks extends StatelessWidget {
 
   Future<void> _openSubscription(BuildContext context) async {
     if (!await openSubscriptionPolicy() && context.mounted) {
+      context.showSnackBarError(legalUrlOpenErrorString);
+    }
+  }
+
+  Future<void> _openAccountDeletion(BuildContext context) async {
+    if (!await openAccountDeletion() && context.mounted) {
       context.showSnackBarError(legalUrlOpenErrorString);
     }
   }

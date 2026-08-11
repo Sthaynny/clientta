@@ -355,6 +355,7 @@ String get planBackupImportInvalidString =>
 String get legalSectionString => 'Legal';
 String get privacyPolicyString => 'Política de Privacidade';
 String get subscriptionPolicyString => 'Política de Assinatura Pro';
+String get accountDeletionPolicyString => 'Exclusão de conta';
 String get registerPrivacyNoticePrefixString =>
     'Ao criar conta, você declara ter lido e concordado com a ';
 String get registerPrivacyNoticeSuffixString => '.';

@@ -7,6 +7,9 @@ Future<bool> openPrivacyPolicy() =>
 Future<bool> openSubscriptionPolicy() =>
     _openUrl(AppLegalConstants.subscriptionPolicyUrl);
 
+Future<bool> openAccountDeletion() =>
+    _openUrl(AppLegalConstants.accountDeletionUrl);
+
 Future<bool> _openUrl(String url) async {
   final uri = Uri.parse(url);
   if (!await canLaunchUrl(uri)) {
