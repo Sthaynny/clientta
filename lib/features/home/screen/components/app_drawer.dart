@@ -1,6 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:clientta/core/dependecy/dependency.dart';
+import 'package:clientta/core/legal/legal_url_launcher.dart';
 import 'package:clientta/core/router/app_router.dart';
 import 'package:clientta/core/strings/app_mission.dart';
 import 'package:clientta/core/strings/daily_strings.dart';
@@ -140,6 +141,19 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 const HubLegalLinks(alignment: WrapAlignment.start),
+                DSSpacing.sm.y,
+                ListTile(
+                  leading: Icon(Icons.mail_outline_rounded, color: HubColors.inkMuted),
+                  title: DSBodyText(
+                    supportContactString,
+                    color: HubColors.inkMuted,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(DSSpacing.sm.value),
+                  ),
+                  onTap: () => _openSupport(context),
+                ),
               ],
             ),
           ),
@@ -170,6 +184,12 @@ class AppDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _openSupport(BuildContext context) async {
+    if (!await openSupportEmail() && context.mounted) {
+      context.showSnackBarError(legalUrlOpenErrorString);
+    }
   }
 
   Future<void> _signOut(BuildContext context) async {

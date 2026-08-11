@@ -356,6 +356,8 @@ String get legalSectionString => 'Legal';
 String get privacyPolicyString => 'Política de Privacidade';
 String get subscriptionPolicyString => 'Política de Assinatura Pro';
 String get accountDeletionPolicyString => 'Exclusão de conta';
+String get supportContactString => 'Falar com suporte';
+String get supportEmailSubjectString => 'Suporte — Clientta';
 String get registerPrivacyNoticePrefixString =>
     'Ao criar conta, você declara ter lido e concordado com a ';
 String get registerPrivacyNoticeSuffixString => '.';
