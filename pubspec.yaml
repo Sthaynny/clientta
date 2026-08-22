@@ -2,7 +2,7 @@ name: clientta
 description: "Clientta — CRM de agendamentos para consultores, offline no celular."
 publish_to: "none"
 
-version: 1.3.0+11
+version: 1.4.0+12
 
 environment:
   sdk: ^3.7.0
