@@ -150,5 +150,5 @@ timezone: ^0.10.x
 - [README.md](README.md) — comparativo Free/Pro
 - [assinatura_stripe.md](assinatura_stripe.md) — entitlement Pro
 - [agendas.md](agendas.md) — modelo `ServiceAppointment`
-- [../tasks/a_fazer/lembretes_locais.md](../tasks/a_fazer/lembretes_locais.md) — backlog C-410
+- [../tasks/finalizadas/lembretes_locais.md](../tasks/finalizadas/lembretes_locais.md) — backlog C-410
 - [../PLANEJAMENTO.md](../PLANEJAMENTO.md) — fase 4.3
